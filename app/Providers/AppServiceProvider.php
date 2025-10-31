@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiting\Limit;
 
@@ -28,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
                 Limit::perMinute(5)->by($request->ip()),
                 Limit::perDay(20)->by($request->ip()),
             ];
+        });
+
+        // Authorize log-viewer for authenticated users
+        Gate::define('viewLogViewer', function ($user = null) {
+            return $user !== null;
         });
     }
 }
