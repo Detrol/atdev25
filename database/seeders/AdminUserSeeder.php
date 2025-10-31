@@ -14,13 +14,13 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(
-            ['email' => 'admin@atdev.me'],
+            ['email' => 'admin@example.com'],
             [
-                'name' => 'ATDev Admin',
-                'password' => Hash::make('password'),
+                'name' => 'Admin User',
+                'password' => Hash::make('changeme'),
             ]
         );
 
-        $this->command->info('Admin user created: admin@atdev.me / password');
+        $this->command->info('Admin user created: admin@example.com');
     }
 }
