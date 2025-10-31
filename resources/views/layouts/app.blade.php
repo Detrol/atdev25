@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="sv" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $title ?? 'ATDev - AI-Driven Utveckling | 20+ Års Erfarenhet' }}</title>
+    <meta name="description" content="{{ $description ?? 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation för att leverera högkvalitativa webbapplikationer till en bråkdel av priset. Specialist på Laravel, React och AI-integration.' }}">
+    <meta name="keywords" content="webbutveckling, AI-utveckling, Laravel, React, prompt engineering, AI-expert, Andreas Tröls, ATDev">
+    <meta name="author" content="Andreas Tröls">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $ogTitle ?? $title ?? 'ATDev - AI-Driven Utveckling' }}">
+    <meta property="og:description" content="{{ $ogDescription ?? $description ?? 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation för premiumkvalitet till låg kostnad.' }}">
+    <meta property="og:image" content="{{ $ogImage ?? asset('images/og-default.jpg') }}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $twitterTitle ?? $title ?? 'ATDev - AI-Driven Utveckling' }}">
+    <meta property="twitter:description" content="{{ $twitterDescription ?? $description ?? 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation.' }}">
+    <meta property="twitter:image" content="{{ $twitterImage ?? asset('images/og-default.jpg') }}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- CSRF Token for AJAX requests -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js', 'resources/js/chat-widget.js'])
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    @yield('content')
+
+    <!-- Flash Messages -->
+    @if(session('success'))
+        <div class="fixed bottom-4 right-4 z-50 max-w-md" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform translate-y-4"
+             x-transition:enter-end="opacity-100 transform translate-y-0">
+            <div class="glass dark:glass-dark-border rounded-2xl p-4 shadow-2xl border-l-4 border-green-500">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <p class="font-medium text-gray-800 dark:text-gray-100">{{ session('success') }}</p>
+                    <button @click="show = false" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 ml-auto">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="fixed bottom-4 right-4 z-50 max-w-md" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform translate-y-4"
+             x-transition:enter-end="opacity-100 transform translate-y-0">
+            <div class="glass dark:glass-dark-border rounded-2xl p-4 shadow-2xl border-l-4 border-red-500">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <p class="font-medium text-gray-800 dark:text-gray-100">{{ session('error') }}</p>
+                    <button @click="show = false" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 ml-auto">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- AI Chat Widget -->
+    <div x-data="chatWidget()" x-init="init()" class="chat-widget-container">
+        <!-- Chat Button -->
+        <button @click="toggleChat()" class="chat-button" aria-label="Öppna AI-assistent">
+            <svg x-show="!isOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+            </svg>
+            <svg x-show="isOpen" x-cloak fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <!-- Chat Window -->
+        <div x-show="isOpen"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform scale-100"
+             x-transition:leave-end="opacity-0 transform scale-95"
+             class="chat-window"
+             x-cloak>
+
+            <!-- Header -->
+            <div class="chat-header">
+                <div class="chat-header-title">
+                    <div class="chat-header-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div class="chat-header-text">
+                        <h3>AI-Assistent</h3>
+                        <p>Ställ tekniska frågor</p>
+                    </div>
+                </div>
+                <button @click="toggleChat()" class="chat-close" aria-label="Stäng chat">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Error Message -->
+            <div x-show="error" x-transition class="chat-error" x-cloak>
+                <span x-text="error"></span>
+                <button @click="clearError()" class="chat-error-close">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-messages" x-ref="messagesContainer">
+                <!-- Welcome message if no messages -->
+                <template x-if="messages.length === 0 && !isLoading">
+                    <div class="text-center text-gray-500 py-8">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                        <p class="text-sm font-medium mb-1">Hej! Jag är AI-assistenten</p>
+                        <p class="text-xs">Ställ mig frågor om webbutveckling, arkitektur eller tekniska lösningar</p>
+                    </div>
+                </template>
+
+                <!-- Message list -->
+                <template x-for="(message, index) in messages" :key="index">
+                    <div class="chat-message" :class="message.role">
+                        <div class="chat-message-avatar">
+                            <span x-show="message.role === 'user'">👤</span>
+                            <span x-show="message.role === 'assistant'">🤖</span>
+                        </div>
+                        <div class="chat-message-content" x-html="message.content"></div>
+                    </div>
+                </template>
+
+                <!-- Loading indicator -->
+                <div x-show="isLoading" class="chat-loading" x-cloak>
+                    <div class="chat-loading-avatar"></div>
+                    <div class="chat-loading-dots">
+                        <div class="chat-loading-dot"></div>
+                        <div class="chat-loading-dot"></div>
+                        <div class="chat-loading-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="chat-input">
+                <div class="chat-input-wrapper">
+                    <textarea
+                        x-ref="messageInput"
+                        x-model="inputMessage"
+                        @keydown="handleKeydown($event)"
+                        placeholder="Skriv ditt meddelande..."
+                        class="chat-input-field"
+                        rows="1"
+                        :disabled="isLoading"
+                    ></textarea>
+                    <button
+                        @click="sendMessage()"
+                        :disabled="!inputMessage.trim() || isLoading"
+                        class="chat-input-button"
+                        aria-label="Skicka meddelande"
+                    >
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alpine.js Plugins -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js Core -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>
