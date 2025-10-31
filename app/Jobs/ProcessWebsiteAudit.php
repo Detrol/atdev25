@@ -115,11 +115,12 @@ class ProcessWebsiteAudit implements ShouldQueue
     /**
      * Handle a job failure.
      */
-    public function failed(?Exception $exception): void
+    public function failed(?\Throwable $exception): void
     {
         Log::error('ProcessWebsiteAudit job failed permanently', [
             'audit_id' => $this->audit->id,
             'error' => $exception?->getMessage(),
+            'type' => $exception ? get_class($exception) : null,
         ]);
 
         $this->audit->markAsFailed();
