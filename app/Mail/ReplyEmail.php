@@ -9,15 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactEmail extends Mailable
+class ReplyEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public ContactMessage $message)
-    {
+    public function __construct(
+        public ContactMessage $originalMessage,
+        public ContactMessage $replyMessage
+    ) {
         //
     }
 
@@ -27,9 +29,8 @@ class ContactEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Nytt kontaktmeddelande från ATDev.me',
-            // Reply-To är nu den unika reply-adressen för att fånga svar via webhook
-            replyTo: [$this->message->getReplyAddress()],
+            subject: 'Re: Ditt meddelande till ATDev',
+            replyTo: [$this->originalMessage->getReplyAddress()],
         );
     }
 
@@ -39,9 +40,10 @@ class ContactEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            text: 'emails.contact',
+            text: 'emails.reply',
             with: [
-                'contactMessage' => $this->message,
+                'originalMessage' => $this->originalMessage,
+                'replyMessage' => $this->replyMessage,
             ],
         );
     }

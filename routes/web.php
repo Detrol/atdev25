@@ -10,6 +10,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TechStackController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\WebsiteAuditController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,11 @@ Route::post('/contact', [ContactController::class, 'store'])
 Route::get('/audit', [WebsiteAuditController::class, 'create'])->name('audits.create');
 Route::post('/audit', [WebsiteAuditController::class, 'store'])->name('audits.store');
 Route::get('/audit/{token}', [WebsiteAuditController::class, 'status'])->name('audits.status');
+
+// Webhook routes (utan CSRF protection)
+Route::post('/webhooks/mailgun/inbound', [WebhookController::class, 'handleInbound'])
+    ->middleware('throttle:100,1')
+    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 // Admin routes (protected by auth middleware)
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
@@ -43,6 +49,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     
     // Messages
     Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('messages/{message}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('messages/{message}/reply', [MessageController::class, 'reply'])->name('messages.reply');
     Route::post('messages/{message}/read', [MessageController::class, 'markAsRead'])->name('messages.read');
     Route::delete('messages/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
 
