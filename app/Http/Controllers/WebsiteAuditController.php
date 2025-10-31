@@ -6,6 +6,7 @@ use App\Http\Requests\WebsiteAuditRequest;
 use App\Jobs\ProcessWebsiteAudit;
 use App\Models\WebsiteAudit;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
@@ -25,17 +26,21 @@ class WebsiteAuditController extends Controller
      */
     public function store(WebsiteAuditRequest $request): RedirectResponse
     {
-        // Check rate limiting (3 per day per IP)
-        $ip = $request->ip();
-        $key = 'audit-submission:'.$ip;
+        $isAdmin = Auth::check();
 
-        if (RateLimiter::tooManyAttempts($key, 3)) {
-            $seconds = RateLimiter::availableIn($key);
-            $hours = ceil($seconds / 3600);
+        // Check rate limiting (3 per day per IP) - Skip for admins
+        if (! $isAdmin) {
+            $ip = $request->ip();
+            $key = 'audit-submission:'.$ip;
 
-            return back()->withErrors([
-                'rate_limit' => "Du har nått dagsgränsen för webbplatsgranskningar. Försök igen om {$hours} timmar.",
-            ])->withInput();
+            if (RateLimiter::tooManyAttempts($key, 3)) {
+                $seconds = RateLimiter::availableIn($key);
+                $hours = ceil($seconds / 3600);
+
+                return back()->withErrors([
+                    'rate_limit' => "Du har nått dagsgränsen för webbplatsgranskningar. Försök igen om {$hours} timmar.",
+                ])->withInput();
+            }
         }
 
         // Check for duplicate URL within last 7 days
@@ -58,7 +63,8 @@ class WebsiteAuditController extends Controller
         Log::info('Controller: Creating new audit', [
             'url' => $request->url,
             'email' => $request->email,
-            'ip' => $ip,
+            'ip' => $request->ip(),
+            'is_admin' => $isAdmin,
         ]);
 
         $audit = WebsiteAudit::create([
@@ -82,8 +88,12 @@ class WebsiteAuditController extends Controller
             'audit_id' => $audit->id,
         ]);
 
-        // Record rate limit
-        RateLimiter::hit($key, 86400); // 24 hours
+        // Record rate limit (only for non-admins)
+        if (! $isAdmin) {
+            $ip = $request->ip();
+            $key = 'audit-submission:'.$ip;
+            RateLimiter::hit($key, 86400); // 24 hours
+        }
 
         return redirect()
             ->route('audits.status', $audit->token)
