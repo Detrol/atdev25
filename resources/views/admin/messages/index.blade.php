@@ -13,26 +13,39 @@
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div class="shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                 @forelse($messages as $message)
-                    <div class="bg-white border-b border-gray-200 {{ $message->read_at ? '' : 'bg-indigo-50' }}">
+                    <div class="bg-white border-b border-gray-200 {{ $message->read ? '' : 'bg-indigo-50' }}">
                         <div class="px-4 py-5 sm:px-6">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-3">
                                     <h3 class="text-lg font-medium text-gray-900">{{ $message->name }}</h3>
-                                    @unless($message->read_at)
+                                    @unless($message->read)
                                         <span class="inline-flex items-center rounded-md bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
                                             Oläst
                                         </span>
                                     @endunless
+
+                                    {{-- Status badge --}}
+                                    @if($message->status === 'pending')
+                                        <span class="inline-flex items-center rounded-md bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+                                            Väntar
+                                        </span>
+                                    @elseif($message->status === 'replied')
+                                        <span class="inline-flex items-center rounded-md bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                            Besvarad
+                                        </span>
+                                    @endif
+
+                                    {{-- Reply count --}}
+                                    @if($message->replies->count() > 0)
+                                        <span class="inline-flex items-center rounded-md bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+                                            {{ $message->replies->count() }} {{ $message->replies->count() === 1 ? 'svar' : 'svar' }}
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    @unless($message->read_at)
-                                        <form action="/admin/messages/{{ $message->id }}/read" method="POST">
-                                            @csrf
-                                            <button type="submit" class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-                                                Markera som läst
-                                            </button>
-                                        </form>
-                                    @endunless
+                                    <a href="{{ route('admin.messages.show', $message) }}" class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                                        Visa & Svara
+                                    </a>
                                     <form action="/admin/messages/{{ $message->id }}" method="POST" onsubmit="return confirm('Är du säker på att du vill radera detta meddelande?');">
                                         @csrf
                                         @method('DELETE')
@@ -60,7 +73,7 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $message->message }}</p>
+                                <p class="text-sm text-gray-700 line-clamp-2">{{ $message->message }}</p>
                             </div>
                             @if($message->ip_address)
                                 <div class="mt-3 text-xs text-gray-500">

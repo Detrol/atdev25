@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class ContactMessage extends Model
 {
@@ -13,11 +16,65 @@ class ContactMessage extends Model
         'ip_address',
         'user_agent',
         'read',
+        'reply_token',
+        'parent_id',
+        'status',
+        'is_admin_reply',
+        'admin_user_id',
+        'replied_at',
     ];
 
     protected $casts = [
         'read' => 'boolean',
+        'is_admin_reply' => 'boolean',
+        'replied_at' => 'datetime',
     ];
+
+    /**
+     * Boot the model - generate unique reply token.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($message) {
+            if (empty($message->reply_token)) {
+                $message->reply_token = Str::random(32);
+            }
+        });
+    }
+
+    /**
+     * Relationships
+     */
+
+    /**
+     * Parent meddelande (om detta är ett svar).
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(ContactMessage::class, 'parent_id');
+    }
+
+    /**
+     * Alla svar på detta meddelande.
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany(ContactMessage::class, 'parent_id')->orderBy('created_at', 'asc');
+    }
+
+    /**
+     * Admin-användare som svarade.
+     */
+    public function adminReplier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'admin_user_id');
+    }
+
+    /**
+     * Scopes
+     */
 
     /**
      * Scope a query to only include unread messages.
@@ -28,10 +85,105 @@ class ContactMessage extends Model
     }
 
     /**
+     * Scope för meddelanden med status pending.
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    /**
+     * Scope för meddelanden med status replied.
+     */
+    public function scopeReplied($query)
+    {
+        return $query->where('status', 'replied');
+    }
+
+    /**
+     * Scope för meddelanden med status closed.
+     */
+    public function scopeClosed($query)
+    {
+        return $query->where('status', 'closed');
+    }
+
+    /**
+     * Scope för original meddelanden (inte replies).
+     */
+    public function scopeOriginalMessages($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    /**
+     * Methods
+     */
+
+    /**
      * Mark the message as read.
      */
     public function markAsRead(): void
     {
         $this->update(['read' => true]);
+    }
+
+    /**
+     * Markera meddelandet som besvarat.
+     */
+    public function markAsReplied(): void
+    {
+        $this->update([
+            'status' => 'replied',
+            'replied_at' => now(),
+        ]);
+    }
+
+    /**
+     * Skapa ett svar på detta meddelande.
+     */
+    public function createReply(string $message, int $adminUserId): self
+    {
+        $reply = self::create([
+            'parent_id' => $this->id,
+            'name' => 'ATDev Admin',
+            'email' => config('mail.from.address'),
+            'message' => $message,
+            'is_admin_reply' => true,
+            'admin_user_id' => $adminUserId,
+            'status' => 'replied',
+            'read' => true,
+        ]);
+
+        // Uppdatera status på original meddelande
+        $this->markAsReplied();
+
+        return $reply;
+    }
+
+    /**
+     * Hämta hela konversationen (parent + alla replies).
+     */
+    public function conversation()
+    {
+        // Om detta är ett svar, hämta parent först
+        $parent = $this->parent_id ? $this->parent : $this;
+
+        // Hämta alla replies inkl. detta meddelande om det är ett svar
+        return self::where('id', $parent->id)
+            ->orWhere('parent_id', $parent->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+    }
+
+    /**
+     * Generera reply-to email adress för detta meddelande.
+     */
+    public function getReplyAddress(): string
+    {
+        $domain = config('mail.from.address');
+        $domain = substr($domain, strpos($domain, '@') + 1);
+
+        return "reply-{$this->reply_token}@{$domain}";
     }
 }
