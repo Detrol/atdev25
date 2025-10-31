@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -59,7 +58,7 @@ class WebsiteDataCollector
                 'images' => $this->analyzeImages(),
                 'links' => $this->analyzeLinks(),
                 'performance' => $this->calculatePerformance(),
-                'technical' => $this->analyzeTechnical(),
+                'technical' => $this->analyzeTechnical($url),
                 'content' => $this->analyzeContent(),
             ];
 
@@ -310,7 +309,7 @@ class WebsiteDataCollector
     /**
      * Analyze technical aspects
      */
-    private function analyzeTechnical(): array
+    private function analyzeTechnical(string $url): array
     {
         // Check for common frameworks/technologies
         $technologies = [];
@@ -338,7 +337,7 @@ class WebsiteDataCollector
         }
 
         // Check for HTTPS
-        $hasSSL = str_starts_with($this->html, 'https://');
+        $hasSSL = str_starts_with($url, 'https://');
 
         // Check for viewport meta
         $hasViewport = $this->crawler->filter('meta[name="viewport"]')->count() > 0;
