@@ -30,7 +30,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Login view
-        Fortify::loginView(fn () => view('admin.auth.login'));
+        Fortify::loginView(fn () => view('auth.login'));
 
         // Rate limiting for login
         RateLimiter::for('login', function (Request $request) {
