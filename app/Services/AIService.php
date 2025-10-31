@@ -303,12 +303,16 @@ Analysera och betygsätt:
 Prioriterad lista (1-8 förslag):
 
 ### 1. [Titel]
+
 **Vad**: [Kort beskrivning]
+
 **Varför**: [Business impact]
+
 **Hur**: [Konkret steg]
+
 **Svårighetsgrad**: Lätt/Medel/Svår
 
-[Upprepa för varje förslag]
+[Upprepa för varje förslag med tomma rader mellan Vad/Varför/Hur/Svårighetsgrad]
 
 ## Tekniska Rekommendationer
 - Specifika verktyg eller tekniker
