@@ -6,6 +6,7 @@ use App\Http\Requests\WebsiteAuditRequest;
 use App\Jobs\ProcessWebsiteAudit;
 use App\Models\WebsiteAudit;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 
@@ -43,12 +44,23 @@ class WebsiteAuditController extends Controller
             ->first();
 
         if ($recentAudit) {
+            Log::info('Controller: Duplicate audit found, redirecting to existing', [
+                'url' => $request->url,
+                'existing_audit_id' => $recentAudit->id,
+            ]);
+
             return redirect()
                 ->route('audits.status', $recentAudit->token)
                 ->with('info', 'Denna webbplats har redan granskats nyligen. Här är den senaste rapporten.');
         }
 
         // Create audit
+        Log::info('Controller: Creating new audit', [
+            'url' => $request->url,
+            'email' => $request->email,
+            'ip' => $ip,
+        ]);
+
         $audit = WebsiteAudit::create([
             'url' => $request->url,
             'name' => $request->name,
@@ -56,8 +68,19 @@ class WebsiteAuditController extends Controller
             'company' => $request->company,
         ]);
 
+        Log::info('Controller: Audit created', [
+            'audit_id' => $audit->id,
+            'token' => $audit->token,
+        ]);
+
         // Dispatch job
+        Log::info('Controller: Dispatching ProcessWebsiteAudit job', [
+            'audit_id' => $audit->id,
+        ]);
         ProcessWebsiteAudit::dispatch($audit);
+        Log::info('Controller: Job dispatched successfully', [
+            'audit_id' => $audit->id,
+        ]);
 
         // Record rate limit
         RateLimiter::hit($key, 86400); // 24 hours

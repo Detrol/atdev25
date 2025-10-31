@@ -160,18 +160,25 @@ class AIService
      */
     public function analyzeWebsite(array $collectedData): array
     {
+        Log::info('AIService: Starting website analysis', ['url' => $collectedData['url'] ?? 'unknown']);
+
         $apiKey = Config::get('services.anthropic.api_key');
 
         if (! $apiKey) {
-            Log::error('Anthropic API key not configured for website analysis');
+            Log::error('AIService: Anthropic API key not configured for website analysis');
             throw new \Exception('AI-tjänsten är inte korrekt konfigurerad.');
         }
 
         $url = Config::get('services.anthropic.api_url', 'https://api.anthropic.com/v1/messages');
 
         // Skapa analysuppdraget
+        Log::info('AIService: Creating analysis prompts...');
         $systemPrompt = $this->createWebsiteAnalysisPrompt();
         $userMessage = $this->formatCollectedDataForAnalysis($collectedData);
+        Log::info('AIService: Prompts created', [
+            'system_prompt_length' => strlen($systemPrompt),
+            'user_message_length' => strlen($userMessage),
+        ]);
 
         $data = [
             'model' => 'claude-3-7-sonnet-20250219',
@@ -198,10 +205,17 @@ class AIService
         ];
 
         try {
+            Log::info('AIService: Calling Anthropic API...');
+            $startTime = microtime(true);
             $response = Http::withHeaders($headers)->timeout(60)->post($url, $data);
+            $apiCallDuration = microtime(true) - $startTime;
+            Log::info('AIService: API call completed', [
+                'duration' => round($apiCallDuration, 2),
+                'status' => $response->status(),
+            ]);
 
             if ($response->failed()) {
-                Log::error('Anthropic API call failed for website analysis', [
+                Log::error('AIService: Anthropic API call failed for website analysis', [
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
@@ -210,18 +224,26 @@ class AIService
             }
 
             $responseData = $response->json();
+            Log::info('AIService: Response parsed', [
+                'has_content' => isset($responseData['content'][0]['text']),
+                'input_tokens' => $responseData['usage']['input_tokens'] ?? 0,
+                'output_tokens' => $responseData['usage']['output_tokens'] ?? 0,
+            ]);
 
             if (! isset($responseData['content'][0]['text'])) {
-                Log::error('Unexpected response format from Anthropic API', ['responseData' => $responseData]);
+                Log::error('AIService: Unexpected response format from Anthropic API', ['responseData' => $responseData]);
                 throw new \Exception('Fick ett oväntat svar från AI-tjänsten.');
             }
 
             $aiReport = $responseData['content'][0]['text'];
+            Log::info('AIService: Report generated', ['report_length' => strlen($aiReport)]);
 
             // Extrahera scores från rapporten
+            Log::info('AIService: Extracting scores from report...');
             $scores = $this->extractScoresFromReport($aiReport);
+            Log::info('AIService: Scores extracted', $scores);
 
-            Log::info('Website analysis completed', [
+            Log::info('AIService: Website analysis completed successfully', [
                 'url' => $collectedData['url'],
                 'seo_score' => $scores['seo_score'],
                 'performance_score' => $scores['performance_score'],
@@ -235,9 +257,10 @@ class AIService
                 'overall_score' => $scores['overall_score'],
             ];
         } catch (\Throwable $e) {
-            Log::error('Exception in analyzeWebsite', [
+            Log::error('AIService: Exception in analyzeWebsite', [
                 'error' => $e->getMessage(),
                 'url' => $collectedData['url'] ?? 'unknown',
+                'trace' => $e->getTraceAsString(),
             ]);
 
             throw $e;

@@ -21,24 +21,35 @@ class WebsiteDataCollector
      */
     public function collect(string $url): array
     {
+        Log::info('WebsiteDataCollector: Starting collection', ['url' => $url]);
+
         try {
             // Fetch HTML and take screenshot
+            Log::info('WebsiteDataCollector: Fetching HTML...');
             $startTime = microtime(true);
             $this->html = $this->fetchHtml($url);
             $this->loadTime = microtime(true) - $startTime;
+            Log::info('WebsiteDataCollector: HTML fetched', [
+                'load_time' => round($this->loadTime, 2),
+                'html_size' => strlen($this->html),
+            ]);
 
             if (empty($this->html)) {
                 throw new Exception('Failed to fetch HTML from URL');
             }
 
             // Initialize DOM crawler
+            Log::info('WebsiteDataCollector: Initializing DOM crawler');
             $this->crawler = new Crawler($this->html);
 
             // Take screenshot
+            Log::info('WebsiteDataCollector: Taking screenshot...');
             $screenshotPath = $this->takeScreenshot($url);
+            Log::info('WebsiteDataCollector: Screenshot complete', ['path' => $screenshotPath]);
 
             // Collect all data
-            return [
+            Log::info('WebsiteDataCollector: Extracting data...');
+            $data = [
                 'url' => $url,
                 'html_length' => strlen($this->html),
                 'load_time' => round($this->loadTime, 2),
@@ -51,10 +62,19 @@ class WebsiteDataCollector
                 'technical' => $this->analyzeTechnical(),
                 'content' => $this->analyzeContent(),
             ];
+
+            Log::info('WebsiteDataCollector: Collection complete', [
+                'data_keys' => array_keys($data),
+                'total_images' => $data['images']['total'] ?? 0,
+                'total_links' => $data['links']['total'] ?? 0,
+            ]);
+
+            return $data;
         } catch (Exception $e) {
             Log::error('WebsiteDataCollector failed', [
                 'url' => $url,
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
 
             throw $e;
