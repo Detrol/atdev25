@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\WebsiteAuditController as AdminAuditController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -32,7 +33,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Projects
     Route::resource('projects', AdminProjectController::class);
     Route::post('projects/{project}/screenshot', [AdminProjectController::class, 'screenshot'])->name('projects.screenshot');
-    
+
+    // Services
+    Route::resource('services', AdminServiceController::class);
+
     // Profile
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
