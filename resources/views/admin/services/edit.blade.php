@@ -32,7 +32,7 @@
                            id="title"
                            value="{{ old('title', $service->title) }}"
                            required
-                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('title') ring-red-300 @enderror">
+                           class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('title') ring-red-300 @enderror">
                     @error('title')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -49,7 +49,7 @@
                            name="slug"
                            id="slug"
                            value="{{ old('slug', $service->slug) }}"
-                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('slug') ring-red-300 @enderror">
+                           class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('slug') ring-red-300 @enderror">
                     @error('slug')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -66,7 +66,7 @@
                               id="description"
                               rows="4"
                               required
-                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('description') ring-red-300 @enderror">{{ old('description', $service->description) }}</textarea>
+                              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('description') ring-red-300 @enderror">{{ old('description', $service->description) }}</textarea>
                     @error('description')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -82,7 +82,7 @@
                     <select name="icon"
                             id="icon"
                             required
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('icon') ring-red-300 @enderror">
+                            class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('icon') ring-red-300 @enderror">
                         <option value="">Välj ikon</option>
                         <option value="code" {{ old('icon', $service->icon) === 'code' ? 'selected' : '' }}>Code (Kod)</option>
                         <option value="puzzle-piece" {{ old('icon', $service->icon) === 'puzzle-piece' ? 'selected' : '' }}>Puzzle Piece (Integration)</option>
@@ -105,7 +105,7 @@
                               id="features"
                               rows="3"
                               placeholder="Funktion 1, Funktion 2, Funktion 3"
-                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('features') ring-red-300 @enderror">{{ old('features', is_array($service->features) ? implode(', ', $service->features) : '') }}</textarea>
+                              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('features') ring-red-300 @enderror">{{ old('features', is_array($service->features) ? implode(', ', $service->features) : '') }}</textarea>
                     @error('features')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -124,7 +124,7 @@
                            id="sort_order"
                            value="{{ old('sort_order', $service->sort_order) }}"
                            min="0"
-                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('sort_order') ring-red-300 @enderror">
+                           class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 @error('sort_order') ring-red-300 @enderror">
                     @error('sort_order')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
