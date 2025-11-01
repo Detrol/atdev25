@@ -15,7 +15,6 @@ beforeEach(function () {
                         'project_type_label' => 'Portfolio/Landing Page',
                         'complexity' => 3,
                         'complexity_label' => 'Bas komplexitet - standardfunktioner som kontaktformulär och projektgalleri',
-                        'recommended_tech' => ['Laravel', 'Alpine.js', 'Tailwind CSS', 'MySQL'],
                         'key_features' => [
                             'Responsiv design',
                             'Projektgalleri med filtrering',
@@ -77,7 +76,6 @@ test('price calculator returns successful estimation with ranges', function () {
                 'project_type_label',
                 'complexity',
                 'complexity_label',
-                'recommended_tech',
                 'key_features',
                 'confidence',
                 'notes',
@@ -129,7 +127,7 @@ test('price calculator returns successful estimation with ranges', function () {
     expect($hoursMaxAi)->toBe((int) round($hoursMaxTraditional * 0.5));
 });
 
-test('price calculator enforces Laravel technology stack', function () {
+test('price calculator returns key features', function () {
     $description = 'Jag behöver en e-handelsplattform med användarautentisering och betalintegration.';
 
     $response = $this->postJson('/api/price-estimate', [
@@ -139,17 +137,13 @@ test('price calculator enforces Laravel technology stack', function () {
     $response->assertStatus(200);
 
     $estimation = $response->json('estimation');
-    $techStack = implode(' ', $estimation['recommended_tech']);
 
-    // Should always include Laravel
-    expect($techStack)->toContain('Laravel');
+    // Should return key features
+    expect($estimation['key_features'])->toBeArray();
+    expect($estimation['key_features'])->not->toBeEmpty();
 
-    // Should use Tailwind CSS
-    expect($techStack)->toContain('Tailwind');
-
-    // Should NOT recommend Next.js or React standalone
-    expect($techStack)->not->toContain('Next.js');
-    expect($techStack)->not->toContain('Express');
+    // Should not include recommended_tech anymore
+    expect($estimation)->not->toHaveKey('recommended_tech');
 });
 
 test('price calculator respects rate limiting', function () {
@@ -243,8 +237,9 @@ test('AI prompt no longer includes time calculation formulas', function () {
     expect($prompt)->not->toContain('estimated_hours_traditional');
     expect($prompt)->not->toContain('estimated_hours_ai');
 
-    // Should still enforce Laravel
-    expect($prompt)->toContain('ALLTID Laravel');
+    // Should NOT contain technology recommendations anymore
+    expect($prompt)->not->toContain('ALLTID Laravel');
+    expect($prompt)->not->toContain('recommended_tech');
 
     // Should have complexity guidance
     expect($prompt)->toContain('KOMPLEXITET 1-2');

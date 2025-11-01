@@ -695,7 +695,6 @@ Returnera ENDAST valid JSON med denna exakta struktur:
   "project_type_label": "Svensk beskrivande text av projekttyp",
   "complexity": 1-10,
   "complexity_label": "Kort svensk förklaring av komplexiteten (1-2 meningar)",
-  "recommended_tech": ["Tech1", "Tech2", "Tech3"],
   "key_features": ["Feature 1", "Feature 2", "Feature 3"],
   "confidence": "high|medium|low",
   "notes": "Eventuella viktiga anteckningar på svenska"
@@ -1061,19 +1060,6 @@ Använd denna kategori när projektet inte passar någon annan typ eller är myc
 
 ---
 
-## TEKNOLOGIREKOMMENDATIONER
-
-**Backend:** ALLTID Laravel (primär stack)
-**Frontend:**
-- Alpine.js (komplexitet 1-4)
-- Vue.js eller Livewire (komplexitet 5-10)
-**Styling:** ALLTID Tailwind CSS
-**Databas:** MySQL (standard) eller PostgreSQL (vid avancerade queries)
-
-**UNDVIK:** Next.js, React (standalone), Node.js backend, Express
-
----
-
 ## VIKTIGA REGLER
 
 1. **MATCHA mot exempel** - Om beskrivningen liknar ett exempel, använd samma komplexitet
@@ -1115,7 +1101,6 @@ PROMPT;
             'project_type_label',
             'complexity',
             'complexity_label',
-            'recommended_tech',
             'key_features',
         ];
 
