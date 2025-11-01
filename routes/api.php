@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AIAssistantController;
+use App\Http\Controllers\PriceCalculatorController;
 use App\Http\Controllers\TechStackController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,11 @@ Route::prefix('chat')->group(function () {
     Route::get('/history', [AIAssistantController::class, 'getChatHistory'])
         ->name('api.chat.history');
 });
+
+// Price Calculator API
+Route::post('/price-estimate', [PriceCalculatorController::class, 'estimate'])
+    ->middleware('throttle:5,10') // 5 requests per 10 minutes
+    ->name('api.price-estimate');
 
 // Tech Stack API
 Route::get('/tech-stack', function () {

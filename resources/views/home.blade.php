@@ -136,6 +136,8 @@
     </div>
 </section>
 
+@include('components.price-calculator')
+
 <section id="services" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
     <div class="max-w-6xl mx-auto px-6">
         <div class="text-center mb-16">
