@@ -113,7 +113,7 @@
         </div>
 
         <!-- Main Viewer & Product Selection -->
-        <div x-data="productViewerData()" x-init="init()" class="space-y-12">
+        <div x-data="productViewerData(@js($demos['product_viewer']['products']))" x-init="init()" class="space-y-12">
             <!-- 3D Viewer Container -->
             <div class="grid lg:grid-cols-3 gap-8 items-start">
                 <!-- Product Viewer (2/3) -->
@@ -379,6 +379,7 @@
 </footer>
 
 @push('scripts')
+@vite('resources/js/demos/product-viewer.js')
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 @endpush
 
