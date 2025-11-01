@@ -705,29 +705,57 @@ Analysera projektbeskrivningen och returnera ENDAST valid JSON med denna exakta 
 
 RIKTLINJER FÖR ESTIMERING:
 
-**Projekttyper:**
-- simple: Landing pages, portfolios, enkla webbsidor (10-40h)
-- webapp: SaaS, e-handel, booking-system, plattformar med inloggning (80-300h)
-- api: Backend/API-utveckling, integrationer (40-150h)
-- maintenance: Bugfixar, uppdateringar, mindre ändringar (10-50h)
-- custom: Specialanpassade lösningar som inte passar ovan
+**Projekttyper och basTimmar:**
+- simple: Landing pages, portfolios, enkla webbsidor (basTimmar: 12)
+- webapp: SaaS, e-handel, booking-system, plattformar (basTimmar: 80)
+- api: Backend/API-utveckling, integrationer (basTimmar: 40)
+- maintenance: Bugfixar, uppdateringar (basTimmar: 8)
+- custom: Specialanpassade lösningar (basTimmar: 60)
 
-**Komplexitet (1-10):**
-- 1-3: Enkelt (Standardfunktioner, färdiga CMS-lösningar, statiska sidor)
-- 4-6: Medel (Anpassningar, API-integrationer, användarhantering, databas)
-- 7-9: Komplex (Betalningar, avancerad logik, admin-paneler, realtid, säkerhet)
-- 10: Enterprise (Mikrotjänster, hög skalbarhet, komplex arkitektur, AI/ML)
+**Komplexitet (1-10) som multiplikator:**
+- 1: ×0.6 (Mycket enkelt - statisk content)
+- 2: ×0.8 (Enkelt - minimal interaktion)
+- 3: ×1.0 (Bas - standardfunktioner)
+- 4: ×1.3 (Lätt medel - några anpassningar)
+- 5: ×1.7 (Medel - databas, auth, admin)
+- 6: ×2.2 (Över medel - integrationer, API)
+- 7: ×2.8 (Komplex - betalning, realtid)
+- 8: ×3.5 (Mycket komplex - avancerad logik)
+- 9: ×4.5 (Enterprise-grade - skalbarhet)
+- 10: ×6.0 (Maximal komplexitet - mikrotjänster)
+
+**Feature-påverkan (lägg till basTimmar):**
+- Admin-panel för innehåll: +8h
+- Användarautentisering (login/register): +6h
+- Kontaktformulär med email: +3h
+- Betalintegration (Stripe/Swish): +12h
+- API-integration (tredje part): +8h per integration
+- Filuppladdning/galleri: +4h
+- Real-time features (websockets): +15h
+- Avancerad sökning/filtrering: +6h
+- Multi-språk support: +10h
+- Bokningssystem/kalender: +15h
+
+**Beräkningsformel:**
+estimated_hours_traditional = (basTimmar × komplexitetsMultiplikator) + summa(feature-timmar)
+
+**Laravel-optimeringar (dra bort från totalen):**
+- Laravel har inbyggd auth → -4h om auth behövs
+- Migrations & ORM → -3h för databas-setup
+- Blade templates → -2h för frontend
 
 **Tidsestimering:**
-- estimated_hours_ai ska ALLTID vara exakt 50% av estimated_hours_traditional
-- delivery_weeks baseras på 20h effektivt arbete/vecka
-- delivery_weeks_ai är hälften av delivery_weeks_traditional (avrunda uppåt)
-- Var realistisk men inte överdrivet generös
+- estimated_hours_ai = estimated_hours_traditional × 0.5 (exakt 50%)
+- delivery_weeks_traditional = ceil(estimated_hours_traditional / 20)
+- delivery_weeks_ai = ceil(estimated_hours_ai / 20)
 
 **Teknologirekommendationer:**
-- Rekommendera moderna, beprövade teknologier (Laravel, Vue.js, React, Node.js, etc.)
-- Matcha teknologier med projektets behov och komplexitet
-- 3-6 huvudteknologier
+- ALLTID Laravel som backend (primär stack)
+- Frontend: Alpine.js (komplexitet 1-4), Vue.js (komplexitet 5-10), Livewire (admin-fokus)
+- Styling: ALLTID Tailwind CSS
+- Databas: MySQL (standard) eller PostgreSQL (vid behov av avancerade queries)
+- UNDVIK: Next.js, React (standalone), Node.js backend, Express
+- Stack-exempel: "Laravel, Alpine.js, Tailwind CSS, MySQL" (enkel) eller "Laravel, Vue.js, Tailwind CSS, PostgreSQL, Redis" (komplex)
 
 **Key Features:**
 - Extrahera 4-8 huvudfunktioner från beskrivningen
