@@ -112,8 +112,8 @@
                         </svg>
                     </div>
                     <div class="chat-header-text">
-                        <h3>AI-Assistent</h3>
-                        <p>Ställ tekniska frågor</p>
+                        <h3>AI Demo-Assistent</h3>
+                        <p>Skräddarsydd för företag</p>
                     </div>
                 </div>
                 <button @click="toggleChat()" class="chat-close" aria-label="Stäng chat">
@@ -135,16 +135,39 @@
 
             <!-- Messages -->
             <div class="chat-messages" x-ref="messagesContainer">
-                <!-- Welcome message if no messages -->
-                <template x-if="messages.length === 0 && !isLoading">
-                    <div class="text-center text-gray-500 py-8">
-                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                        </svg>
-                        <p class="text-sm font-medium mb-1">Hej! Jag är AI-assistenten</p>
-                        <p class="text-xs">Ställ mig frågor om webbutveckling, arkitektur eller tekniska lösningar</p>
+                <!-- Welcome message - Always visible -->
+                <div class="py-6 px-4 border-b border-gray-200/50 dark:border-gray-700/50 mb-4">
+                    <!-- Welcome Header -->
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">👋 Detta är en demo-assistent</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Den visar hur AI kan skräddarsys för <span class="font-semibold text-purple-600 dark:text-purple-400">DITT företag</span>!<br>
+                            Tränad på ATDevs data – samma teknologi kan använda <span class="font-semibold text-blue-600 dark:text-blue-400">ER specifika data</span>.
+                        </p>
                     </div>
-                </template>
+
+                    <!-- Example Questions -->
+                    <div class="space-y-2">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Testa att fråga:</p>
+                        <button @click="selectSuggestedQuestion('Vilka projekt har du byggt?')" class="suggested-question">
+                            <span>💼</span>
+                            <span>Vilka projekt har du byggt?</span>
+                        </button>
+                        <button @click="selectSuggestedQuestion('Hur kan AI integreras i min verksamhet?')" class="suggested-question">
+                            <span>🤖</span>
+                            <span>Hur kan AI integreras i min verksamhet?</span>
+                        </button>
+                        <button @click="selectSuggestedQuestion('Vad kostar en skräddarsydd AI-assistent?')" class="suggested-question">
+                            <span>💰</span>
+                            <span>Vad kostar en skräddarsydd AI-assistent?</span>
+                        </button>
+                    </div>
+                </div>
 
                 <!-- Message list -->
                 <template x-for="(message, index) in messages" :key="index">
