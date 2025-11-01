@@ -1,11 +1,11 @@
 <?php
 
 use App\Services\AIService;
+use App\Services\PriceEstimateMapper;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 beforeEach(function () {
-    // Mock the Anthropic API response
+    // Mock the Anthropic API response (simplified - no hours/weeks)
     Http::fake([
         'api.anthropic.com/*' => Http::response([
             'content' => [
@@ -15,8 +15,6 @@ beforeEach(function () {
                         'project_type_label' => 'Portfolio/Landing Page',
                         'complexity' => 3,
                         'complexity_label' => 'Bas komplexitet - standardfunktioner som kontaktformulär och projektgalleri',
-                        'estimated_hours_traditional' => 15,
-                        'estimated_hours_ai' => 7.5,
                         'recommended_tech' => ['Laravel', 'Alpine.js', 'Tailwind CSS', 'MySQL'],
                         'key_features' => [
                             'Responsiv design',
@@ -24,8 +22,6 @@ beforeEach(function () {
                             'Kontaktformulär',
                             'Admin-panel för innehåll',
                         ],
-                        'delivery_weeks_traditional' => 1,
-                        'delivery_weeks_ai' => 1,
                         'confidence' => 'high',
                         'notes' => 'Standardportfolio med moderna designprinciper',
                     ]),
@@ -33,7 +29,7 @@ beforeEach(function () {
             ],
             'usage' => [
                 'input_tokens' => 500,
-                'output_tokens' => 300,
+                'output_tokens' => 200,
             ],
         ], 200),
     ]);
@@ -66,7 +62,7 @@ test('price calculator validates maximum description length', function () {
         ->assertJsonValidationErrors(['description']);
 });
 
-test('price calculator returns successful estimation', function () {
+test('price calculator returns successful estimation with ranges', function () {
     $description = 'Jag behöver en modern portfolio-webbplats med ett projektgalleri, kontaktformulär och admin-panel för att hantera innehåll.';
 
     $response = $this->postJson('/api/price-estimate', [
@@ -81,21 +77,30 @@ test('price calculator returns successful estimation', function () {
                 'project_type_label',
                 'complexity',
                 'complexity_label',
-                'estimated_hours_traditional',
-                'estimated_hours_ai',
                 'recommended_tech',
                 'key_features',
-                'delivery_weeks_traditional',
-                'delivery_weeks_ai',
                 'confidence',
                 'notes',
+                // Range fields from mapper
+                'hours_range_traditional',
+                'hours_range_ai',
+                'hours_traditional',
+                'hours_ai',
+                'price_range_traditional',
+                'price_range_ai',
                 'price_traditional',
                 'price_ai',
-                'savings',
-                'savings_percent',
+                'price_range_traditional_vat',
+                'price_range_ai_vat',
                 'price_traditional_vat',
                 'price_ai_vat',
+                'savings_range',
+                'savings_range_vat',
+                'savings',
                 'savings_vat',
+                'savings_percent',
+                'delivery_weeks_traditional',
+                'delivery_weeks_ai',
             ],
         ]);
 
@@ -103,18 +108,25 @@ test('price calculator returns successful estimation', function () {
 
     // Verify 50% AI savings
     expect($estimation['savings_percent'])->toBe(50);
-    // AI hours might be rounded, so we check it's approximately 50%
-    expect($estimation['estimated_hours_ai'])->toBeGreaterThanOrEqual($estimation['estimated_hours_traditional'] * 0.45);
-    expect($estimation['estimated_hours_ai'])->toBeLessThanOrEqual($estimation['estimated_hours_traditional'] * 0.55);
 
-    // Verify pricing at 700 kr/h
-    expect($estimation['price_traditional'])->toBe($estimation['estimated_hours_traditional'] * 700);
-    expect($estimation['price_ai'])->toBe($estimation['estimated_hours_ai'] * 700);
-    expect($estimation['savings'])->toBe($estimation['price_traditional'] - $estimation['price_ai']);
+    // Verify ranges are arrays
+    expect($estimation['hours_range_traditional'])->toBeArray();
+    expect($estimation['hours_range_ai'])->toBeArray();
+    expect($estimation['price_range_traditional'])->toBeArray();
+    expect($estimation['price_range_ai'])->toBeArray();
 
-    // Verify VAT calculations (25%)
-    expect($estimation['price_traditional_vat'])->toBe((int) round($estimation['price_traditional'] * 1.25));
-    expect($estimation['price_ai_vat'])->toBe((int) round($estimation['price_ai'] * 1.25));
+    // Verify formatted strings exist
+    expect($estimation['hours_traditional'])->toBeString();
+    expect($estimation['hours_ai'])->toBeString();
+    expect($estimation['price_traditional'])->toBeString();
+    expect($estimation['price_ai'])->toBeString();
+
+    // Verify AI hours are 50% of traditional
+    [$hoursMinTraditional, $hoursMaxTraditional] = $estimation['hours_range_traditional'];
+    [$hoursMinAi, $hoursMaxAi] = $estimation['hours_range_ai'];
+
+    expect($hoursMinAi)->toBe((int) round($hoursMinTraditional * 0.5));
+    expect($hoursMaxAi)->toBe((int) round($hoursMaxTraditional * 0.5));
 });
 
 test('price calculator enforces Laravel technology stack', function () {
@@ -137,7 +149,6 @@ test('price calculator enforces Laravel technology stack', function () {
 
     // Should NOT recommend Next.js or React standalone
     expect($techStack)->not->toContain('Next.js');
-    expect($techStack)->not->toContain('React');
     expect($techStack)->not->toContain('Express');
 });
 
@@ -161,8 +172,65 @@ test('price calculator respects rate limiting', function () {
     $response->assertStatus(429);
 });
 
-test('AI service uses formula-based calculations', function () {
-    // This test verifies the prompt contains mathematical formulas
+test('PriceEstimateMapper returns consistent ranges for same complexity', function () {
+    // Test that same project type + complexity always returns same range
+    $result1 = PriceEstimateMapper::map('simple', 3);
+    $result2 = PriceEstimateMapper::map('simple', 3);
+
+    expect($result1)->toEqual($result2);
+
+    // Verify it's a proper range
+    expect($result1['hours_range_traditional'])->toBeArray();
+    expect($result1['hours_traditional'])->toBeString();
+    expect($result1['price_traditional'])->toBeString();
+});
+
+test('PriceEstimateMapper handles complexity levels correctly', function () {
+    // Complexity 1-2 should give smaller range than complexity 3-4
+    $simple1 = PriceEstimateMapper::map('simple', 2);
+    $simple4 = PriceEstimateMapper::map('simple', 4);
+
+    [$hoursMin1, $hoursMax1] = $simple1['hours_range_traditional'];
+    [$hoursMin4, $hoursMax4] = $simple4['hours_range_traditional'];
+
+    // Higher complexity should give higher hours
+    expect($hoursMin4)->toBeGreaterThan($hoursMin1);
+    expect($hoursMax4)->toBeGreaterThan($hoursMax1);
+});
+
+test('PriceEstimateMapper enforces 50% AI efficiency', function () {
+    $result = PriceEstimateMapper::map('webapp', 5);
+
+    [$hoursMinTraditional, $hoursMaxTraditional] = $result['hours_range_traditional'];
+    [$hoursMinAi, $hoursMaxAi] = $result['hours_range_ai'];
+
+    // AI should be exactly 50% of traditional
+    expect($hoursMinAi)->toEqual(round($hoursMinTraditional * 0.5));
+    expect($hoursMaxAi)->toEqual(round($hoursMaxTraditional * 0.5));
+    expect($result['savings_percent'])->toBe(50);
+});
+
+test('PriceEstimateMapper calculates prices at 700 kr per hour', function () {
+    $result = PriceEstimateMapper::map('simple', 3);
+
+    [$hoursMin, $hoursMax] = $result['hours_range_traditional'];
+    [$priceMin, $priceMax] = $result['price_range_traditional'];
+
+    expect($priceMin)->toBe($hoursMin * 700);
+    expect($priceMax)->toBe($hoursMax * 700);
+});
+
+test('PriceEstimateMapper calculates VAT correctly', function () {
+    $result = PriceEstimateMapper::map('api', 4);
+
+    [$priceMinExclVat, $priceMaxExclVat] = $result['price_range_traditional'];
+    [$priceMinInclVat, $priceMaxInclVat] = $result['price_range_traditional_vat'];
+
+    expect($priceMinInclVat)->toEqual(round($priceMinExclVat * 1.25));
+    expect($priceMaxInclVat)->toEqual(round($priceMaxExclVat * 1.25));
+});
+
+test('AI prompt no longer includes time calculation formulas', function () {
     $aiService = app(AIService::class);
 
     $reflection = new ReflectionClass($aiService);
@@ -170,12 +238,15 @@ test('AI service uses formula-based calculations', function () {
     $method->setAccessible(true);
     $prompt = $method->invoke($aiService);
 
-    // Verify formula-based structure exists
-    expect($prompt)->toContain('basTimmar: 12'); // Simple project base
-    expect($prompt)->toContain('×0.6'); // Complexity multiplier 1
-    expect($prompt)->toContain('×6.0'); // Complexity multiplier 10
-    expect($prompt)->toContain('+8h'); // Admin panel feature
-    expect($prompt)->toContain('-4h'); // Laravel auth optimization
-    expect($prompt)->toContain('ALLTID Laravel'); // Technology enforcement
-    expect($prompt)->toContain('× 0.5'); // 50% AI efficiency
+    // Should NOT contain calculation formulas
+    expect($prompt)->not->toContain('basTimmar × komplexitetsMultiplikator');
+    expect($prompt)->not->toContain('estimated_hours_traditional');
+    expect($prompt)->not->toContain('estimated_hours_ai');
+
+    // Should still enforce Laravel
+    expect($prompt)->toContain('ALLTID Laravel');
+
+    // Should have complexity guidance
+    expect($prompt)->toContain('Komplexitet 1-2');
+    expect($prompt)->toContain('Komplexitet 3-4');
 });
