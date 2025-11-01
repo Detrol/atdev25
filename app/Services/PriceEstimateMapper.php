@@ -99,11 +99,11 @@ class PriceEstimateMapper
         $priceMinAiVat = round($priceMinAi * 1.25);
         $priceMaxAiVat = round($priceMaxAi * 1.25);
 
-        // Calculate delivery weeks (assuming 20h/week effective work)
-        $weeksMinTraditional = max(1, ceil($hoursMin / 20));
-        $weeksMaxTraditional = max(1, ceil($hoursMax / 20));
-        $weeksMinAi = max(1, ceil($hoursMinAi / 20));
-        $weeksMaxAi = max(1, ceil($hoursMaxAi / 20));
+        // Calculate delivery time (assuming 5h/day effective work)
+        $daysMinTraditional = max(1, ceil($hoursMin / 5));
+        $daysMaxTraditional = max(1, ceil($hoursMax / 5));
+        $daysMinAi = max(1, ceil($hoursMinAi / 5));
+        $daysMaxAi = max(1, ceil($hoursMaxAi / 5));
 
         // Calculate savings
         $savingsMin = $priceMinTraditional - $priceMaxAi; // Conservative (worst case)
@@ -143,9 +143,9 @@ class PriceEstimateMapper
             'savings_vat' => self::formatPriceRange($savingsMinVat, $savingsMaxVat),
             'savings_percent' => 50,
 
-            // Delivery weeks
-            'delivery_weeks_traditional' => self::formatWeekRange($weeksMinTraditional, $weeksMaxTraditional),
-            'delivery_weeks_ai' => self::formatWeekRange($weeksMinAi, $weeksMaxAi),
+            // Delivery time
+            'delivery_weeks_traditional' => self::formatDeliveryTime($daysMinTraditional, $daysMaxTraditional),
+            'delivery_weeks_ai' => self::formatDeliveryTime($daysMinAi, $daysMaxAi),
         ];
     }
 
@@ -201,15 +201,27 @@ class PriceEstimateMapper
     }
 
     /**
-     * Format week range as readable string
+     * Format delivery time as readable string (days or weeks)
      */
-    private static function formatWeekRange(int $min, int $max): string
+    private static function formatDeliveryTime(int $minDays, int $maxDays): string
     {
-        if ($min === $max) {
-            return "~{$min} ".($min === 1 ? 'vecka' : 'veckor');
+        // If 5 days or less, show in days
+        if ($maxDays <= 5) {
+            if ($minDays === $maxDays) {
+                return "~{$minDays} ".($minDays === 1 ? 'dag' : 'dagar');
+            }
+            return "{$minDays}-{$maxDays} dagar";
         }
 
-        return "{$min}-{$max} veckor";
+        // Convert to weeks for longer periods
+        $minWeeks = ceil($minDays / 5);
+        $maxWeeks = ceil($maxDays / 5);
+
+        if ($minWeeks === $maxWeeks) {
+            return "~{$minWeeks} ".($minWeeks === 1 ? 'vecka' : 'veckor');
+        }
+
+        return "{$minWeeks}-{$maxWeeks} veckor";
     }
 
     /**
