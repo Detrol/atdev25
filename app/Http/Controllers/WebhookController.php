@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class WebhookController extends Controller
 {
@@ -15,7 +14,7 @@ class WebhookController extends Controller
     public function handleInbound(Request $request)
     {
         // Verifiera Mailgun signature
-        if (!$this->verifySignature($request)) {
+        if (! $this->verifySignature($request)) {
             Log::warning('Mailgun webhook: Ogiltig signature', [
                 'ip' => $request->ip(),
             ]);
@@ -34,7 +33,7 @@ class WebhookController extends Controller
 
             // Extrahera reply_token från recipient
             // Format: reply-{token}@atdev.me
-            if (!preg_match('/reply-([a-zA-Z0-9]+)@/', $recipient, $matches)) {
+            if (! preg_match('/reply-([a-zA-Z0-9]+)@/', $recipient, $matches)) {
                 Log::warning('Mailgun webhook: Kunde inte extrahera reply token', [
                     'recipient' => $recipient,
                 ]);
@@ -48,7 +47,7 @@ class WebhookController extends Controller
             $originalMessage = ContactMessage::where('reply_token', $replyToken)
                 ->first();
 
-            if (!$originalMessage) {
+            if (! $originalMessage) {
                 Log::warning('Mailgun webhook: Kunde inte hitta meddelande för token', [
                     'token' => $replyToken,
                 ]);
@@ -57,7 +56,7 @@ class WebhookController extends Controller
             }
 
             // Använd stripped-text om tillgängligt, annars body-plain
-            $messageBody = !empty($strippedText) ? $strippedText : $bodyPlain;
+            $messageBody = ! empty($strippedText) ? $strippedText : $bodyPlain;
 
             // Skapa reply från användaren
             ContactMessage::create([
@@ -98,7 +97,7 @@ class WebhookController extends Controller
         $signature = $request->input('signature');
 
         // Kontrollera att alla required fields finns
-        if (!$timestamp || !$token || !$signature) {
+        if (! $timestamp || ! $token || ! $signature) {
             return false;
         }
 
@@ -112,10 +111,11 @@ class WebhookController extends Controller
 
         if (empty($signingKey)) {
             Log::error('Mailgun webhook: Webhook signing key saknas i config');
+
             return false;
         }
 
-        $data = $timestamp . $token;
+        $data = $timestamp.$token;
         $expectedSignature = hash_hmac('sha256', $data, $signingKey);
 
         return hash_equals($expectedSignature, $signature);

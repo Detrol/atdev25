@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectRequest;
 use App\Jobs\TakeProjectScreenshot;
 use App\Models\Project;
-use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -35,6 +34,7 @@ class ProjectController extends Controller
     public function create()
     {
         $statuses = ProjectStatus::cases();
+
         return view('admin.projects.create', compact('statuses'));
     }
 
@@ -64,6 +64,7 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $statuses = ProjectStatus::cases();
+
         return view('admin.projects.edit', compact('project', 'statuses'));
     }
 
@@ -99,7 +100,7 @@ class ProjectController extends Controller
      */
     public function screenshot(Project $project)
     {
-        if (!$project->live_url) {
+        if (! $project->live_url) {
             return redirect()->back()
                 ->with('error', 'Projektet saknar live URL!');
         }

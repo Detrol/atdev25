@@ -26,6 +26,7 @@ class ContactRequest extends FormRequest
             'email' => ['required', 'email', 'max:255'],
             'message' => ['required', 'string', 'min:10', 'max:5000'],
             'website' => ['nullable', 'max:0'], // Honeypot field
+            'price_estimation_id' => ['nullable', 'integer', 'exists:price_estimations,id'],
         ];
     }
 

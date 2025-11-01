@@ -31,8 +31,9 @@ Route::post('/price-estimate', [PriceCalculatorController::class, 'estimate'])
 
 // Tech Stack API
 Route::get('/tech-stack', function () {
-    $controller = new TechStackController();
+    $controller = new TechStackController;
     $view = $controller->index();
     $techData = $view->getData()['techData'];
+
     return response()->json($techData);
 })->name('api.tech-stack');

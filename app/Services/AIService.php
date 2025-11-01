@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Chat;
 use App\Models\Profile;
 use App\Models\Project;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -341,15 +340,15 @@ PROMPT;
 
         // Meta information
         $message .= "## META-INFORMATION\n";
-        $message .= "**Title**: ".($data['meta']['title'] ?? 'Saknas')."\n";
-        $message .= "**Description**: ".($data['meta']['description'] ?? 'Saknas')."\n";
-        $message .= "**Meta Keywords**: ".($data['meta']['keywords'] ?: 'Saknas')."\n";
-        $message .= "**Canonical**: ".($data['meta']['canonical'] ?: 'Saknas')."\n";
-        $message .= "**Robots**: ".($data['meta']['robots'] ?: 'Saknas')."\n\n";
+        $message .= '**Title**: '.($data['meta']['title'] ?? 'Saknas')."\n";
+        $message .= '**Description**: '.($data['meta']['description'] ?? 'Saknas')."\n";
+        $message .= '**Meta Keywords**: '.($data['meta']['keywords'] ?: 'Saknas')."\n";
+        $message .= '**Canonical**: '.($data['meta']['canonical'] ?: 'Saknas')."\n";
+        $message .= '**Robots**: '.($data['meta']['robots'] ?: 'Saknas')."\n\n";
 
         // Open Graph
         if (! empty($data['meta']['og_tags'])) {
-            $message .= "**Open Graph Tags**: ".count($data['meta']['og_tags'])." st\n";
+            $message .= '**Open Graph Tags**: '.count($data['meta']['og_tags'])." st\n";
         }
 
         // Headings
@@ -402,19 +401,19 @@ PROMPT;
 
         // Technical
         $message .= "\n## TEKNISKT\n";
-        $message .= "- HTTPS: ".($data['technical']['has_ssl'] ? 'Ja' : 'Nej')."\n";
-        $message .= "- Mobilvänlig (viewport): ".($data['technical']['mobile_friendly'] ? 'Ja' : 'Nej')."\n";
-        $message .= "- Schema markup: ".($data['technical']['has_schema'] ? 'Ja' : 'Nej')."\n";
+        $message .= '- HTTPS: '.($data['technical']['has_ssl'] ? 'Ja' : 'Nej')."\n";
+        $message .= '- Mobilvänlig (viewport): '.($data['technical']['mobile_friendly'] ? 'Ja' : 'Nej')."\n";
+        $message .= '- Schema markup: '.($data['technical']['has_schema'] ? 'Ja' : 'Nej')."\n";
 
         if (! empty($data['technical']['technologies'])) {
-            $message .= "- Identifierade teknologier: ".implode(', ', $data['technical']['technologies'])."\n";
+            $message .= '- Identifierade teknologier: '.implode(', ', $data['technical']['technologies'])."\n";
         }
 
         // Content
         $message .= "\n## INNEHÅLL\n";
         $message .= "- Antal ord: {$data['content']['word_count']}\n";
         $message .= "- Antal paragrafer: {$data['content']['paragraph_count']}\n";
-        $message .= "- Tillräckligt innehåll: ".($data['content']['has_sufficient_content'] ? 'Ja' : 'Nej (< 300 ord)')."\n";
+        $message .= '- Tillräckligt innehåll: '.($data['content']['has_sufficient_content'] ? 'Ja' : 'Nej (< 300 ord)')."\n";
 
         return $message;
     }
@@ -525,7 +524,7 @@ PROMPT;
             $info .= "Beskrivning: {$project->description}\n";
 
             if ($project->tech_stack) {
-                $info .= "Tekniker: ".implode(', ', $project->tech_stack)."\n";
+                $info .= 'Tekniker: '.implode(', ', $project->tech_stack)."\n";
             }
 
             if ($project->live_url) {
@@ -549,7 +548,7 @@ PROMPT;
             "- Var ärlig om begränsningar och avvägningar mellan olika tekniska val\n".
             "- Uppmuntra användare att utforska och lära sig mer\n".
             "- Du kan referera till projekt i portfolion som exempel på tekniska lösningar\n".
-            "- Om frågor går utanför ditt kompetensområde, var ärlig om det";
+            '- Om frågor går utanför ditt kompetensområde, var ärlig om det';
     }
 
     /**

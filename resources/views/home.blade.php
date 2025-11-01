@@ -482,9 +482,23 @@
             <form method="POST" action="{{ route('contact.store') }}" @submit="submitting = true" class="space-y-8" x-data="{
                 nameFocused: false,
                 emailFocused: false,
-                messageFocused: false
+                messageFocused: false,
+                estimationId: null,
+                estimation: null,
+                init() {
+                    // Check if estimation data was passed from price calculator
+                    if (window.contactFormEstimation) {
+                        this.estimationId = window.contactFormEstimation.id;
+                        this.estimation = window.contactFormEstimation.data;
+                        // Clear the global data
+                        delete window.contactFormEstimation;
+                    }
+                }
             }">
                 @csrf
+
+                <!-- Hidden field for price estimation ID -->
+                <input type="hidden" name="price_estimation_id" :value="estimationId">
 
                 <!-- Name Field with Floating Label -->
                 <div class="relative group">
@@ -552,6 +566,60 @@
                         {{ $message }}
                     </p>
                     @enderror
+                </div>
+
+                <!-- Price Estimation Summary (shown when coming from price calculator) -->
+                <div x-show="estimation" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 dark:from-purple-900/20 dark:via-blue-900/20 dark:to-pink-900/20 rounded-2xl p-6 border-2 border-purple-200 dark:border-purple-700">
+                    <div class="flex items-center gap-3 mb-4">
+                        <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Din Prisestimering</h3>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
+                            <p class="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-1">Projekttyp</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="estimation?.project_type_label"></p>
+                        </div>
+                        <div class="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
+                            <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1">Komplexitet</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white"><span x-text="estimation?.complexity"></span>/10</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Arbetstid (AI)</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="estimation?.hours_ai"></p>
+                        </div>
+                        <div class="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Leverans</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="estimation?.delivery_weeks_ai"></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-xs font-semibold opacity-90">AI-Driven Pris (inkl. moms)</p>
+                            <span class="px-2 py-1 bg-white/20 rounded-full text-xs font-bold">-50%</span>
+                        </div>
+                        <p class="text-2xl font-bold" x-text="estimation?.price_ai_vat"></p>
+                        <p class="text-xs opacity-75 mt-1">Din besparing: <span x-text="estimation?.savings_vat"></span></p>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-700" x-show="estimation?.key_features?.length > 0">
+                        <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Identifierade Funktioner:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="feature in estimation?.key_features || []" :key="feature">
+                                <span class="px-2 py-1 bg-white/70 dark:bg-gray-800/70 rounded-lg text-xs text-gray-700 dark:text-gray-300" x-text="feature"></span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <p class="mt-4 text-xs text-gray-600 dark:text-gray-400 text-center">
+                        📊 Denna analys kommer att kopplas till ditt meddelande
+                    </p>
                 </div>
 
                 <!-- Message Field with Floating Label -->

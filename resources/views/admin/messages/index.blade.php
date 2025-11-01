@@ -41,6 +41,13 @@
                                             {{ $message->replies->count() }} {{ $message->replies->count() === 1 ? 'svar' : 'svar' }}
                                         </span>
                                     @endif
+
+                                    {{-- Price Estimation indicator --}}
+                                    @if($message->priceEstimation)
+                                        <span class="inline-flex items-center rounded-md bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800" title="Har kopplad prisestimering">
+                                            📊 Estimering
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <a href="{{ route('admin.messages.show', $message) }}" class="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">

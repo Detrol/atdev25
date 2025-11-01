@@ -31,6 +31,97 @@
         </div>
     </div>
 
+    {{-- Price Estimation (if linked) --}}
+    @if($message->priceEstimation)
+    <div class="mb-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 border-2 border-purple-200">
+        <div class="flex items-center gap-3 mb-4">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            <h2 class="text-lg font-bold text-gray-900">Kopplad Prisestimering</h2>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-4 mb-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-purple-600 mb-1">Projekttyp</p>
+                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->project_type_label }}</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-blue-600 mb-1">Komplexitet</p>
+                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->complexity }}/10</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-gray-600 mb-1">Arbetstid (AI)</p>
+                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->hours_ai }}</p>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-gray-600 mb-1">Leverans</p>
+                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->delivery_weeks_ai }}</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-gray-600 mb-2">Traditionell Utveckling</p>
+                <div class="space-y-1 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Timmar:</span>
+                        <span class="font-semibold">{{ $message->priceEstimation->hours_traditional }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Pris (ex. moms):</span>
+                        <span class="font-semibold">{{ $message->priceEstimation->price_traditional }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Inkl. moms:</span>
+                        <span class="font-bold text-gray-900">{{ $message->priceEstimation->price_traditional_vat }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold opacity-90 mb-2">AI-Driven (ATDev) · -50%</p>
+                <div class="space-y-1 text-sm">
+                    <div class="flex justify-between">
+                        <span class="opacity-90">Timmar:</span>
+                        <span class="font-semibold">{{ $message->priceEstimation->hours_ai }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="opacity-90">Pris (ex. moms):</span>
+                        <span class="font-semibold">{{ $message->priceEstimation->price_ai }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="opacity-90">Inkl. moms:</span>
+                        <span class="font-bold text-xl">{{ $message->priceEstimation->price_ai_vat }}</span>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3 border-t border-white/30">
+                    <div class="flex justify-between">
+                        <span class="text-xs opacity-90">Besparing:</span>
+                        <span class="font-bold">{{ $message->priceEstimation->savings_vat }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if(count($message->priceEstimation->key_features) > 0)
+        <div class="bg-white rounded-lg p-4 shadow-sm">
+            <p class="text-xs font-semibold text-gray-700 mb-2">Identifierade Funktioner:</p>
+            <div class="flex flex-wrap gap-2">
+                @foreach($message->priceEstimation->key_features as $feature)
+                    <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium">{{ $feature }}</span>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p class="text-xs text-gray-700"><strong>Original beskrivning:</strong></p>
+            <p class="text-sm text-gray-600 mt-1">{{ $message->priceEstimation->description }}</p>
+        </div>
+    </div>
+    @endif
+
     {{-- Conversation Thread --}}
     <div class="space-y-4 mb-8">
         @foreach($conversation as $msg)
