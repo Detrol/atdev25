@@ -20,6 +20,45 @@
 
 ---
 
+### GET `/tech-stack`
+**Controller**: `TechStackController@index`
+**View**: `tech-stack`
+
+**Datakontrakt**:
+```php
+[
+    'technologies' => array  // Tech stack data for visualization
+]
+```
+
+**Beskrivning**: Visar interaktiv D3.js-visualisering av teknologier och deras relationer.
+
+---
+
+### GET `/demos`
+**Controller**: `DemosController@index`
+**View**: `demos`
+
+**Datakontrakt**:
+```php
+[
+    'demos' => array  // Array of available interactive demonstrations (empty initially)
+]
+```
+
+**Beskrivning**: Showcase-sida med full-page sections för interaktiva demos. Placeholder-innehåll tills specifika demos implementeras.
+
+**Features**:
+- Apple-style full-page sections
+- Smooth scroll navigation
+- Glassmorphism design
+- Responsive layout
+- Fully functional demos (när implementerade)
+
+**CTA på home**: Dedikerad gradient CTA-section mellan Projects och Website Audit.
+
+---
+
 ### GET `/projects/{slug}`
 **Controller**: `ProjectController@show`  
 **View**: `projects.show`

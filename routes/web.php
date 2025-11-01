@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\WebsiteAuditController as AdminAuditController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DemosController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TechStackController;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tech-stack', [TechStackController::class, 'index'])->name('tech-stack');
+Route::get('/demos', [DemosController::class, 'index'])->name('demos');
 Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
 Route::post('/contact', [ContactController::class, 'store'])
     ->middleware('throttle:contact')
