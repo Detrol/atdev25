@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PriceEstimateRequest;
 use App\Services\AIService;
+use App\Services\PriceEstimateMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -35,27 +36,24 @@ class PriceCalculatorController extends Controller
         }
 
         try {
-            // Get AI estimation
-            $estimation = $this->aiService->estimateProjectPrice($description);
+            // Get AI analysis (project type, complexity, tech, features)
+            $aiAnalysis = $this->aiService->estimateProjectPrice($description);
 
-            // Calculate prices (700 kr/h)
-            $hourlyRate = 700;
-            $estimation['price_traditional'] = $estimation['estimated_hours_traditional'] * $hourlyRate;
-            $estimation['price_ai'] = $estimation['estimated_hours_ai'] * $hourlyRate;
-            $estimation['savings'] = $estimation['price_traditional'] - $estimation['price_ai'];
-            $estimation['savings_percent'] = 50; // Always 50% due to AI efficiency
+            // Map to predefined time and price ranges for consistency
+            $priceEstimate = PriceEstimateMapper::map(
+                $aiAnalysis['project_type'],
+                $aiAnalysis['complexity']
+            );
 
-            // With VAT (25%)
-            $estimation['price_traditional_vat'] = round($estimation['price_traditional'] * 1.25);
-            $estimation['price_ai_vat'] = round($estimation['price_ai'] * 1.25);
-            $estimation['savings_vat'] = $estimation['price_traditional_vat'] - $estimation['price_ai_vat'];
+            // Merge AI analysis with price estimate
+            $estimation = array_merge($aiAnalysis, $priceEstimate);
 
             Log::info('Price estimation successful', [
                 'ip' => $request->ip(),
                 'project_type' => $estimation['project_type'],
                 'complexity' => $estimation['complexity'],
-                'hours_traditional' => $estimation['estimated_hours_traditional'],
-                'hours_ai' => $estimation['estimated_hours_ai'],
+                'hours_range_traditional' => $estimation['hours_range_traditional'],
+                'hours_range_ai' => $estimation['hours_range_ai'],
             ]);
 
             return response()->json([

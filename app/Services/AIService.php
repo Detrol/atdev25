@@ -682,7 +682,7 @@ HTML;
     private function createPriceEstimationPrompt(): string
     {
         return <<<'PROMPT'
-Du är en erfaren webbutvecklare som estimerar projekt professionellt.
+Du är en erfaren webbutvecklare som analyserar projekt professionellt.
 
 Analysera projektbeskrivningen och returnera ENDAST valid JSON med denna exakta struktur:
 
@@ -692,86 +692,68 @@ Analysera projektbeskrivningen och returnera ENDAST valid JSON med denna exakta 
   "project_type_label": "Svensk beskrivande text av projekttyp",
   "complexity": 1-10,
   "complexity_label": "Kort svensk förklaring av komplexiteten (1-2 meningar)",
-  "estimated_hours_traditional": antal timmar,
-  "estimated_hours_ai": antal timmar,
   "recommended_tech": ["Tech1", "Tech2", "Tech3"],
   "key_features": ["Feature 1", "Feature 2", "Feature 3"],
-  "delivery_weeks_traditional": antal veckor,
-  "delivery_weeks_ai": antal veckor,
   "confidence": "high|medium|low",
   "notes": "Eventuella viktiga anteckningar på svenska"
 }
 ```
 
-RIKTLINJER FÖR ESTIMERING:
+**PROJEKTTYPER:**
 
-**Projekttyper och basTimmar:**
-- simple: Landing pages, portfolios, enkla webbsidor (basTimmar: 12)
-- webapp: SaaS, e-handel, booking-system, plattformar (basTimmar: 80)
-- api: Backend/API-utveckling, integrationer (basTimmar: 40)
-- maintenance: Bugfixar, uppdateringar (basTimmar: 8)
-- custom: Specialanpassade lösningar (basTimmar: 60)
+**simple:** Landing pages, portfolios, enkla webbsidor
+- Komplexitet 1-2: Mycket enkelt - statisk content, minimal interaktion
+- Komplexitet 3-4: Bas - standardfunktioner som kontaktformulär, galleri
+- Komplexitet 5-7: Medel - databas, admin-panel, användarhantering
+- Komplexitet 8-10: Komplex - avancerade features, integrationer
 
-**Komplexitet (1-10) som multiplikator:**
-- 1: ×0.6 (Mycket enkelt - statisk content)
-- 2: ×0.8 (Enkelt - minimal interaktion)
-- 3: ×1.0 (Bas - standardfunktioner)
-- 4: ×1.3 (Lätt medel - några anpassningar)
-- 5: ×1.7 (Medel - databas, auth, admin)
-- 6: ×2.2 (Över medel - integrationer, API)
-- 7: ×2.8 (Komplex - betalning, realtid)
-- 8: ×3.5 (Mycket komplex - avancerad logik)
-- 9: ×4.5 (Enterprise-grade - skalbarhet)
-- 10: ×6.0 (Maximal komplexitet - mikrotjänster)
+**webapp:** SaaS, e-handel, booking-system, plattformar
+- Komplexitet 1-3: Enkel web app - grundläggande CRUD, enkelt UI
+- Komplexitet 4-6: Medel - integrationer, API, betalning
+- Komplexitet 7-8: Komplex - real-time features, avancerad logik
+- Komplexitet 9-10: Enterprise - microservices, hög skalbarhet
 
-**Feature-påverkan (lägg till basTimmar):**
-- Admin-panel för innehåll: +8h
-- Användarautentisering (login/register): +6h
-- Kontaktformulär med email: +3h
-- Betalintegration (Stripe/Swish): +12h
-- API-integration (tredje part): +8h per integration
-- Filuppladdning/galleri: +4h
-- Real-time features (websockets): +15h
-- Avancerad sökning/filtrering: +6h
-- Multi-språk support: +10h
-- Bokningssystem/kalender: +15h
+**api:** Backend/API-utveckling, integrationer
+- Komplexitet 1-3: Enkelt API - få endpoints, enkel data
+- Komplexitet 4-6: Medel - många endpoints, autentisering
+- Komplexitet 7-8: Komplex - tredjepartsintegrationer, caching
+- Komplexitet 9-10: Enterprise - microservices, hög belastning
 
-**Beräkningsformel:**
-estimated_hours_traditional = (basTimmar × komplexitetsMultiplikator) + summa(feature-timmar)
+**maintenance:** Bugfixar, uppdateringar, förbättringar
+- Komplexitet 1-3: Mindre fixes - UI-tweaks, enkla buggar
+- Komplexitet 4-6: Medel - funktionsuppdateringar, refactoring
+- Komplexitet 7-8: Major - stora omstruktureringar, säkerhetsuppdateringar
+- Komplexitet 9-10: Complete overhaul - arkitekturändring
 
-**Laravel-optimeringar (dra bort från totalen):**
-- Laravel har inbyggd auth → -4h om auth behövs
-- Migrations & ORM → -3h för databas-setup
-- Blade templates → -2h för frontend
+**custom:** Specialanpassade lösningar
+- Komplexitet 1-3: Enkel custom - specifika behov
+- Komplexitet 4-6: Medel - anpassade workflows
+- Komplexitet 7-8: Komplex - unika algoritmer, specialfunktioner
+- Komplexitet 9-10: Highly specialized - unik teknik
 
-**Tidsestimering:**
-- estimated_hours_ai = estimated_hours_traditional × 0.5 (exakt 50%)
-- delivery_weeks_traditional = ceil(estimated_hours_traditional / 20)
-- delivery_weeks_ai = ceil(estimated_hours_ai / 20)
-
-**Teknologirekommendationer:**
-- ALLTID Laravel som backend (primär stack)
+**TEKNOLOGIREKOMMENDATIONER:**
+- Backend: ALLTID Laravel (primär stack)
 - Frontend: Alpine.js (komplexitet 1-4), Vue.js (komplexitet 5-10), Livewire (admin-fokus)
 - Styling: ALLTID Tailwind CSS
-- Databas: MySQL (standard) eller PostgreSQL (vid behov av avancerade queries)
+- Databas: MySQL (standard) eller PostgreSQL (vid avancerade queries)
 - UNDVIK: Next.js, React (standalone), Node.js backend, Express
-- Stack-exempel: "Laravel, Alpine.js, Tailwind CSS, MySQL" (enkel) eller "Laravel, Vue.js, Tailwind CSS, PostgreSQL, Redis" (komplex)
 
-**Key Features:**
-- Extrahera 4-8 huvudfunktioner från beskrivningen
-- Var specifik och konkret
+**KEY FEATURES:**
+- Identifiera 4-8 huvudfunktioner från beskrivningen
+- Var specifik och konkret (t.ex. "Admin-panel för projekthantering" istället för bara "Admin")
 - Skriv på svenska
+- Inkludera både UI-features och tekniska aspekter
 
-**Confidence:**
-- high: Tydlig beskrivning, standardprojekt
+**CONFIDENCE:**
+- high: Tydlig beskrivning, standardprojekt med väldefinierade krav
 - medium: Viss tvetydighet, vissa antaganden krävs
-- low: Vag beskrivning, många antaganden
+- low: Vag beskrivning, många antaganden behövs
 
-VIKTIGT:
+**VIKTIGT:**
 1. Returnera ENDAST valid JSON, ingen annan text före eller efter
-2. Alla värden ska vara realistiska och inom rimliga intervall
+2. Var konsistent i komplexitetsval - samma typ av projekt ska alltid få liknande komplexitet
 3. Alla texter ska vara på svenska
-4. estimated_hours_ai är alltid exakt 50% av traditional
+4. Välj projekttyp och komplexitet noggrant - dessa styr prisberäkningen
 PROMPT;
     }
 
@@ -802,12 +784,8 @@ PROMPT;
             'project_type_label',
             'complexity',
             'complexity_label',
-            'estimated_hours_traditional',
-            'estimated_hours_ai',
             'recommended_tech',
             'key_features',
-            'delivery_weeks_traditional',
-            'delivery_weeks_ai',
         ];
 
         foreach ($requiredFields as $field) {
@@ -820,9 +798,6 @@ PROMPT;
                 throw new \Exception('Ofullständig estimering från AI. Vänligen försök igen.');
             }
         }
-
-        // Säkerställ att AI-timmar är exakt 50% av traditional
-        $data['estimated_hours_ai'] = (int) ($data['estimated_hours_traditional'] * 0.5);
 
         return $data;
     }

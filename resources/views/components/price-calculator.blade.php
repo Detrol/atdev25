@@ -163,20 +163,20 @@
                         <div class="space-y-3 text-gray-700 dark:text-gray-300">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm">Arbetstid:</span>
-                                <span class="font-semibold" x-text="`${result?.estimated_hours_traditional} timmar`"></span>
+                                <span class="font-semibold" x-text="result?.hours_traditional"></span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm">Leverans:</span>
-                                <span class="font-semibold" x-text="`~${result?.delivery_weeks_traditional} ${result?.delivery_weeks_traditional === 1 ? 'vecka' : 'veckor'}`"></span>
+                                <span class="font-semibold" x-text="result?.delivery_weeks_traditional"></span>
                             </div>
                             <div class="pt-3 border-t border-gray-300 dark:border-gray-600">
                                 <div class="flex justify-between items-center mb-1">
                                     <span class="text-sm">Pris (exkl. moms):</span>
-                                    <span class="font-bold text-lg" x-text="formatCurrency(result?.price_traditional)"></span>
+                                    <span class="font-bold text-lg" x-text="result?.price_traditional"></span>
                                 </div>
                                 <div class="flex justify-between items-center text-sm">
                                     <span>Inkl. moms (25%):</span>
-                                    <span class="font-semibold" x-text="formatCurrency(result?.price_traditional_vat)"></span>
+                                    <span class="font-semibold" x-text="result?.price_traditional_vat"></span>
                                 </div>
                             </div>
                         </div>
@@ -196,20 +196,20 @@
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-white/90">Arbetstid:</span>
-                                <span class="font-semibold" x-text="`${result?.estimated_hours_ai} timmar`"></span>
+                                <span class="font-semibold" x-text="result?.hours_ai"></span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-sm text-white/90">Leverans:</span>
-                                <span class="font-semibold" x-text="`~${result?.delivery_weeks_ai} ${result?.delivery_weeks_ai === 1 ? 'vecka' : 'veckor'}`"></span>
+                                <span class="font-semibold" x-text="result?.delivery_weeks_ai"></span>
                             </div>
                             <div class="pt-3 border-t border-white/30">
                                 <div class="flex justify-between items-center mb-1">
                                     <span class="text-sm text-white/90">Pris (exkl. moms):</span>
-                                    <span class="font-bold text-xl" x-text="formatCurrency(result?.price_ai)"></span>
+                                    <span class="font-bold text-xl" x-text="result?.price_ai"></span>
                                 </div>
                                 <div class="flex justify-between items-center text-sm">
                                     <span class="text-white/90">Inkl. moms (25%):</span>
-                                    <span class="font-semibold" x-text="formatCurrency(result?.price_ai_vat)"></span>
+                                    <span class="font-semibold" x-text="result?.price_ai_vat"></span>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +218,7 @@
                         <div class="mt-4 pt-4 border-t border-white/30">
                             <p class="text-sm text-white/90 mb-2">Din besparing:</p>
                             <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-bold" x-text="formatCurrency(result?.savings)"></span>
+                                <span class="text-3xl font-bold" x-text="result?.savings"></span>
                                 <span class="text-white/80">(50%)</span>
                             </div>
                             <p class="text-xs text-white/70 mt-1">Tack vare AI & automation</p>
