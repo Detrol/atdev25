@@ -15,42 +15,48 @@ class PriceEstimateMapper
     /**
      * Predefined time brackets based on project type and complexity
      * Format: ['complexity_range' => '1-2', 'hours' => [min, max]]
+     * Tighter ranges (20-25% spread) for more consistent estimates
      */
     private const TIME_BRACKETS = [
         'simple' => [
             // Portfolio, landing pages, simple sites
-            ['range' => '1-2', 'hours' => [8, 12]],      // Very simple - static content
-            ['range' => '3-4', 'hours' => [12, 18]],     // Basic - standard features
-            ['range' => '5-7', 'hours' => [18, 30]],     // Medium - database, admin, auth
-            ['range' => '8-10', 'hours' => [30, 50]],    // Complex - advanced features
+            ['range' => '1-2', 'hours' => [8, 10]],      // Very simple - static content (25% spread)
+            ['range' => '3-4', 'hours' => [13, 16]],     // Basic - standard features (23% spread)
+            ['range' => '5-6', 'hours' => [20, 24]],     // Medium - database, admin, auth (20% spread)
+            ['range' => '7-8', 'hours' => [28, 34]],     // Complex - advanced features (21% spread)
+            ['range' => '9-10', 'hours' => [38, 46]],    // Very complex - enterprise (21% spread)
         ],
         'webapp' => [
             // SaaS, e-commerce, booking systems
-            ['range' => '1-3', 'hours' => [40, 60]],     // Simple web app
-            ['range' => '4-6', 'hours' => [60, 100]],    // Medium - integrations, API
-            ['range' => '7-8', 'hours' => [100, 140]],   // Complex - payments, real-time
-            ['range' => '9-10', 'hours' => [140, 200]],  // Enterprise - microservices
+            ['range' => '1-2', 'hours' => [40, 48]],     // Simple web app (20% spread)
+            ['range' => '3-4', 'hours' => [54, 66]],     // Basic webapp (22% spread)
+            ['range' => '5-6', 'hours' => [72, 88]],     // Medium - integrations, API (22% spread)
+            ['range' => '7-8', 'hours' => [95, 115]],    // Complex - payments, real-time (21% spread)
+            ['range' => '9-10', 'hours' => [130, 160]],  // Enterprise - microservices (23% spread)
         ],
         'api' => [
             // Backend/API development
-            ['range' => '1-3', 'hours' => [20, 35]],     // Simple API
-            ['range' => '4-6', 'hours' => [35, 60]],     // Medium - multiple endpoints
-            ['range' => '7-8', 'hours' => [60, 90]],     // Complex - integrations
-            ['range' => '9-10', 'hours' => [90, 130]],   // Enterprise - scalability
+            ['range' => '1-2', 'hours' => [18, 22]],     // Simple API (22% spread)
+            ['range' => '3-4', 'hours' => [26, 32]],     // Basic API (23% spread)
+            ['range' => '5-6', 'hours' => [38, 46]],     // Medium - multiple endpoints (21% spread)
+            ['range' => '7-8', 'hours' => [52, 64]],     // Complex - integrations (23% spread)
+            ['range' => '9-10', 'hours' => [75, 92]],    // Enterprise - scalability (23% spread)
         ],
         'maintenance' => [
             // Bug fixes, updates
-            ['range' => '1-3', 'hours' => [4, 8]],       // Minor fixes
-            ['range' => '4-6', 'hours' => [8, 15]],      // Medium updates
-            ['range' => '7-8', 'hours' => [15, 25]],     // Major refactoring
-            ['range' => '9-10', 'hours' => [25, 40]],    // Complete overhaul
+            ['range' => '1-2', 'hours' => [4, 5]],       // Minor fixes (25% spread)
+            ['range' => '3-4', 'hours' => [6, 8]],       // Small updates (33% spread)
+            ['range' => '5-6', 'hours' => [10, 12]],     // Medium updates (20% spread)
+            ['range' => '7-8', 'hours' => [15, 18]],     // Major refactoring (20% spread)
+            ['range' => '9-10', 'hours' => [22, 28]],    // Complete overhaul (27% spread)
         ],
         'custom' => [
             // Specialized solutions
-            ['range' => '1-3', 'hours' => [30, 50]],     // Simple custom solution
-            ['range' => '4-6', 'hours' => [50, 80]],     // Medium complexity
-            ['range' => '7-8', 'hours' => [80, 120]],    // Complex custom work
-            ['range' => '9-10', 'hours' => [120, 180]],  // Highly specialized
+            ['range' => '1-2', 'hours' => [28, 34]],     // Simple custom solution (21% spread)
+            ['range' => '3-4', 'hours' => [40, 48]],     // Basic custom (20% spread)
+            ['range' => '5-6', 'hours' => [55, 67]],     // Medium complexity (22% spread)
+            ['range' => '7-8', 'hours' => [78, 95]],     // Complex custom work (22% spread)
+            ['range' => '9-10', 'hours' => [110, 135]],  // Highly specialized (23% spread)
         ],
     ];
 
