@@ -14,43 +14,43 @@ class PriceEstimateMapper
 
     /**
      * Predefined time brackets based on project type and complexity
-     * Format: [min_hours, max_hours]
+     * Format: ['complexity_range' => '1-2', 'hours' => [min, max]]
      */
     private const TIME_BRACKETS = [
         'simple' => [
             // Portfolio, landing pages, simple sites
-            [1, 2] => [8, 12],      // Very simple - static content
-            [3, 4] => [12, 18],     // Basic - standard features
-            [5, 7] => [18, 30],     // Medium - database, admin, auth
-            [8, 10] => [30, 50],    // Complex - advanced features
+            ['range' => '1-2', 'hours' => [8, 12]],      // Very simple - static content
+            ['range' => '3-4', 'hours' => [12, 18]],     // Basic - standard features
+            ['range' => '5-7', 'hours' => [18, 30]],     // Medium - database, admin, auth
+            ['range' => '8-10', 'hours' => [30, 50]],    // Complex - advanced features
         ],
         'webapp' => [
             // SaaS, e-commerce, booking systems
-            [1, 3] => [40, 60],     // Simple web app
-            [4, 6] => [60, 100],    // Medium - integrations, API
-            [7, 8] => [100, 140],   // Complex - payments, real-time
-            [9, 10] => [140, 200],  // Enterprise - microservices
+            ['range' => '1-3', 'hours' => [40, 60]],     // Simple web app
+            ['range' => '4-6', 'hours' => [60, 100]],    // Medium - integrations, API
+            ['range' => '7-8', 'hours' => [100, 140]],   // Complex - payments, real-time
+            ['range' => '9-10', 'hours' => [140, 200]],  // Enterprise - microservices
         ],
         'api' => [
             // Backend/API development
-            [1, 3] => [20, 35],     // Simple API
-            [4, 6] => [35, 60],     // Medium - multiple endpoints
-            [7, 8] => [60, 90],     // Complex - integrations
-            [9, 10] => [90, 130],   // Enterprise - scalability
+            ['range' => '1-3', 'hours' => [20, 35]],     // Simple API
+            ['range' => '4-6', 'hours' => [35, 60]],     // Medium - multiple endpoints
+            ['range' => '7-8', 'hours' => [60, 90]],     // Complex - integrations
+            ['range' => '9-10', 'hours' => [90, 130]],   // Enterprise - scalability
         ],
         'maintenance' => [
             // Bug fixes, updates
-            [1, 3] => [4, 8],       // Minor fixes
-            [4, 6] => [8, 15],      // Medium updates
-            [7, 8] => [15, 25],     // Major refactoring
-            [9, 10] => [25, 40],    // Complete overhaul
+            ['range' => '1-3', 'hours' => [4, 8]],       // Minor fixes
+            ['range' => '4-6', 'hours' => [8, 15]],      // Medium updates
+            ['range' => '7-8', 'hours' => [15, 25]],     // Major refactoring
+            ['range' => '9-10', 'hours' => [25, 40]],    // Complete overhaul
         ],
         'custom' => [
             // Specialized solutions
-            [1, 3] => [30, 50],     // Simple custom solution
-            [4, 6] => [50, 80],     // Medium complexity
-            [7, 8] => [80, 120],    // Complex custom work
-            [9, 10] => [120, 180],  // Highly specialized
+            ['range' => '1-3', 'hours' => [30, 50]],     // Simple custom solution
+            ['range' => '4-6', 'hours' => [50, 80]],     // Medium complexity
+            ['range' => '7-8', 'hours' => [80, 120]],    // Complex custom work
+            ['range' => '9-10', 'hours' => [120, 180]],  // Highly specialized
         ],
     ];
 
@@ -150,15 +150,21 @@ class PriceEstimateMapper
     {
         $brackets = self::TIME_BRACKETS[$projectType];
 
-        foreach ($brackets as $complexityRange => $timeRange) {
-            [$min, $max] = $complexityRange;
+        foreach ($brackets as $bracket) {
+            // Parse range string like '1-2' or '3-4'
+            [$min, $max] = explode('-', $bracket['range']);
+            $min = (int) $min;
+            $max = (int) $max;
+
             if ($complexity >= $min && $complexity <= $max) {
-                return $timeRange;
+                return $bracket['hours'];
             }
         }
 
         // Fallback to last bracket if somehow not found
-        return end($brackets);
+        $lastBracket = end($brackets);
+
+        return $lastBracket['hours'];
     }
 
     /**
@@ -218,13 +224,13 @@ class PriceEstimateMapper
         }
 
         $ranges = [];
-        foreach (self::TIME_BRACKETS[$projectType] as $complexityRange => $timeRange) {
-            [$min, $max] = $complexityRange;
+        foreach (self::TIME_BRACKETS[$projectType] as $bracket) {
+            [$min, $max] = explode('-', $bracket['range']);
             $ranges[] = [
-                'complexity_min' => $min,
-                'complexity_max' => $max,
-                'hours_min' => $timeRange[0],
-                'hours_max' => $timeRange[1],
+                'complexity_min' => (int) $min,
+                'complexity_max' => (int) $max,
+                'hours_min' => $bracket['hours'][0],
+                'hours_max' => $bracket['hours'][1],
             ];
         }
 
