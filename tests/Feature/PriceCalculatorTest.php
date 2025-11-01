@@ -247,6 +247,6 @@ test('AI prompt no longer includes time calculation formulas', function () {
     expect($prompt)->toContain('ALLTID Laravel');
 
     // Should have complexity guidance
-    expect($prompt)->toContain('Komplexitet 1-2');
-    expect($prompt)->toContain('Komplexitet 3-4');
+    expect($prompt)->toContain('KOMPLEXITET 1-2');
+    expect($prompt)->toContain('KOMPLEXITET 3-4');
 });
