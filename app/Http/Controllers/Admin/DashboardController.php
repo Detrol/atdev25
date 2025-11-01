@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use App\Models\Project;
 use App\Models\Service;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {

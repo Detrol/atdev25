@@ -53,6 +53,6 @@ class ProjectSeeder extends Seeder
             );
         }
 
-        $this->command->info(count($projects) . ' projects created');
+        $this->command->info(count($projects).' projects created');
     }
 }

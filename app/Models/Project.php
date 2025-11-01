@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\ProjectStatus;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 

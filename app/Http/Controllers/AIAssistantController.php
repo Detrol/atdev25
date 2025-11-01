@@ -21,8 +21,6 @@ class AIAssistantController extends Controller
 
     /**
      * Handle incoming chat request (synchronous)
-     *
-     * @return JsonResponse
      */
     public function chat(ChatRequest $request): JsonResponse
     {
@@ -94,8 +92,6 @@ class AIAssistantController extends Controller
 
     /**
      * Get chat history for a session
-     *
-     * @return JsonResponse
      */
     public function getChatHistory(Request $request): JsonResponse
     {

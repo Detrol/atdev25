@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Profile;
-use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
@@ -17,7 +16,8 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        $profile = Profile::current() ?? new Profile();
+        $profile = Profile::current() ?? new Profile;
+
         return view('admin.profile.edit', compact('profile'));
     }
 

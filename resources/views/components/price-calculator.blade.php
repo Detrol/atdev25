@@ -265,12 +265,12 @@
 
                 <!-- CTA Button -->
                 <div class="text-center pt-4">
-                    <a href="#contact" class="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-105 active:scale-95">
+                    <button @click="bookConsultation()" class="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-105 active:scale-95">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                         </svg>
                         Boka Gratis Konsultation
-                    </a>
+                    </button>
                     <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
                         Vi går igenom din exakta situation och skapar en detaljerad projektplan
                     </p>
@@ -288,6 +288,7 @@ function priceCalculator() {
         loading: false,
         result: null,
         error: null,
+        estimationId: null,
 
         async estimate() {
             if (this.description.length < 20 || this.description.length > 2000) {
@@ -298,6 +299,7 @@ function priceCalculator() {
             this.loading = true;
             this.error = null;
             this.result = null;
+            this.estimationId = null;
 
             try {
                 const response = await fetch('/api/price-estimate', {
@@ -316,6 +318,7 @@ function priceCalculator() {
 
                 if (response.ok && data.success) {
                     this.result = data.estimation;
+                    this.estimationId = data.estimation_id;
                     // Scroll to results
                     setTimeout(() => {
                         document.querySelector('#price-calculator').scrollIntoView({
@@ -333,6 +336,27 @@ function priceCalculator() {
             } finally {
                 this.loading = false;
             }
+        },
+
+        bookConsultation() {
+            // Store estimation data in global scope for contact form
+            if (this.estimationId && this.result) {
+                window.contactFormEstimation = {
+                    id: this.estimationId,
+                    data: this.result
+                };
+            }
+
+            // Scroll to contact form
+            setTimeout(() => {
+                const contactSection = document.querySelector('#contact');
+                if (contactSection) {
+                    contactSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 100);
         },
 
         formatCurrency(amount) {

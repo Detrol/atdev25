@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PriceEstimateRequest;
+use App\Models\PriceEstimation;
 use App\Services\AIService;
 use App\Services\PriceEstimateMapper;
 use Illuminate\Http\JsonResponse;
@@ -53,8 +54,48 @@ class PriceCalculatorController extends Controller
             // Merge AI analysis with price estimate
             $estimation = array_merge($aiAnalysis, $priceEstimate);
 
+            // Save estimation to database
+            $priceEstimationRecord = PriceEstimation::create([
+                'description' => $description,
+                'project_type' => $estimation['project_type'],
+                'complexity' => $estimation['complexity'],
+                'project_type_label' => $estimation['project_type_label'],
+                'complexity_label' => $estimation['complexity_label'],
+                'key_features' => $estimation['key_features'],
+                'hours_traditional_min' => $estimation['hours_range_traditional'][0],
+                'hours_traditional_max' => $estimation['hours_range_traditional'][1],
+                'hours_ai_min' => $estimation['hours_range_ai'][0],
+                'hours_ai_max' => $estimation['hours_range_ai'][1],
+                'hours_traditional' => $estimation['hours_traditional'],
+                'hours_ai' => $estimation['hours_ai'],
+                'price_traditional_min' => $estimation['price_range_traditional'][0],
+                'price_traditional_max' => $estimation['price_range_traditional'][1],
+                'price_ai_min' => $estimation['price_range_ai'][0],
+                'price_ai_max' => $estimation['price_range_ai'][1],
+                'price_traditional' => $estimation['price_traditional'],
+                'price_ai' => $estimation['price_ai'],
+                'price_traditional_vat_min' => $estimation['price_range_traditional_vat'][0],
+                'price_traditional_vat_max' => $estimation['price_range_traditional_vat'][1],
+                'price_ai_vat_min' => $estimation['price_range_ai_vat'][0],
+                'price_ai_vat_max' => $estimation['price_range_ai_vat'][1],
+                'price_traditional_vat' => $estimation['price_traditional_vat'],
+                'price_ai_vat' => $estimation['price_ai_vat'],
+                'savings_min' => $estimation['savings_range'][0],
+                'savings_max' => $estimation['savings_range'][1],
+                'savings' => $estimation['savings'],
+                'savings_vat_min' => $estimation['savings_range_vat'][0],
+                'savings_vat_max' => $estimation['savings_range_vat'][1],
+                'savings_vat' => $estimation['savings_vat'],
+                'savings_percent' => $estimation['savings_percent'],
+                'delivery_weeks_traditional' => $estimation['delivery_weeks_traditional'],
+                'delivery_weeks_ai' => $estimation['delivery_weeks_ai'],
+                'ip_address' => $request->ip(),
+                'session_id' => session()->getId(),
+            ]);
+
             Log::info('Price estimation successful', [
                 'ip' => $request->ip(),
+                'estimation_id' => $priceEstimationRecord->id,
                 'project_type' => $estimation['project_type'],
                 'complexity' => $estimation['complexity'],
                 'hours_range_traditional' => $estimation['hours_range_traditional'],
@@ -63,6 +104,7 @@ class PriceCalculatorController extends Controller
 
             return response()->json([
                 'success' => true,
+                'estimation_id' => $priceEstimationRecord->id,
                 'estimation' => $estimation,
             ]);
         } catch (\Throwable $e) {

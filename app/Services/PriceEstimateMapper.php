@@ -65,7 +65,6 @@ class PriceEstimateMapper
      *
      * @param  string  $projectType  simple|webapp|api|maintenance|custom
      * @param  int  $complexity  1-10
-     * @return array
      */
     public static function map(string $projectType, int $complexity): array
     {
@@ -210,6 +209,7 @@ class PriceEstimateMapper
             if ($minDays === $maxDays) {
                 return "~{$minDays} ".($minDays === 1 ? 'dag' : 'dagar');
             }
+
             return "{$minDays}-{$maxDays} dagar";
         }
 

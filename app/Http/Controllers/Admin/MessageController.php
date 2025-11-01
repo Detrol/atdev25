@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ReplyRequest;
 use App\Jobs\SendReplyEmail;
 use App\Models\ContactMessage;
-use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
@@ -14,12 +13,12 @@ class MessageController extends Controller
      * Display all contact messages.
      *
      * Data contract:
-     * - messages: Collection<ContactMessage> (paginated, original messages only)
+     * - messages: Collection<ContactMessage> (paginated, original messages only, with priceEstimation loaded)
      */
     public function index()
     {
         $messages = ContactMessage::originalMessages()
-            ->with(['replies', 'adminReplier'])
+            ->with(['replies', 'adminReplier', 'priceEstimation'])
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
@@ -32,17 +31,21 @@ class MessageController extends Controller
      * Data contract:
      * - message: ContactMessage (original message)
      * - conversation: Collection<ContactMessage> (all messages in thread)
+     * - estimation: PriceEstimation|null (price estimation if linked)
      */
     public function show(ContactMessage $message)
     {
         // Hitta root-meddelandet om detta är ett svar
         $originalMessage = $message->parent_id ? $message->parent : $message;
 
+        // Eager load price estimation if exists
+        $originalMessage->load('priceEstimation');
+
         // Hämta hela konversationen
         $conversation = $originalMessage->conversation();
 
         // Markera som läst
-        if (!$originalMessage->read) {
+        if (! $originalMessage->read) {
             $originalMessage->markAsRead();
         }
 

@@ -35,7 +35,7 @@ Route::post('/webhooks/mailgun/inbound', [WebhookController::class, 'handleInbou
 // Admin routes (protected by auth middleware)
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Projects
     Route::resource('projects', AdminProjectController::class);
     Route::post('projects/{project}/screenshot', [AdminProjectController::class, 'screenshot'])->name('projects.screenshot');
@@ -46,7 +46,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Profile
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
-    
+
     // Messages
     Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
     Route::get('messages/{message}', [MessageController::class, 'show'])->name('messages.show');

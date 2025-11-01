@@ -77,18 +77,18 @@ class ServiceRequest extends FormRequest
         if ($this->has('features') && is_string($this->features)) {
             $features = array_filter(
                 array_map('trim', explode(',', $this->features)),
-                fn($value) => !empty($value)
+                fn ($value) => ! empty($value)
             );
             $this->merge(['features' => $features]);
         }
 
         // Set is_active default
-        if (!$this->has('is_active')) {
+        if (! $this->has('is_active')) {
             $this->merge(['is_active' => false]);
         }
 
         // Set default sort_order if not provided
-        if (!$this->has('sort_order') || $this->sort_order === null) {
+        if (! $this->has('sort_order') || $this->sort_order === null) {
             $this->merge(['sort_order' => 0]);
         }
     }
