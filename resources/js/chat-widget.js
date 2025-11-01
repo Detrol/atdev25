@@ -160,6 +160,16 @@ document.addEventListener('alpine:init', () => {
                 this.error = null;
             },
 
+            // Select a suggested question
+            selectSuggestedQuestion(question) {
+                this.inputMessage = question;
+                this.$nextTick(() => {
+                    this.$refs.messageInput?.focus();
+                    // Auto-send the question
+                    this.sendMessage();
+                });
+            },
+
             // Get formatted time
             getFormattedTime(timestamp) {
                 if (!timestamp) return '';

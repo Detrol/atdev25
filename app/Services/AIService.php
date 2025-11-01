@@ -463,17 +463,27 @@ PROMPT;
      */
     private function getAssistantIdentity(?Profile $profile): string
     {
-        $name = $profile?->name ?? 'utvecklaren';
+        $name = $profile?->name ?? 'ATDev';
 
-        return "Du är en AI-assistent som representerar {$name}s portfolio. ".
-            'Din roll är att vara en teknisk rådgivare och besvara frågor om webbutveckling, arkitektur, bästa praxis och tekniska lösningar. '.
-            'Du kan också berätta om projekten i portfolion och kompetensområden. '.
+        return "Du är en DEMO-assistent som visar hur AI kan skräddarsys för företag. ".
+            "Du representerar {$name}s portfolio och visar potentialen med att träna AI på företagsspecifik data. ".
+            "\n\n".
+            'VIKTIGT - Strikt ämnesbegränsning:'.
+            "\n".'Du får ENDAST svara på frågor om:'.
+            "\n".'1. Projekt i portfolion (beskrivningar, tekniker, funktioner)'.
+            "\n".'2. Tjänster som erbjuds (webbutveckling, AI-integration, etc.)'.
+            "\n".'3. Hur AI kan integreras i företag (allmänna exempel och möjligheter)'.
+            "\n".'4. Hur en skräddarsydd AI-assistent kan tränas på företagets data'.
+            "\n\n".
+            'För ALLA andra frågor (programmering, teknisk rådgivning, allmänna frågor):'.
+            "\n".'- Förklara vänligt att du är en begränsad demo-assistent'.
+            "\n".'- Hänvisa till kontaktformuläret för andra frågor'.
+            "\n".'- Ge exempel på vad användaren kan fråga dig om istället'.
             "\n\n".
             'Kommunikationsstil:'.
             "\n".'- Var professionell men vänlig och tillgänglig'.
-            "\n".'- Svara koncist och relevant på svenska'.
-            "\n".'- Använd konkreta exempel från projekten när det är relevant'.
-            "\n".'- Ge teknisk vägledning baserat på bästa praxis'.
+            "\n".'- Svara koncist på svenska'.
+            "\n".'- Betona att DU är ett exempel på hur AI kan anpassas'.
             "\n".'- Undvik överdriven användning av utropstecken och emojis'.
             "\n".'- Formatera svar med HTML för bättre läsbarhet';
     }
@@ -538,17 +548,17 @@ PROMPT;
     }
 
     /**
-     * Allmänna riktlinjer för teknisk rådgivning
+     * Riktlinjer för demo-assistenten
      */
     private function getGeneralGuidelines(): string
     {
-        return "Riktlinjer för teknisk rådgivning:\n".
-            "- Du kan ge allmän teknisk vägledning om webbutveckling, ramverk, arkitektur och bästa praxis\n".
-            "- När du diskuterar tekniska lösningar, förklara varför något är en god praxis\n".
-            "- Var ärlig om begränsningar och avvägningar mellan olika tekniska val\n".
-            "- Uppmuntra användare att utforska och lära sig mer\n".
-            "- Du kan referera till projekt i portfolion som exempel på tekniska lösningar\n".
-            '- Om frågor går utanför ditt kompetensområde, var ärlig om det';
+        return "Riktlinjer för demo-assistenten:\n".
+            "- Du är ett EXEMPEL på hur AI kan skräddarsys med företagsspecifik data\n".
+            "- Din kunskap är begränsad till projekten och tjänsterna i denna portfolio\n".
+            "- Vid frågor om AI-integration: Ge konkreta exempel på hur företag kan använda skräddarsydd AI\n".
+            "- Betona att samma teknologi kan tränas på DERAS data (produkter, dokument, FAQ, etc.)\n".
+            "- Om någon frågar något utanför dina begränsningar: Var tydlig med att du är en demo och hänvisa till kontaktformuläret\n".
+            "- Exempel på off-topic svar: 'Jag är en demo-assistent och kan endast svara på frågor om ATDevs projekt och tjänster. För teknisk rådgivning eller andra frågor, använd kontaktformuläret.'";
     }
 
     /**
@@ -1112,6 +1122,243 @@ PROMPT;
 
                 throw new \Exception('Ofullständig estimering från AI. Vänligen försök igen.');
             }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Analyserar en matbeskrivning för allergener med AI.
+     *
+     * @param  string  $dishDescription
+     * @return array
+     */
+    public function analyzeMenuAllergens(string $dishDescription): array
+    {
+        $apiKey = Config::get('services.anthropic.api_key');
+
+        if (! $apiKey) {
+            Log::error('Anthropic API key not configured for allergen analysis');
+            throw new \Exception('AI-tjänsten är inte korrekt konfigurerad.');
+        }
+
+        $url = Config::get('services.anthropic.api_url', 'https://api.anthropic.com/v1/messages');
+
+        $systemPrompt = $this->createAllergenAnalysisPrompt();
+
+        $data = [
+            'model' => 'claude-3-7-sonnet-20250219',
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => $dishDescription,
+                ],
+            ],
+            'system' => [
+                [
+                    'type' => 'text',
+                    'text' => $systemPrompt,
+                ],
+            ],
+            'max_tokens' => 800,
+            'temperature' => 0.3, // Låg för faktabaserad, konsistent analys
+        ];
+
+        $headers = [
+            'x-api-key' => $apiKey,
+            'anthropic-version' => '2023-06-01',
+            'Content-Type' => 'application/json',
+        ];
+
+        try {
+            $response = Http::withHeaders($headers)->timeout(30)->post($url, $data);
+
+            if ($response->failed()) {
+                Log::error('Anthropic API call failed for allergen analysis', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                throw new \Exception('Kunde inte analysera allergener. Vänligen försök igen.');
+            }
+
+            $responseData = $response->json();
+
+            if (! isset($responseData['content'][0]['text'])) {
+                Log::error('Unexpected response format from Anthropic API', ['responseData' => $responseData]);
+                throw new \Exception('Fick ett oväntat svar från AI-tjänsten.');
+            }
+
+            $aiResponse = $responseData['content'][0]['text'];
+
+            Log::info('Allergen analysis successful', [
+                'dish' => substr($dishDescription, 0, 100),
+                'input_tokens' => $responseData['usage']['input_tokens'] ?? 0,
+                'output_tokens' => $responseData['usage']['output_tokens'] ?? 0,
+            ]);
+
+            // Parsa JSON från AI-svar
+            return $this->parseAllergenAnalysis($aiResponse);
+        } catch (\Throwable $e) {
+            Log::error('Exception in analyzeMenuAllergens', [
+                'error' => $e->getMessage(),
+                'dish' => $dishDescription,
+            ]);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Skapar systemprompt för allergenanalys
+     */
+    private function createAllergenAnalysisPrompt(): string
+    {
+        $allergens = config('allergens.allergens', []);
+
+        $allergenList = '';
+        foreach ($allergens as $key => $allergen) {
+            $allergenList .= "- **{$allergen['name']}** ({$allergen['icon']}): " .
+                implode(', ', array_slice($allergen['keywords'], 0, 8)) . "\n";
+        }
+
+        return <<<PROMPT
+Du är en expertnutritionist och allergenspecialist som analyserar maträtter för allergener.
+
+Din uppgift är att identifiera allergener i en matbeskrivning baserat på ingredienser.
+
+## TILLGÄNGLIGA ALLERGENER:
+
+{$allergenList}
+
+## INSTRUKTIONER:
+
+1. Läs matbeskrivningen noggrant
+2. Identifiera alla ingredienser som nämns
+3. Matcha ingredienser mot allergenkeywords ovan
+4. Returnera ENDAST valid JSON enligt formatet nedan
+
+## JSON-FORMAT (EXAKT):
+
+```json
+{
+  "dish_name": "Namn på rätten (extrahera från beskrivningen)",
+  "allergens": [
+    {
+      "allergen": "gluten",
+      "name": "Gluten",
+      "icon": "🌾",
+      "confidence": "high",
+      "reason": "Innehåller pasta som är gjord av vete"
+    }
+  ],
+  "dietary_info": {
+    "vegan": false,
+    "vegetarian": true,
+    "gluten_free": false,
+    "lactose_free": false
+  },
+  "notes": "Eventuella viktiga anteckningar på svenska"
+}
+```
+
+## CONFIDENCE LEVELS:
+- **high**: Ingrediens explicit nämnd (t.ex. "med parmesan")
+- **medium**: Trolig ingrediens (t.ex. "caesardressing" innehåller troligen ägg och fisk)
+- **low**: Möjlig ingrediens men osäker
+
+## VIKTIGA REGLER:
+
+1. Var KONSISTENT - samma ingrediens ska alltid ge samma allergen
+2. Inkludera ENDAST allergener som faktiskt finns i beskrivningen
+3. Om osäker, använd "medium" eller "low" confidence
+4. Ange ALLTID en kort, konkret "reason" på svenska
+5. Returnera ENDAST valid JSON - ingen annan text
+6. dietary_info ska vara boolean (true/false)
+7. Om inga allergener hittas, returnera tom array för "allergens"
+
+## EXEMPEL:
+
+Input: "Carbonara - Pasta med ägg, bacon och parmesanost. 145 kr"
+
+Output:
+```json
+{
+  "dish_name": "Carbonara",
+  "allergens": [
+    {
+      "allergen": "gluten",
+      "name": "Gluten",
+      "icon": "🌾",
+      "confidence": "high",
+      "reason": "Innehåller pasta som är gjord av vete"
+    },
+    {
+      "allergen": "eggs",
+      "name": "Ägg",
+      "icon": "🥚",
+      "confidence": "high",
+      "reason": "Ägg nämns explicit i beskrivningen"
+    },
+    {
+      "allergen": "lactose",
+      "name": "Laktos/Mjölk",
+      "icon": "🥛",
+      "confidence": "high",
+      "reason": "Innehåller parmesanost (mejeriprodukt)"
+    }
+  ],
+  "dietary_info": {
+    "vegan": false,
+    "vegetarian": false,
+    "gluten_free": false,
+    "lactose_free": false
+  },
+  "notes": "Klassisk italiensk pastarätt"
+}
+```
+
+Analysera nu den givna matbeskrivningen och returnera ENDAST valid JSON.
+PROMPT;
+    }
+
+    /**
+     * Parsear JSON från AI-svar för allergenanalys
+     */
+    private function parseAllergenAnalysis(string $response): array
+    {
+        // Ta bort eventuell markdown code block wrapper
+        $response = preg_replace('/^```json\s*/', '', $response);
+        $response = preg_replace('/\s*```$/', '', $response);
+        $response = trim($response);
+
+        $data = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            Log::error('Failed to parse allergen analysis JSON', [
+                'response' => $response,
+                'error' => json_last_error_msg(),
+            ]);
+
+            throw new \Exception('Kunde inte tolka AI-svar. Vänligen försök igen.');
+        }
+
+        // Validera att nödvändiga fält finns
+        if (! isset($data['allergens']) || ! is_array($data['allergens'])) {
+            Log::error('Missing allergens field in analysis', ['data' => $data]);
+
+            // Returnera default tom analys istället för att kasta exception
+            return [
+                'dish_name' => $data['dish_name'] ?? 'Okänd rätt',
+                'allergens' => [],
+                'dietary_info' => [
+                    'vegan' => false,
+                    'vegetarian' => false,
+                    'gluten_free' => true,
+                    'lactose_free' => true,
+                ],
+                'notes' => 'Kunde inte identifiera allergener.',
+            ];
         }
 
         return $data;
