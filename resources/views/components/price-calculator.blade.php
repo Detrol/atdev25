@@ -124,16 +124,6 @@
                         </div>
                     </div>
 
-                    <!-- Recommended Technologies -->
-                    <div class="mb-6" x-show="result?.recommended_tech?.length > 0">
-                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Rekommenderade Teknologier:</p>
-                        <div class="flex flex-wrap gap-2">
-                            <template x-for="tech in result?.recommended_tech || []" :key="tech">
-                                <span class="px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium border border-purple-200 dark:border-purple-700" x-text="tech"></span>
-                            </template>
-                        </div>
-                    </div>
-
                     <!-- Key Features -->
                     <div x-show="result?.key_features?.length > 0">
                         <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Identifierade Huvudfunktioner:</p>
