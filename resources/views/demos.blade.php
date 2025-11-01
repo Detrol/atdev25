@@ -128,7 +128,9 @@
                                 :poster="selectedProduct.poster"
                                 ar
                                 ar-modes="webxr scene-viewer quick-look"
+                                ar-placement="floor"
                                 camera-controls
+                                touch-action="pan-y"
                                 :auto-rotate="autoRotate"
                                 shadow-intensity="1"
                                 exposure="1"
