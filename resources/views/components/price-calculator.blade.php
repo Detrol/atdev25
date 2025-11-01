@@ -339,12 +339,14 @@ function priceCalculator() {
         },
 
         bookConsultation() {
-            // Store estimation data in global scope for contact form
+            // Dispatch custom event with estimation data
             if (this.estimationId && this.result) {
-                window.contactFormEstimation = {
-                    id: this.estimationId,
-                    data: this.result
-                };
+                window.dispatchEvent(new CustomEvent('estimation-ready', {
+                    detail: {
+                        id: this.estimationId,
+                        data: this.result
+                    }
+                }));
             }
 
             // Scroll to contact form
