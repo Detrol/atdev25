@@ -602,4 +602,200 @@ RIKTLINJER:
 - Max 500 tokens per svar
 HTML;
     }
+
+    /**
+     * Estimerar projektpris och komplexitet baserat på beskrivning
+     */
+    public function estimateProjectPrice(string $description): array
+    {
+        $apiKey = Config::get('services.anthropic.api_key');
+
+        if (! $apiKey) {
+            Log::error('Anthropic API key not configured for price estimation');
+            throw new \Exception('AI-tjänsten är inte korrekt konfigurerad.');
+        }
+
+        $url = Config::get('services.anthropic.api_url', 'https://api.anthropic.com/v1/messages');
+
+        $systemPrompt = $this->createPriceEstimationPrompt();
+
+        $data = [
+            'model' => 'claude-3-7-sonnet-20250219',
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => $description,
+                ],
+            ],
+            'system' => [
+                [
+                    'type' => 'text',
+                    'text' => $systemPrompt,
+                ],
+            ],
+            'max_tokens' => 1500,
+            'temperature' => 0.3, // Lägre för mer konsistent estimering
+        ];
+
+        $headers = [
+            'x-api-key' => $apiKey,
+            'anthropic-version' => '2023-06-01',
+            'Content-Type' => 'application/json',
+        ];
+
+        try {
+            $response = Http::withHeaders($headers)->timeout(30)->post($url, $data);
+
+            if ($response->failed()) {
+                Log::error('Anthropic API call failed for price estimation', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                throw new \Exception('Kunde inte estimera projektet. Vänligen försök igen.');
+            }
+
+            $responseData = $response->json();
+
+            if (! isset($responseData['content'][0]['text'])) {
+                Log::error('Unexpected response format from Anthropic API', ['responseData' => $responseData]);
+                throw new \Exception('Fick ett oväntat svar från AI-tjänsten.');
+            }
+
+            $aiResponse = $responseData['content'][0]['text'];
+
+            // Parsa JSON från AI-svar
+            return $this->parsePriceEstimation($aiResponse);
+        } catch (\Throwable $e) {
+            Log::error('Exception in estimateProjectPrice', [
+                'error' => $e->getMessage(),
+                'description' => $description,
+            ]);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Skapar systemprompt för prisestimering
+     */
+    private function createPriceEstimationPrompt(): string
+    {
+        return <<<'PROMPT'
+Du är en erfaren webbutvecklare som estimerar projekt professionellt.
+
+Analysera projektbeskrivningen och returnera ENDAST valid JSON med denna exakta struktur:
+
+```json
+{
+  "project_type": "simple|webapp|api|maintenance|custom",
+  "project_type_label": "Svensk beskrivande text av projekttyp",
+  "complexity": 1-10,
+  "complexity_label": "Kort svensk förklaring av komplexiteten (1-2 meningar)",
+  "estimated_hours_traditional": antal timmar,
+  "estimated_hours_ai": antal timmar,
+  "recommended_tech": ["Tech1", "Tech2", "Tech3"],
+  "key_features": ["Feature 1", "Feature 2", "Feature 3"],
+  "delivery_weeks_traditional": antal veckor,
+  "delivery_weeks_ai": antal veckor,
+  "confidence": "high|medium|low",
+  "notes": "Eventuella viktiga anteckningar på svenska"
+}
+```
+
+RIKTLINJER FÖR ESTIMERING:
+
+**Projekttyper:**
+- simple: Landing pages, portfolios, enkla webbsidor (10-40h)
+- webapp: SaaS, e-handel, booking-system, plattformar med inloggning (80-300h)
+- api: Backend/API-utveckling, integrationer (40-150h)
+- maintenance: Bugfixar, uppdateringar, mindre ändringar (10-50h)
+- custom: Specialanpassade lösningar som inte passar ovan
+
+**Komplexitet (1-10):**
+- 1-3: Enkelt (Standardfunktioner, färdiga CMS-lösningar, statiska sidor)
+- 4-6: Medel (Anpassningar, API-integrationer, användarhantering, databas)
+- 7-9: Komplex (Betalningar, avancerad logik, admin-paneler, realtid, säkerhet)
+- 10: Enterprise (Mikrotjänster, hög skalbarhet, komplex arkitektur, AI/ML)
+
+**Tidsestimering:**
+- estimated_hours_ai ska ALLTID vara exakt 50% av estimated_hours_traditional
+- delivery_weeks baseras på 20h effektivt arbete/vecka
+- delivery_weeks_ai är hälften av delivery_weeks_traditional (avrunda uppåt)
+- Var realistisk men inte överdrivet generös
+
+**Teknologirekommendationer:**
+- Rekommendera moderna, beprövade teknologier (Laravel, Vue.js, React, Node.js, etc.)
+- Matcha teknologier med projektets behov och komplexitet
+- 3-6 huvudteknologier
+
+**Key Features:**
+- Extrahera 4-8 huvudfunktioner från beskrivningen
+- Var specifik och konkret
+- Skriv på svenska
+
+**Confidence:**
+- high: Tydlig beskrivning, standardprojekt
+- medium: Viss tvetydighet, vissa antaganden krävs
+- low: Vag beskrivning, många antaganden
+
+VIKTIGT:
+1. Returnera ENDAST valid JSON, ingen annan text före eller efter
+2. Alla värden ska vara realistiska och inom rimliga intervall
+3. Alla texter ska vara på svenska
+4. estimated_hours_ai är alltid exakt 50% av traditional
+PROMPT;
+    }
+
+    /**
+     * Parsear JSON från AI-svar för prisestimering
+     */
+    private function parsePriceEstimation(string $response): array
+    {
+        // Ta bort eventuell markdown code block wrapper
+        $response = preg_replace('/^```json\s*/', '', $response);
+        $response = preg_replace('/\s*```$/', '', $response);
+        $response = trim($response);
+
+        $data = json_decode($response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            Log::error('Failed to parse price estimation JSON', [
+                'response' => $response,
+                'error' => json_last_error_msg(),
+            ]);
+
+            throw new \Exception('Kunde inte tolka AI-svar. Vänligen försök igen.');
+        }
+
+        // Validera att alla nödvändiga fält finns
+        $requiredFields = [
+            'project_type',
+            'project_type_label',
+            'complexity',
+            'complexity_label',
+            'estimated_hours_traditional',
+            'estimated_hours_ai',
+            'recommended_tech',
+            'key_features',
+            'delivery_weeks_traditional',
+            'delivery_weeks_ai',
+        ];
+
+        foreach ($requiredFields as $field) {
+            if (! isset($data[$field])) {
+                Log::error('Missing required field in price estimation', [
+                    'field' => $field,
+                    'data' => $data,
+                ]);
+
+                throw new \Exception('Ofullständig estimering från AI. Vänligen försök igen.');
+            }
+        }
+
+        // Säkerställ att AI-timmar är exakt 50% av traditional
+        $data['estimated_hours_ai'] = (int) ($data['estimated_hours_traditional'] * 0.5);
+
+        return $data;
+    }
 }
