@@ -127,10 +127,11 @@
                                 :src="selectedProduct.model"
                                 :poster="selectedProduct.poster"
                                 ar
-                                ar-modes="webxr scene-viewer quick-look"
+                                ar-modes="scene-viewer quick-look"
                                 ar-placement="floor"
                                 camera-controls
-                                touch-action="pan-y"
+                                interaction-prompt="none"
+                                disable-tap
                                 :auto-rotate="autoRotate"
                                 shadow-intensity="1"
                                 exposure="1"
