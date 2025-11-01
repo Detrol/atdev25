@@ -486,13 +486,12 @@
                 estimationId: null,
                 estimation: null,
                 init() {
-                    // Check if estimation data was passed from price calculator
-                    if (window.contactFormEstimation) {
-                        this.estimationId = window.contactFormEstimation.id;
-                        this.estimation = window.contactFormEstimation.data;
-                        // Clear the global data
-                        delete window.contactFormEstimation;
-                    }
+                    // Listen for estimation data from price calculator
+                    window.addEventListener('estimation-ready', (event) => {
+                        this.estimationId = event.detail.id;
+                        this.estimation = event.detail.data;
+                        console.log('Estimation received:', this.estimation);
+                    });
                 }
             }">
                 @csrf
