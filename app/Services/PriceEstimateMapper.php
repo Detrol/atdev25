@@ -10,7 +10,7 @@ class PriceEstimateMapper
 {
     private const HOURLY_RATE = 700;
 
-    private const AI_EFFICIENCY = 0.5; // 50% time savings with AI
+    private const AI_EFFICIENCY = 0.2; // 80% time savings with AI (AI takes only 20% of traditional time)
 
     /**
      * Predefined time brackets based on project type and complexity
@@ -140,7 +140,7 @@ class PriceEstimateMapper
             'savings_range_vat' => [$savingsMinVat, $savingsMaxVat],
             'savings' => self::formatPriceRange($savingsMin, $savingsMax),
             'savings_vat' => self::formatPriceRange($savingsMinVat, $savingsMaxVat),
-            'savings_percent' => 50,
+            'savings_percent' => 80,
 
             // Delivery time
             'delivery_weeks_traditional' => self::formatDeliveryTime($daysMinTraditional, $daysMaxTraditional),
