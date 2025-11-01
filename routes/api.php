@@ -25,9 +25,8 @@ Route::prefix('chat')->group(function () {
         ->name('api.chat.history');
 });
 
-// Price Calculator API
+// Price Calculator API (rate limiting hanteras i controller för bättre meddelanden)
 Route::post('/price-estimate', [PriceCalculatorController::class, 'estimate'])
-    ->middleware('throttle:5,10') // 5 requests per 10 minutes
     ->name('api.price-estimate');
 
 // Tech Stack API
