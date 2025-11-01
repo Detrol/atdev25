@@ -31,5 +31,6 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="ANTHROPIC_API_KEY" value="sk-ant-test-fake-key-for-testing-only"/>
     </php>
 </phpunit>
