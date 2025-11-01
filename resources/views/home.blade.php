@@ -589,22 +589,36 @@
 
                     <div class="grid md:grid-cols-2 gap-4 mb-4">
                         <div class="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Arbetstid (AI)</p>
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Arbetstid</p>
                             <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="estimation?.hours_ai"></p>
                         </div>
                         <div class="bg-white/50 dark:bg-gray-800/50 rounded-xl p-3">
-                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Leverans</p>
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Leveranstid</p>
                             <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="estimation?.delivery_weeks_ai"></p>
                         </div>
                     </div>
 
                     <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <p class="text-xs font-semibold opacity-90">AI-Driven Pris (inkl. moms)</p>
-                            <span class="px-2 py-1 bg-white/20 rounded-full text-xs font-bold">-50%</span>
+                        <div class="flex justify-between items-center mb-3">
+                            <p class="text-xs font-semibold opacity-90">Estimerat Pris</p>
+                            <span class="px-2 py-1 bg-white/20 rounded-full text-xs font-bold">-80%</span>
                         </div>
-                        <p class="text-2xl font-bold" x-text="estimation?.price_ai_vat"></p>
-                        <p class="text-xs opacity-75 mt-1">Din besparing: <span x-text="estimation?.savings_vat"></span></p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-baseline">
+                                <span class="text-sm opacity-90">Exkl. moms:</span>
+                                <span class="text-xl font-bold" x-text="estimation?.price_ai"></span>
+                            </div>
+                            <div class="flex justify-between items-baseline border-t border-white/20 pt-2">
+                                <span class="text-sm opacity-90">Inkl. moms:</span>
+                                <span class="text-2xl font-bold" x-text="estimation?.price_ai_vat"></span>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-white/30">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs opacity-90">Din besparing (80%):</span>
+                                <span class="font-bold" x-text="estimation?.savings_vat"></span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-700" x-show="estimation?.key_features?.length > 0">

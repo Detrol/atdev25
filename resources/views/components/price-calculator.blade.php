@@ -175,7 +175,7 @@
                     <!-- AI-Driven Development -->
                     <div class="relative bg-gradient-to-br from-purple-600 via-blue-600 to-pink-600 text-white rounded-3xl p-6 shadow-2xl border-2 border-purple-400">
                         <div class="absolute top-4 right-4">
-                            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold">-50%</span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold">-80%</span>
                         </div>
                         <div class="flex items-center gap-2 mb-4">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,7 +209,7 @@
                             <p class="text-sm text-white/90 mb-2">Din besparing:</p>
                             <div class="flex items-baseline gap-2">
                                 <span class="text-3xl font-bold" x-text="result?.savings"></span>
-                                <span class="text-white/80">(50%)</span>
+                                <span class="text-white/80">(80%)</span>
                             </div>
                             <p class="text-xs text-white/70 mt-1">Tack vare AI & automation</p>
                         </div>
@@ -223,14 +223,14 @@
                             <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <span class="font-semibold text-blue-800 dark:text-blue-300">Hur sparar AI 50% av tiden?</span>
+                            <span class="font-semibold text-blue-800 dark:text-blue-300">Hur sparar AI 80% av tiden?</span>
                         </div>
                         <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div x-show="open" x-transition class="px-6 pb-4 text-sm text-gray-700 dark:text-gray-300 space-y-2">
-                        <p class="font-medium mb-3">Med 20+ års erfarenhet och moderna AI-verktyg levererar jag samma kvalitet på hälften av tiden:</p>
+                        <p class="font-medium mb-3">Med 20+ års erfarenhet och moderna AI-verktyg levererar jag samma kvalitet på en femtedel av tiden:</p>
                         <ul class="space-y-2 pl-5">
                             <li class="flex items-start gap-2">
                                 <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
