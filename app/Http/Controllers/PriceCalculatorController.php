@@ -26,13 +26,15 @@ class PriceCalculatorController extends Controller
     {
         $description = $request->validated()['description'];
 
-        // Rate limiting (5 requests per 10 minutes per IP)
-        $key = 'price_estimate_'.$request->ip();
+        // Rate limiting (5 requests per 10 minutes per IP) - Exempt for authenticated admins
+        if (! auth()->check()) {
+            $key = 'price_estimate_'.$request->ip();
 
-        if (! $this->checkThrottling($key)) {
-            return response()->json([
-                'error' => 'För många förfrågningar. Vänligen försök igen om 10 minuter.',
-            ], 429);
+            if (! $this->checkThrottling($key)) {
+                return response()->json([
+                    'error' => 'För många förfrågningar. Vänligen försök igen om 10 minuter.',
+                ], 429);
+            }
         }
 
         try {
