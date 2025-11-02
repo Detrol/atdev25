@@ -116,7 +116,45 @@
         </div>
 
         <!-- Timeline Card (Featured) -->
-        <div class="mb-8" x-data="{ visible: false, progress: 0 }" x-intersect="visible = true" x-init="$watch('visible', value => { if (value) { setTimeout(() => { progress = 100 }, 300) } })">
+        <div class="mb-8" x-data="{
+            visible: false,
+            progress: 0,
+            currentIcon: null
+        }" x-intersect="visible = true" x-init="
+            $watch('visible', value => {
+                if (value) {
+                    setTimeout(() => {
+                        // Trigger smooth CSS animation
+                        progress = 100;
+
+                        // Show icons when progress bar reaches each year position
+                        // HTML at 12.5% = 1.25s
+                        setTimeout(() => {
+                            currentIcon = 'html';
+                            setTimeout(() => { currentIcon = null }, 1800);
+                        }, 1250);
+
+                        // PHP at 37.5% = 3.75s
+                        setTimeout(() => {
+                            currentIcon = 'php';
+                            setTimeout(() => { currentIcon = null }, 1800);
+                        }, 3750);
+
+                        // Laravel at 62.5% = 6.25s
+                        setTimeout(() => {
+                            currentIcon = 'laravel';
+                            setTimeout(() => { currentIcon = null }, 1800);
+                        }, 6250);
+
+                        // AI at 87.5% = 8.75s
+                        setTimeout(() => {
+                            currentIcon = 'ai';
+                            setTimeout(() => { currentIcon = null }, 1800);
+                        }, 8750);
+                    }, 800);
+                }
+            });
+        ">
             <div class="relative group overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 shadow-2xl hover:shadow-purple-500/50 transition-all duration-500" x-show="visible" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
                 <!-- Glassmorphism Overlay -->
                 <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
@@ -138,9 +176,39 @@
 
                     <!-- Timeline -->
                     <div class="relative">
+                        <!-- Tech Icon Display (Positioned Above Each Year) -->
+
+                        <!-- HTML Icon (12.5% - 2004) -->
+                        <div class="absolute -top-20 left-[12.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'html'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-orange-500 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" class="w-12 h-12 drop-shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- PHP Icon (37.5% - 2010) -->
+                        <div class="absolute -top-20 left-[37.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'php'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-purple-600 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/php/777BB4" alt="PHP" class="w-12 h-12 drop-shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- Laravel Icon (62.5% - 2017) -->
+                        <div class="absolute -top-20 left-[62.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'laravel'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-red-600 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" class="w-12 h-12 drop-shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- AI Icon (87.5% - 2023) -->
+                        <div class="absolute -top-20 left-[87.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'ai'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-amber-600 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/anthropic/CC9B7A" alt="Anthropic" class="w-12 h-12 drop-shadow-lg">
+                            </div>
+                        </div>
+
                         <!-- Progress Bar Background -->
                         <div class="h-2 bg-white/20 rounded-full overflow-hidden mb-4">
-                            <div class="h-full bg-white/90 rounded-full transition-all duration-2000 ease-out" :style="`width: ${progress}%`"></div>
+                            <div class="h-full bg-white/90 rounded-full transition-all duration-[10000ms] ease-linear" :style="`width: ${progress}%`"></div>
                         </div>
 
                         <!-- Milestones -->
@@ -158,7 +226,7 @@
                                 <div class="text-white/80 text-sm">Laravel</div>
                             </div>
                             <div class="text-center" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-900" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                                <div class="text-2xl font-bold text-white mb-1">2024</div>
+                                <div class="text-2xl font-bold text-white mb-1">2023</div>
                                 <div class="text-white/80 text-sm">AI Integration</div>
                             </div>
                         </div>
@@ -276,7 +344,6 @@
     </div>
 </section>
 
-@include('components.price-calculator')
 
 <section id="services" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
     <div class="max-w-6xl mx-auto px-6">
@@ -358,6 +425,7 @@
         </div>
     </div>
 </section>
+
 
 <section id="projects" class="relative py-24 bg-gray-50 dark:bg-gray-800 overflow-hidden">
     <div class="relative max-w-6xl mx-auto px-6">
@@ -524,6 +592,7 @@
     </div>
 </section>
 
+
 <!-- Interactive Demos CTA Section -->
 <section class="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-700 overflow-hidden">
     <!-- Background decoration -->
@@ -544,31 +613,9 @@
             Upplev Funktionerna Live
         </h2>
 
-        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Prova våra interaktiva demos och se exakt vad som är möjligt för din verksamhet. Inga registreringar, bara ren innovation.
+        <p class="text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Prova våra interaktiva demos och se exakt vad som är möjligt för din verksamhet.
         </p>
-
-        <!-- Feature badges -->
-        <div class="flex flex-wrap justify-center gap-4 mb-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white">
-                <svg class="w-4 h-4 text-green-300" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-sm font-medium">Fully Functional</span>
-            </div>
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white">
-                <svg class="w-4 h-4 text-green-300" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-sm font-medium">No Signup Required</span>
-            </div>
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white">
-                <svg class="w-4 h-4 text-green-300" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-sm font-medium">Try It Now</span>
-            </div>
-        </div>
 
         <!-- CTA Button -->
         <div class="relative inline-block">
@@ -591,64 +638,6 @@
     </div>
 </section>
 
-<!-- Website Audit CTA Section -->
-<section class="relative py-24 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -top-48 -left-48"></div>
-        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -bottom-48 -right-48"></div>
-    </div>
-
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
-        <div class="inline-block p-3 bg-white/10 rounded-2xl mb-6">
-            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-            </svg>
-        </div>
-
-        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-            Hur Presterar Din Webbplats?
-        </h2>
-
-        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Få en gratis, AI-driven analys av din webbplats SEO, prestanda och användarupplevelse.
-            Professionell rapport på 2-5 minuter.
-        </p>
-
-        <div class="flex flex-wrap justify-center gap-4 mb-12">
-            <div class="flex items-center gap-2 text-white/80">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span>100% Gratis</span>
-            </div>
-            <div class="flex items-center gap-2 text-white/80">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span>AI-Analyserad</span>
-            </div>
-            <div class="flex items-center gap-2 text-white/80">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span>Konkreta Råd</span>
-            </div>
-        </div>
-
-        <a href="{{ route('audits.create') }}"
-           class="inline-flex items-center gap-3 px-10 py-5 bg-white text-purple-600 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-white/25 transition-all hover:scale-105 active:scale-95">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-            Starta Gratis Website Audit
-        </a>
-
-        <p class="mt-6 text-white/70 text-sm">
-            Ingen kreditkort krävs • Resultat på 2-5 minuter • Rapport via e-post
-        </p>
-    </div>
-</section>
 
 <!-- FAQ Section -->
 <section id="faq" class="relative py-24 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 overflow-hidden">
@@ -910,6 +899,70 @@
         </div>
     </div>
 </section>
+
+
+@include('components.price-calculator')
+
+
+<!-- Website Audit CTA Section -->
+<section class="relative py-24 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -top-48 -left-48"></div>
+        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -bottom-48 -right-48"></div>
+    </div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+        <div class="inline-block p-3 bg-white/10 rounded-2xl mb-6">
+            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+            </svg>
+        </div>
+
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+            Hur Presterar Din Webbplats?
+        </h2>
+
+        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            Få en gratis, AI-driven analys av din webbplats SEO, prestanda och användarupplevelse.
+            Professionell rapport på 2-5 minuter.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+            <div class="flex items-center gap-2 text-white/80">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>100% Gratis</span>
+            </div>
+            <div class="flex items-center gap-2 text-white/80">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>AI-Analyserad</span>
+            </div>
+            <div class="flex items-center gap-2 text-white/80">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Konkreta Råd</span>
+            </div>
+        </div>
+
+        <a href="{{ route('audits.create') }}"
+           class="inline-flex items-center gap-3 px-10 py-5 bg-white text-purple-600 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-white/25 transition-all hover:scale-105 active:scale-95">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            Starta Gratis Website Audit
+        </a>
+
+        <p class="mt-6 text-white/70 text-sm">
+            Ingen kreditkort krävs • Resultat på 2-5 minuter • Rapport via e-post
+        </p>
+    </div>
+</section>
+
 
 <section id="contact" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
     <div class="relative max-w-4xl mx-auto px-6">
@@ -1173,9 +1226,9 @@
                 <div class="pt-6 border-t border-purple-200 dark:border-purple-700">
                     <p class="text-center text-gray-700 dark:text-gray-300 mb-3">Eller kontakta mig direkt via e-post:</p>
                     <div class="flex justify-center">
-                        <a href="mailto:andreas@atdev.se" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                        <a href="mailto:andreas@atdev.me" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
                             <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span class="font-semibold text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors">andreas@atdev.se</span>
+                            <span class="font-semibold text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors">andreas@atdev.me</span>
                         </a>
                     </div>
                 </div>
