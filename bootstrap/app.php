@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: [
             'cookie_consent_id',
         ]);
+
+        // Undanta Mailgun webhook från CSRF-skydd
+        // Webhook körs på webhooks.atdev.me och använder signature verification istället
+        $middleware->validateCsrfTokens(except: [
+            'mailgun/inbound',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

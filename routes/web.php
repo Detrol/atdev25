@@ -41,9 +41,9 @@ Route::post('/gdpr/process-deletion/{token}', [GdprController::class, 'processDe
 
 // Webhook routes (utan CSRF protection)
 // Körs på webhooks.atdev.me subdomain (utan Cloudflare proxy)
+// CSRF undantag konfigurerat i bootstrap/app.php
 Route::post('/mailgun/inbound', [WebhookController::class, 'handleInbound'])
-    ->middleware('throttle:100,1')
-    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+    ->middleware('throttle:100,1');
 
 // Admin routes (protected by auth middleware)
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
