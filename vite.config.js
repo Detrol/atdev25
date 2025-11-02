@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/css/chat-widget.css',
                 'resources/js/app.js',
                 'resources/js/chat-widget.js',
+                'resources/js/cookie-consent.js',
                 'resources/js/demos/product-viewer.js',
                 'resources/js/demos/before-after-slider.js',
                 'resources/js/demos/smart-menu.js',

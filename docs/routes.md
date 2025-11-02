@@ -94,7 +94,7 @@
 
 **Sidoeffekter**:
 - Sparar ContactMessage i databas
-- Dispatchar SendContactEmail job (skickar till info@atdev.me)
+- Dispatchar SendContactEmail job (skickar till andreas@atdev.me)
 
 ---
 

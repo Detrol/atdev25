@@ -15,10 +15,10 @@ class ProfileSeeder extends Seeder
         Profile::firstOrCreate(
             ['id' => 1],
             [
-                'name' => 'Andreas Trölss',
+                'name' => 'Andreas Thun',
                 'title' => 'Fullstack-utvecklare',
                 'bio' => 'Erfaren webbutvecklare specialiserad på Laravel och moderna frontend-ramverk. Jag hjälper företag att bygga skalbara och användarvänliga webbapplikationer från idé till färdig produkt.',
-                'email' => 'info@atdev.me',
+                'email' => 'andreas@atdev.me',
                 'github' => 'https://github.com',
                 'linkedin' => 'https://linkedin.com',
             ]

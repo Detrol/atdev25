@@ -54,7 +54,7 @@
         </div>
 
         <div class="footer">
-            <p>Har du frågor? Kontakta mig på <a href="mailto:info@atdev.me">info@atdev.me</a></p>
+            <p>Har du frågor? Kontakta mig på <a href="mailto:andreas@atdev.me">andreas@atdev.me</a></p>
             <p style="margin-top: 20px;">&copy; {{ date('Y') }} ATDev. Alla rättigheter förbehållna.</p>
         </div>
     </div>

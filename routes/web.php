@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\WebsiteAuditController as AdminAuditController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DemosController;
+use App\Http\Controllers\GdprController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TechStackController;
@@ -28,6 +29,15 @@ Route::post('/contact', [ContactController::class, 'store'])
 Route::get('/audit', [WebsiteAuditController::class, 'create'])->name('audits.create');
 Route::post('/audit', [WebsiteAuditController::class, 'store'])->name('audits.store');
 Route::get('/audit/{token}', [WebsiteAuditController::class, 'status'])->name('audits.status');
+
+// GDPR routes
+Route::get('/privacy', [GdprController::class, 'privacy'])->name('gdpr.privacy');
+Route::get('/cookies', [GdprController::class, 'cookies'])->name('gdpr.cookies');
+Route::get('/gdpr/showcase', [GdprController::class, 'showcase'])->name('gdpr.showcase');
+Route::post('/gdpr/export-demo', [GdprController::class, 'exportDemo'])->name('gdpr.export-demo');
+Route::post('/gdpr/delete-demo', [GdprController::class, 'deleteDemo'])->name('gdpr.delete-demo');
+Route::get('/gdpr/confirm-deletion/{token}', [GdprController::class, 'confirmDeletion'])->name('gdpr.confirm-deletion');
+Route::post('/gdpr/process-deletion/{token}', [GdprController::class, 'processDeletion'])->name('gdpr.process-deletion');
 
 // Webhook routes (utan CSRF protection)
 Route::post('/webhooks/mailgun/inbound', [WebhookController::class, 'handleInbound'])

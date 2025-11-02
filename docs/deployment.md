@@ -13,7 +13,7 @@
 
 ### Domän och subdomäner
 - Huvuddomän: `atdev.me`
-- E-post: `info@atdev.me`
+- E-post: `andreas@atdev.me`
 - Subdomäner för demos: `*.atdev.me` (konfigureras vid behov)
 
 ## Deployment-steg
@@ -45,7 +45,7 @@ DB_PASSWORD=STRONG_PASSWORD_HERE
 
 # Mailgun
 MAIL_MAILER=mailgun
-MAIL_FROM_ADDRESS="info@atdev.me"
+MAIL_FROM_ADDRESS="andreas@atdev.me"
 MAIL_FROM_NAME="${APP_NAME}"
 MAILGUN_DOMAIN=atdev.me
 MAILGUN_SECRET=YOUR_MAILGUN_API_KEY
@@ -206,6 +206,68 @@ sudo supervisorctl restart atdev-worker:*
 # Ta upp app igen
 php artisan up
 ```
+
+## Laravel Forge Deployment
+
+### Automatisk ServiceSeeder-synkning
+
+ServiceSeeder är idempotent och säker att köra vid varje deployment. Den uppdaterar tjänster med senaste innehåll utan att skapa dupliceringar.
+
+**Forge Deployment Script** (redigera i Forge dashboard → Site → Deployment Script):
+
+```bash
+cd /home/forge/atdev.me
+git pull origin $FORGE_SITE_BRANCH
+
+$FORGE_COMPOSER install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+( flock -w 10 9 || exit 1
+    echo 'Restarting FPM...'; sudo -S service $FORGE_PHP_FPM reload ) 9>/tmp/fpmlock
+
+if [ -f artisan ]; then
+    # Migrations
+    $FORGE_PHP artisan migrate --force
+
+    # Sync services (idempotent - säkert att köra varje gång)
+    $FORGE_PHP artisan db:seed --class=ServiceSeeder --force
+
+    # Cache optimization
+    $FORGE_PHP artisan config:clear
+    $FORGE_PHP artisan cache:clear
+    $FORGE_PHP artisan config:cache
+    $FORGE_PHP artisan route:cache
+    $FORGE_PHP artisan view:cache
+
+    # Restart queue
+    $FORGE_PHP artisan queue:restart
+fi
+```
+
+**Nyckelfunktioner:**
+- `ServiceSeeder` använder `updateOrCreate()` baserat på slug
+- Uppdaterar befintliga tjänster med nytt innehåll från kod
+- Skapar inga dupliceringar vid upprepade körningar
+- Säkert att köra på varje deploy
+
+**Verifiera efter deploy:**
+```bash
+php artisan tinker --execute="App\Models\Service::count()"
+# Förväntat resultat: 8
+```
+
+### Quick Deploy (utan Forge)
+
+Om du inte använder Forge, lägg till i `composer.json` under `scripts`:
+
+```json
+"post-autoload-dump": [
+    "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+    "@php artisan package:discover --ansi",
+    "@php artisan db:seed --class=ServiceSeeder --force --no-interaction || true"
+]
+```
+
+**Obs**: Detta kör seedern även lokalt vid `composer install`. Använd Forge-metoden för bättre kontroll.
 
 ## Monitorering
 
