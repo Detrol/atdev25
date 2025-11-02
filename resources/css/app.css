@@ -262,3 +262,16 @@ a, button {
 .liquid-morph {
     animation: liquid-morph 8s ease-in-out infinite;
 }
+
+/* Sway animation for tech icons */
+@keyframes sway {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-3deg);
+    }
+    75% {
+        transform: rotate(3deg);
+    }
+}
