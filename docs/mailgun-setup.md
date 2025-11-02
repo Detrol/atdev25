@@ -22,7 +22,8 @@ Lägg till följande i `.env`:
 
 ```env
 # Mailgun configuration
-MAILGUN_DOMAIN=atdev.me
+# VIKTIGT: Använd den subdomain där dina MX records pekar (t.ex. mg.atdev.me)
+MAILGUN_DOMAIN=mg.atdev.me
 MAILGUN_SECRET=your-mailgun-api-key
 MAILGUN_ENDPOINT=api.mailgun.net
 MAILGUN_WEBHOOK_SIGNING_KEY=your-webhook-signing-key
@@ -33,6 +34,12 @@ MAIL_FROM_ADDRESS=andreas@atdev.me
 MAIL_FROM_NAME="ATDev"
 ```
 
+**Viktigt om MAILGUN_DOMAIN:**
+- Detta är domänen som används för **inbound mail** (reply-adressen)
+- Den MÅSTE matcha där dina MX records pekar
+- Om dina MX records pekar på `mg.atdev.me`, använd `mg.atdev.me`
+- Om du vill använda huvuddomänen `atdev.me`, måste du lägga till MX records för den
+
 ### Hitta dina Mailgun credentials:
 
 1. Logga in på [Mailgun Dashboard](https://app.mailgun.com)
@@ -41,24 +48,42 @@ MAIL_FROM_NAME="ATDev"
 
 ---
 
-## Steg 2: Konfigurera DNS (MX Records)
+## Steg 2: Verifiera DNS (MX Records)
 
-För att ta emot inkommande emails måste du konfigurera MX records för din domän.
+För att ta emot inkommande emails behöver du MX records.
 
-### I din DNS-leverantörs panel (t.ex. Cloudflare, Namecheap):
+### Kontrollera dina nuvarande MX records:
 
-Lägg till följande MX records för `atdev.me`:
-
+```bash
+dig mg.atdev.me MX
+# eller
+dig atdev.me MX
 ```
-Priority: 10, Value: mxa.mailgun.org
-Priority: 10, Value: mxb.mailgun.org
+
+Du bör se något liknande:
+```
+mg.atdev.me.  1  IN  MX  10 mxa.eu.mailgun.org.
+mg.atdev.me.  1  IN  MX  10 mxb.eu.mailgun.org.
 ```
 
-**Viktigt**: Om du använder en subdomain för inbound (t.ex. `mail.atdev.me`), lägg till MX records för den subdomainen istället.
+**Vanliga scenarion:**
 
-### Verifiera DNS-konfiguration:
+1. **MX records finns för subdomain (mg.atdev.me)** ← REKOMMENDERAT
+   - Sätt `MAILGUN_DOMAIN=mg.atdev.me` i `.env`
+   - Reply-adresser blir: `reply-ABC123@mg.atdev.me`
 
-I Mailgun Dashboard → Sending → Domain Settings → Verify DNS Settings
+2. **MX records finns för huvuddomän (atdev.me)**
+   - Sätt `MAILGUN_DOMAIN=atdev.me` i `.env`
+   - Reply-adresser blir: `reply-ABC123@atdev.me`
+   - **OBS**: ALL email till `*@atdev.me` går då till Mailgun!
+
+3. **Inga MX records finns**
+   - Du måste lägga till MX records i din DNS-leverantör (Cloudflare, etc.)
+   - Rekommendation: Använd subdomain (mg.atdev.me) för att separera inbound mail
+
+### Verifiera DNS i Mailgun:
+
+Mailgun Dashboard → Sending → Domain Settings → Verify DNS Settings
 
 ---
 
@@ -76,15 +101,19 @@ Routes är regler som talar om för Mailgun vad som ska hända när emails tas e
 
 **Expression Type**: Match Recipient
 
-**Expression**:
+**Expression** (använd den domän där dina MX records pekar):
 ```
-match_recipient("reply-.*@atdev.me")
+match_recipient("reply-.*@mg.atdev.me")
 ```
 
 **Actions**:
 - **Store and Notify**: `https://webhooks.atdev.me/mailgun/inbound`
 
 4. Klicka på **Create Route**
+
+**Viktigt**: Expression måste matcha `MAILGUN_DOMAIN` i din `.env`!
+- Om `MAILGUN_DOMAIN=mg.atdev.me` → `reply-.*@mg.atdev.me`
+- Om `MAILGUN_DOMAIN=atdev.me` → `reply-.*@atdev.me`
 
 ### Via Mailgun API:
 
@@ -93,7 +122,7 @@ curl -s --user 'api:YOUR_API_KEY' \
     https://api.mailgun.net/v3/routes \
     -F priority=10 \
     -F description='ATDev Reply Handler' \
-    -F expression='match_recipient("reply-.*@atdev.me")' \
+    -F expression='match_recipient("reply-.*@mg.atdev.me")' \
     -F action='forward("https://webhooks.atdev.me/mailgun/inbound")' \
     -F action='store(notify="https://webhooks.atdev.me/mailgun/inbound")'
 ```
@@ -121,7 +150,7 @@ curl -s --user 'api:YOUR_API_KEY' \
    ```
    Expected: `{"error":"Invalid signature"}` (401)
 
-3. Skicka ett testmail manuellt till `reply-test123@atdev.me`
+3. Skicka ett testmail manuellt till `reply-test123@mg.atdev.me` (eller din MAILGUN_DOMAIN)
 4. Kolla Laravel logs: `storage/logs/laravel.log`
 5. Du borde se:
    - `Mailgun webhook: Kunde inte hitta meddelande för token` (normalt för test-token)

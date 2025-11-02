@@ -190,8 +190,14 @@ class ContactMessage extends Model
      */
     public function getReplyAddress(): string
     {
-        $domain = config('mail.from.address');
-        $domain = substr($domain, strpos($domain, '@') + 1);
+        // Använd MAILGUN_DOMAIN för inbound mail om det är satt, annars extrahera från from address
+        // Detta är viktigt eftersom MX records ofta finns på en subdomain (t.ex. mg.atdev.me)
+        $domain = config('services.mailgun.domain') ?: config('mail.from.address');
+
+        // Om vi fick en email-adress, extrahera domändelen
+        if (str_contains($domain, '@')) {
+            $domain = substr($domain, strpos($domain, '@') + 1);
+        }
 
         return "reply-{$this->reply_token}@{$domain}";
     }
