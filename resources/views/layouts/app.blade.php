@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'ATDev - AI-Driven Utveckling | 20+ Års Erfarenhet' }}</title>
-    <meta name="description" content="{{ $description ?? 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation för att leverera högkvalitativa webbapplikationer till en bråkdel av priset. Specialist på Laravel, React och AI-integration.' }}">
-    <meta name="keywords" content="webbutveckling, AI-utveckling, Laravel, React, prompt engineering, AI-expert, Andreas Tröls, ATDev">
-    <meta name="author" content="Andreas Tröls">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $ogTitle ?? $title ?? 'ATDev - AI-Driven Utveckling' }}">
-    <meta property="og:description" content="{{ $ogDescription ?? $description ?? 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation för premiumkvalitet till låg kostnad.' }}">
-    <meta property="og:image" content="{{ $ogImage ?? asset('images/og-default.jpg') }}">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="{{ $twitterTitle ?? $title ?? 'ATDev - AI-Driven Utveckling' }}">
-    <meta property="twitter:description" content="{{ $twitterDescription ?? $description ?? 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation.' }}">
-    <meta property="twitter:image" content="{{ $twitterImage ?? asset('images/og-default.jpg') }}">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- SEO Meta Tags -->
+    @isset($seoTitle, $seoDescription)
+        <x-seo-meta
+            :title="$seoTitle"
+            :description="$seoDescription"
+            :keywords="$seoKeywords ?? null"
+            :og-image="$seoImage ?? null"
+            :og-type="$seoType ?? 'website'"
+            :preload-image="$preloadImage ?? null"
+        />
+    @else
+        <x-seo-meta
+            title="ATDev - AI-Driven Utveckling | 20+ Års Erfarenhet"
+            description="Utvecklare med 20+ års erfarenhet kombinerar AI och automation för att leverera högkvalitativa webbapplikationer till en bråkdel av priset. Specialist på Laravel, React och AI-integration."
+            keywords="webbutveckling, AI-utveckling, Laravel, React, prompt engineering, AI-expert, Andreas Thun, ATDev"
+        />
+    @endisset
 
     <!-- CSRF Token for AJAX requests -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js', 'resources/js/chat-widget.js', 'resources/js/cookie-consent.js'])
+
+    <!-- Structured Data (JSON-LD) -->
+    @isset($structuredData)
+        {!! $structuredData !!}
+    @endisset
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
-    <main class="flex-grow">
+    <main role="main" aria-label="Huvudinnehåll" class="flex-grow">
         @yield('content')
     </main>
 

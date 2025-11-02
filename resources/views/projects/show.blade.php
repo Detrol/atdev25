@@ -46,13 +46,19 @@
 
     <!-- Screenshot/Cover Image -->
     @if($project->screenshot_path || $project->cover_image)
-        <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl bg-white">
+        <figure class="mb-12 rounded-3xl overflow-hidden shadow-2xl bg-white">
             @if($project->screenshot_path)
-                <img src="{{ asset('storage/' . $project->screenshot_path) }}" alt="{{ $project->title }}" loading="lazy" class="w-full">
+                <img src="{{ asset('storage/' . $project->screenshot_path) }}"
+                     alt="Skärmdump av {{ $project->title }} - {{ $project->summary ?? 'Ett webbutvecklingsprojekt av Andreas Thun' }}"
+                     loading="lazy"
+                     class="w-full">
             @elseif($project->cover_image)
-                <img src="{{ asset('storage/' . $project->cover_image) }}" alt="{{ $project->title }}" loading="lazy" class="w-full">
+                <img src="{{ asset('storage/' . $project->cover_image) }}"
+                     alt="Omslagsbild för projektet {{ $project->title }} - {{ $project->summary ?? 'Ett webbutvecklingsprojekt av Andreas Thun' }}"
+                     loading="lazy"
+                     class="w-full">
             @endif
-        </div>
+        </figure>
     @endif
 
     <!-- Project Links -->
@@ -80,37 +86,40 @@
 
     <!-- Project Description -->
     @if($project->description)
-        <div class="glass rounded-3xl p-8 md:p-12 mb-12">
+        <article class="glass rounded-3xl p-8 md:p-12 mb-12">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">
                 <span class="gradient-text">Om projektet</span>
             </h2>
             <div class="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
                 {{ $project->description }}
             </div>
-        </div>
+        </article>
     @endif
 
     <!-- Gallery -->
     @if($project->gallery && count($project->gallery) > 0)
-        <div class="mb-12">
+        <section class="mb-12">
             <h2 class="text-3xl md:text-4xl font-bold mb-8">
                 <span class="gradient-text">Galleri</span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @foreach($project->gallery as $image)
-                    <div class="rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:scale-105 bg-white">
-                        <img src="{{ asset('storage/' . $image) }}" alt="{{ $project->title }}" loading="lazy" class="w-full h-auto">
-                    </div>
+                @foreach($project->gallery as $index => $image)
+                    <figure class="rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:scale-105 bg-white">
+                        <img src="{{ asset('storage/' . $image) }}"
+                             alt="Galleribild {{ $index + 1 }} från projektet {{ $project->title }}"
+                             loading="lazy"
+                             class="w-full h-auto">
+                    </figure>
                 @endforeach
             </div>
-        </div>
+        </section>
     @endif
 
     <!-- Project Meta -->
-    <div class="glass rounded-3xl p-8 md:p-12 mb-12 border border-purple-100">
-        <h3 class="text-2xl md:text-3xl font-bold mb-6">
+    <aside class="glass rounded-3xl p-8 md:p-12 mb-12 border border-purple-100">
+        <h2 class="text-2xl md:text-3xl font-bold mb-6">
             <span class="gradient-text">Projektinformation</span>
-        </h3>
+        </h2>
         <dl class="space-y-3">
             <div class="flex justify-between py-2 border-b border-gray-200">
                 <dt class="font-semibold text-gray-700">Status:</dt>
@@ -140,7 +149,7 @@
     </div>
 
     <!-- CTA Section -->
-    <div class="relative bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 rounded-3xl p-12 md:p-16 text-center text-white overflow-hidden">
+    <section class="relative bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 rounded-3xl p-12 md:p-16 text-center text-white overflow-hidden">
         <div class="absolute inset-0 opacity-10">
             <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full filter blur-3xl"></div>
             <div class="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full filter blur-3xl"></div>
@@ -156,6 +165,6 @@
                 </svg>
             </a>
         </div>
-    </div>
+    </section>
 </div>
 @endsection

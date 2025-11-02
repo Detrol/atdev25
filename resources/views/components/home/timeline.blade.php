@@ -1,6 +1,6 @@
 {{-- Timeline & Stats Section Component --}}
 
-<section class="relative py-24 bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
+<section id="expertis" class="relative py-24 bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
     <!-- Animated Background -->
     <div class="absolute inset-0 opacity-30">
         <div class="absolute w-96 h-96 bg-purple-300 dark:bg-purple-600 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>

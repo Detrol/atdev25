@@ -19,7 +19,8 @@
                     <div class="absolute inset-[2px] rounded-3xl h-full overflow-hidden bg-white dark:bg-gray-900">
                         @if($project->cover_image)
                         <img src="{{ asset('storage/' . $project->cover_image) }}"
-                             alt="{{ $project->title }}"
+                             alt="Skärmdump av projektet {{ $project->title }} - {{ $project->summary }}"
+                             loading="lazy"
                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                         @else
                         <div class="w-full h-full bg-gradient-to-br from-purple-400 via-blue-500 to-pink-500 flex items-center justify-center">
