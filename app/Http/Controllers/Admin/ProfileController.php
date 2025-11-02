@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Profile;
-use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -27,46 +26,44 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request)
     {
-        $profile = Profile::current() ?? new Profile;
+        $profile = Profile::current();
 
-        $data = $request->validated();
+        // Create profile if it doesn't exist
+        if (!$profile) {
+            $profile = Profile::create([
+                'github' => $request->input('github'),
+                'linkedin' => $request->input('linkedin'),
+                'twitter' => $request->input('twitter'),
+            ]);
+        } else {
+            // Update social links
+            $profile->update([
+                'github' => $request->input('github'),
+                'linkedin' => $request->input('linkedin'),
+                'twitter' => $request->input('twitter'),
+            ]);
+        }
 
         // Hantera borttagning av avatar
         if ($request->input('remove_avatar')) {
-            if ($profile->avatar) {
-                Storage::disk('public')->delete($profile->avatar);
-            }
-            $data['avatar'] = null;
+            $profile->clearMediaCollection('avatar');
         }
-        // Hantera avatar upload
+        // Hantera avatar upload med optimering
         elseif ($request->hasFile('avatar')) {
-            // Ta bort gammal bild om den finns
-            if ($profile->avatar) {
-                Storage::disk('public')->delete($profile->avatar);
-            }
-            $data['avatar'] = $request->file('avatar')->store('profiles', 'public');
+            $profile->clearMediaCollection('avatar');
+            $profile->addMediaFromRequest('avatar')
+                ->toMediaCollection('avatar');
         }
 
-        // Hantera borttagning av hero_image
+        // Hantera borttagning av work_image
         if ($request->input('remove_hero_image')) {
-            if ($profile->hero_image) {
-                Storage::disk('public')->delete($profile->hero_image);
-            }
-            $data['hero_image'] = null;
+            $profile->clearMediaCollection('work_image');
         }
-        // Hantera hero_image upload
+        // Hantera work_image upload med optimering
         elseif ($request->hasFile('hero_image')) {
-            // Ta bort gammal bild om den finns
-            if ($profile->hero_image) {
-                Storage::disk('public')->delete($profile->hero_image);
-            }
-            $data['hero_image'] = $request->file('hero_image')->store('profiles', 'public');
-        }
-
-        if ($profile->exists) {
-            $profile->update($data);
-        } else {
-            Profile::create($data);
+            $profile->clearMediaCollection('work_image');
+            $profile->addMediaFromRequest('hero_image')
+                ->toMediaCollection('work_image');
         }
 
         return redirect()->route('admin.profile.edit')
