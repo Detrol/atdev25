@@ -229,7 +229,7 @@
                 </div>
 
                 <!-- Honeypot -->
-                <input type="text" name="website" value="" tabindex="-1" autocomplete="off" style="position: absolute; left: -9999px; width: 1px; height: 1px;">
+                <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px;">
 
                 <!-- Submit Button -->
                 <div class="relative">

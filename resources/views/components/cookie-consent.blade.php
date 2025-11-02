@@ -130,7 +130,7 @@
                     Spara val
                 </button>
                 <button @click="acceptAll()"
-                        class="px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
+                        class="px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors">
                     Acceptera alla
                 </button>
             </div>

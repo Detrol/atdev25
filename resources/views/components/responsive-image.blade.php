@@ -20,8 +20,6 @@
     sizes="{{ $sizes }}"
     src="{{ $media->getUrl('small') }}"
     alt="{{ $alt }}"
-    @if($width) width="{{ $width }}" @endif
-    @if($height) height="{{ $height }}" @endif
     fetchpriority="{{ $fetchpriority }}"
     loading="{{ $loading }}"
     decoding="{{ $decoding }}"

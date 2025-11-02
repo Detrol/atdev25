@@ -42,9 +42,9 @@
                         :class="{ 'border-red-500 dark:border-red-400': error }"
                     ></textarea>
                     <div class="flex justify-between items-center mt-2">
-                        <span class="text-sm" :class="description.length < 20 ? 'text-gray-400' : (description.length > 1800 ? 'text-orange-600' : 'text-green-600')">
+                        <span class="text-sm" :class="description.length < 20 ? 'text-gray-600 dark:text-gray-400' : (description.length > 1800 ? 'text-orange-600' : 'text-green-600')">
                             <span x-text="description.length"></span> / 2000 tecken
-                            <span x-show="description.length < 20" class="text-gray-500">(minst 20 tecken krävs)</span>
+                            <span x-show="description.length < 20" class="text-gray-600 dark:text-gray-400">(minst 20 tecken krävs)</span>
                         </span>
                     </div>
                 </div>

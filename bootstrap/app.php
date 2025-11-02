@@ -25,6 +25,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Add security headers globally (CSP, X-Frame-Options, etc.)
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+
+        // Add cache control headers for static assets
+        $middleware->append(\App\Http\Middleware\AddCacheHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
