@@ -2,7 +2,7 @@
 @props(['profile'])
 
 <!-- Om Mig Section -->
-<section class="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+<section id="om-mig" class="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
     <div class="max-w-6xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <!-- Text -->
@@ -35,7 +35,11 @@
                 @if($profile && $profile->hasMedia('work_image'))
                 <div x-show="visible" x-transition:enter="transition ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
                     <img src="{{ $profile->getFirstMediaUrl('work_image', 'optimized') }}"
-                         alt="Andreas arbetar"
+                         alt="Andreas Thun arbetar - utvecklare vid sitt skrivbord"
+                         width="800"
+                         height="600"
+                         loading="lazy"
+                         decoding="async"
                          class="rounded-2xl shadow-2xl border border-white/10 hover:scale-105 transition-transform duration-500">
                 </div>
                 @else

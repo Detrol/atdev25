@@ -11,6 +11,7 @@ use App\Http\Controllers\DemosController;
 use App\Http\Controllers\GdprController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TechStackController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\WebsiteAuditController;
@@ -24,6 +25,9 @@ Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('pro
 Route::post('/contact', [ContactController::class, 'store'])
     ->middleware('throttle:contact')
     ->name('contact.store');
+
+// SEO routes
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Website Audit routes
 Route::get('/audit', [WebsiteAuditController::class, 'create'])->name('audits.create');

@@ -35,5 +35,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('viewLogViewer', function ($user = null) {
             return $user !== null;
         });
+
+        // Share profile globally with all views
+        view()->composer('*', function ($view) {
+            $view->with('profile', \App\Models\Profile::current());
+        });
     }
 }

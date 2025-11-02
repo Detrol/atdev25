@@ -1,6 +1,6 @@
 {{-- How I Work Section Component --}}
 
-<section class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
+<section id="hur-jag-jobbar" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
     <!-- Animated Background -->
     <div class="absolute inset-0 opacity-20">
         <div class="absolute w-96 h-96 bg-blue-300 dark:bg-blue-600 rounded-full blur-3xl -top-48 -right-48 animate-pulse"></div>
