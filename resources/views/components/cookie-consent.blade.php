@@ -1,5 +1,5 @@
 {{-- Cookie Consent Banner - Slide-in från höger (matchar AI chatbot design) --}}
-<div x-data="cookieConsent()"
+<div x-data="cookieConsent"
      x-show="showBanner"
      x-transition:enter="transform transition ease-out duration-300"
      x-transition:enter-start="translate-x-full"

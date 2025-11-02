@@ -76,7 +76,7 @@ return [
 
         'directives' => [
             'default-src' => ["'self'"],
-            'script-src' => ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://cdn.jsdelivr.net'],
+            'script-src' => ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
             'style-src' => ["'self'", "'unsafe-inline'"],
             'img-src' => ["'self'", 'data:', 'https:', 'blob:'],
             'font-src' => ["'self'", 'data:'],
@@ -96,7 +96,7 @@ return [
     */
 
     'security_headers' => [
-        'X-Frame-Options' => 'DENY',
+        'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains; preload',
         'X-Content-Type-Options' => 'nosniff',
         'X-XSS-Protection' => '1; mode=block',
         'Referrer-Policy' => 'strict-origin-when-cross-origin',
@@ -114,12 +114,10 @@ return [
 
     'resource_hints' => [
         'dns_prefetch' => [
-            '//cdn.jsdelivr.net',
             '//cdn.simpleicons.org',
         ],
 
         'preconnect' => [
-            'https://cdn.jsdelivr.net',
             'https://cdn.simpleicons.org',
         ],
     ],
