@@ -97,7 +97,7 @@ return [
 
     'security_headers' => [
         'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains; preload',
-        'X-Content-Type-Options' => 'nosniff',
+        // X-Content-Type-Options hanteras automatiskt av Laravel 11
         'X-XSS-Protection' => '1; mode=block',
         'Referrer-Policy' => 'strict-origin-when-cross-origin',
         'Permissions-Policy' => 'geolocation=(), microphone=(), camera=()',
