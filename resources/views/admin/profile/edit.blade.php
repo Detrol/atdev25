@@ -28,7 +28,14 @@
                     <div class="flex-1">
                         <input type="file" name="avatar" id="avatar" accept="image/*"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 2MB</p>
+                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 5MB</p>
+                        @if($profile->avatar)
+                            <div class="mt-2 flex items-center">
+                                <input type="checkbox" name="remove_avatar" id="remove_avatar" value="1"
+                                    class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-600">
+                                <label for="remove_avatar" class="ml-2 text-sm text-gray-700">Ta bort nuvarande bild</label>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 @error('avatar')
@@ -46,6 +53,13 @@
                     <input type="file" name="hero_image" id="hero_image" accept="image/*"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
                     <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 5MB</p>
+                    @if($profile->hero_image)
+                        <div class="mt-2 flex items-center">
+                            <input type="checkbox" name="remove_hero_image" id="remove_hero_image" value="1"
+                                class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-600">
+                            <label for="remove_hero_image" class="ml-2 text-sm text-gray-700">Ta bort nuvarande bild</label>
+                        </div>
+                    @endif
                 </div>
                 @error('hero_image')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>

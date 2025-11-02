@@ -31,8 +31,15 @@ class ProfileController extends Controller
 
         $data = $request->validated();
 
+        // Hantera borttagning av avatar
+        if ($request->input('remove_avatar')) {
+            if ($profile->avatar) {
+                Storage::disk('public')->delete($profile->avatar);
+            }
+            $data['avatar'] = null;
+        }
         // Hantera avatar upload
-        if ($request->hasFile('avatar')) {
+        elseif ($request->hasFile('avatar')) {
             // Ta bort gammal bild om den finns
             if ($profile->avatar) {
                 Storage::disk('public')->delete($profile->avatar);
@@ -40,8 +47,15 @@ class ProfileController extends Controller
             $data['avatar'] = $request->file('avatar')->store('profiles', 'public');
         }
 
+        // Hantera borttagning av hero_image
+        if ($request->input('remove_hero_image')) {
+            if ($profile->hero_image) {
+                Storage::disk('public')->delete($profile->hero_image);
+            }
+            $data['hero_image'] = null;
+        }
         // Hantera hero_image upload
-        if ($request->hasFile('hero_image')) {
+        elseif ($request->hasFile('hero_image')) {
             // Ta bort gammal bild om den finns
             if ($profile->hero_image) {
                 Storage::disk('public')->delete($profile->hero_image);
