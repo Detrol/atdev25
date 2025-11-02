@@ -41,8 +41,7 @@ class CustomerReplyNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            html: 'emails.customer-reply-notification.html',
-            text: 'emails.customer-reply-notification',
+            view: 'emails.customer-reply-notification',
             with: [
                 'originalMessage' => $this->originalMessage,
                 'customerReply' => $this->customerReply,
