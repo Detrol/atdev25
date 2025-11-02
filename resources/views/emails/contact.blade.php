@@ -1,1 +1,11 @@
-Nytt kontaktmeddelande från {{ $contactMessage->name }}\n\nNamn: {{ $contactMessage->name }}\nE-post: {{ $contactMessage->email }}\nIP: {{ $contactMessage->ip_address }}\n\nMeddelande:\n{{ $contactMessage->message }}\n\n---\nSkickat: {{ $contactMessage->created_at->format("Y-m-d H:i:s") }}
+Nytt kontaktmeddelande från {{ $contactMessage->name }}
+
+Namn: {{ $contactMessage->name }}
+E-post: {{ $contactMessage->email }}
+IP: {{ $contactMessage->ip_address }}
+
+Meddelande:
+{{ $contactMessage->message }}
+
+---
+Skickat: {{ $contactMessage->created_at->format("Y-m-d H:i:s") }}

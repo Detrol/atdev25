@@ -19,7 +19,7 @@ Du kan svara på detta email direkt eller logga in i admin-panelen.
 ───────────────────────────────────────────────────
 
 Konversationens ursprung:
-> {{ Str::limit($originalMessage->message, 200) }}
+> {{ \Illuminate\Support\Str::limit($originalMessage->message, 200) }}
 Skickat: {{ $originalMessage->created_at->format('Y-m-d H:i') }}
 
 ───────────────────────────────────────────────────
