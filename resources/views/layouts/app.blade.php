@@ -28,10 +28,15 @@
     <!-- CSRF Token for AJAX requests -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js', 'resources/js/chat-widget.js'])
+    @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js', 'resources/js/chat-widget.js', 'resources/js/cookie-consent.js'])
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-    @yield('content')
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+    <main class="flex-grow">
+        @yield('content')
+    </main>
+
+    <!-- Footer -->
+    <x-footer />
 
     <!-- Flash Messages -->
     @if(session('success'))
@@ -79,6 +84,9 @@
             </div>
         </div>
     @endif
+
+    <!-- Cookie Consent Banner -->
+    <x-cookie-consent />
 
     <!-- AI Chat Widget -->
     <div x-data="chatWidget()" x-init="init()" class="chat-widget-container">

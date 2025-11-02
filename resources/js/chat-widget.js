@@ -18,19 +18,45 @@ document.addEventListener('alpine:init', () => {
             hasLoadedHistory: false,
 
             // Init
-            init() {
-                this.sessionId = this.getOrCreateSessionId();
+            async init() {
+                this.sessionId = await this.getOrCreateSessionId();
                 console.log('Chat widget initialized with session:', this.sessionId);
             },
 
-            // Session ID management (stored in localStorage)
-            getOrCreateSessionId() {
-                let sessionId = localStorage.getItem('chat_session_id');
-                if (!sessionId) {
-                    sessionId = this.generateUUID();
-                    localStorage.setItem('chat_session_id', sessionId);
+            // Session ID management (stored in localStorage IF consent given)
+            async getOrCreateSessionId() {
+                // Check om vi har consent för functional cookies
+                const hasFunctionalConsent = await this.checkFunctionalConsent();
+
+                let sessionId = null;
+
+                if (hasFunctionalConsent) {
+                    // Consent finns - använd localStorage
+                    sessionId = localStorage.getItem('chat_session_id');
+                    if (!sessionId) {
+                        sessionId = this.generateUUID();
+                        localStorage.setItem('chat_session_id', sessionId);
+                    }
+                } else {
+                    // Ingen consent - använd session-only ID (sparas ej mellan reloads)
+                    if (!window._tempChatSessionId) {
+                        window._tempChatSessionId = this.generateUUID();
+                    }
+                    sessionId = window._tempChatSessionId;
                 }
+
                 return sessionId;
+            },
+
+            // Check om functional consent finns
+            async checkFunctionalConsent() {
+                try {
+                    const response = await fetch('/api/consent/check/functional');
+                    const data = await response.json();
+                    return data.has_consent;
+                } catch {
+                    return false; // Default till ingen consent
+                }
             },
 
             // Generate UUID v4

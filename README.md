@@ -28,7 +28,7 @@ ATDev är en minimalistisk portfolio-lösning med fokus på enkelhet och använd
 
 📧 **E-post & Notifikationer**
 - Queued e-post via Mailgun
-- Kontaktmeddelanden till info@atdev.me
+- Kontaktmeddelanden till andreas@atdev.me
 
 ## Tech Stack
 
@@ -182,7 +182,7 @@ Se `docs/deployment.md` för fullständig produktionsguide, inkl:
 
 ## Support och Kontakt
 
-För frågor eller support, kontakta info@atdev.me
+För frågor eller support, kontakta andreas@atdev.me
 
 ## Licens
 

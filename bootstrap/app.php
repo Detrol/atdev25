@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Undanta cookie_consent_id från encryption så den kan läsas av JavaScript
+        $middleware->encryptCookies(except: [
+            'cookie_consent_id',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

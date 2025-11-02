@@ -92,7 +92,7 @@ Frontend-AI:n kommer få:
 - atdev.me som huvuddomän
 - Subdomäner för demo-projekt (*.atdev.me)
 - Supervisor för queue workers
-- Mailgun för e-post (info@atdev.me)
+- Mailgun för e-post (andreas@atdev.me)
 
 ## Innehållsstrategi
 

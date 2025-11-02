@@ -76,7 +76,7 @@ Admin-användare för autentisering (endast login, ingen registrering).
 
 Jobs som körs asynkront:
 1. **TakeProjectScreenshot**: Tar screenshot av projekt-URL med Browsershot
-2. **SendContactEmail**: Skickar kontaktmeddelanden till info@atdev.me
+2. **SendContactEmail**: Skickar kontaktmeddelanden till andreas@atdev.me
 
 För lokal utveckling: `php artisan queue:work`
 För produktion: Supervisor eller motsvarande för queue worker

@@ -29,7 +29,7 @@ MAILGUN_WEBHOOK_SIGNING_KEY=your-webhook-signing-key
 
 # Email settings
 MAIL_MAILER=mailgun
-MAIL_FROM_ADDRESS=info@atdev.me
+MAIL_FROM_ADDRESS=andreas@atdev.me
 MAIL_FROM_NAME="ATDev"
 ```
 

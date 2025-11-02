@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AIAssistantController;
+use App\Http\Controllers\Api\ConsentController;
 use App\Http\Controllers\Api\GoogleReviewsController;
 use App\Http\Controllers\PriceCalculatorController;
 use App\Http\Controllers\SmartMenuController;
@@ -25,6 +26,15 @@ Route::prefix('chat')->group(function () {
 
     Route::get('/history', [AIAssistantController::class, 'getChatHistory'])
         ->name('api.chat.history');
+});
+
+// Cookie Consent API
+Route::prefix('consent')->group(function () {
+    Route::get('/', [ConsentController::class, 'show'])->name('api.consent.show');
+    Route::post('/', [ConsentController::class, 'store'])->name('api.consent.store');
+    Route::post('/accept-all', [ConsentController::class, 'acceptAll'])->name('api.consent.accept-all');
+    Route::post('/reject-all', [ConsentController::class, 'rejectAll'])->name('api.consent.reject-all');
+    Route::get('/check/{category}', [ConsentController::class, 'check'])->name('api.consent.check');
 });
 
 // Price Calculator API (rate limiting hanteras i controller för bättre meddelanden)
