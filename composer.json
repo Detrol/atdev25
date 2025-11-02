@@ -17,6 +17,7 @@
         "livewire/volt": "^1.7.0",
         "opcodesio/log-viewer": "^3.21",
         "spatie/browsershot": "^5.0",
+        "spatie/laravel-medialibrary": "^11.17",
         "symfony/dom-crawler": "^7.0"
     },
     "require-dev": {

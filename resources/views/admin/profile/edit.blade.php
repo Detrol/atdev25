@@ -16,8 +16,8 @@
             <div>
                 <label class="block text-sm font-medium leading-6 text-gray-900">Profilbild (Avatar)</label>
                 <div class="mt-2 flex items-center gap-4">
-                    @if($profile->avatar)
-                        <img src="{{ Storage::url($profile->avatar) }}" alt="Avatar" class="h-24 w-24 rounded-full object-cover border-2 border-gray-200">
+                    @if($profile->exists && $profile->hasMedia('avatar'))
+                        <img src="{{ $profile->getFirstMediaUrl('avatar', 'thumb') }}" alt="Avatar" class="h-24 w-24 rounded-full object-cover border-2 border-gray-200">
                     @else
                         <div class="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center">
                             <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,8 +28,8 @@
                     <div class="flex-1">
                         <input type="file" name="avatar" id="avatar" accept="image/*"
                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 5MB</p>
-                        @if($profile->avatar)
+                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 5MB (optimeras automatiskt)</p>
+                        @if($profile->exists && $profile->hasMedia('avatar'))
                             <div class="mt-2 flex items-center">
                                 <input type="checkbox" name="remove_avatar" id="remove_avatar" value="1"
                                     class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-600">
@@ -43,17 +43,19 @@
                 @enderror
             </div>
 
-            <!-- Hero Image (Arbetsbild) -->
+            <!-- Arbetsbild (Om Mig-sektion) -->
             <div>
-                <label class="block text-sm font-medium leading-6 text-gray-900">Arbetsbild (Hero Image)</label>
+                <label class="block text-sm font-medium leading-6 text-gray-900">Arbetsbild (Om Mig-sektion)</label>
                 <div class="mt-2">
-                    @if($profile->hero_image)
-                        <img src="{{ Storage::url($profile->hero_image) }}" alt="Hero Image" class="h-48 w-full object-cover rounded-lg mb-4 border-2 border-gray-200">
+                    @if($profile->exists && $profile->hasMedia('work_image'))
+                        <div class="max-w-md mx-auto mb-4">
+                            <img src="{{ $profile->getFirstMediaUrl('work_image', 'optimized') }}" alt="Arbetsbild" class="rounded-2xl shadow-lg border border-gray-200">
+                        </div>
                     @endif
                     <input type="file" name="hero_image" id="hero_image" accept="image/*"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                    <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 5MB</p>
-                    @if($profile->hero_image)
+                    <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 5MB. Visas i "Om Mig"-sektionen (optimeras automatiskt)</p>
+                    @if($profile->exists && $profile->hasMedia('work_image'))
                         <div class="mt-2 flex items-center">
                             <input type="checkbox" name="remove_hero_image" id="remove_hero_image" value="1"
                                 class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-600">

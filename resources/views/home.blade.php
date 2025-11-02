@@ -12,9 +12,9 @@
                 <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span><span class="text-sm font-medium">Tillgänglig för nya projekt</span>
             </div>
 
-            @if($profile?->avatar)
+            @if($profile && $profile->hasMedia('avatar'))
             <div x-show="visible" x-transition:enter="transition ease-out duration-700 delay-200" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100">
-                <img src="{{ Storage::url($profile->avatar) }}"
+                <img src="{{ $profile->getFirstMediaUrl('avatar', 'optimized') }}"
                      alt="Andreas Thun"
                      class="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-white/20 shadow-2xl">
             </div>
@@ -76,9 +76,9 @@
 
             <!-- Foto -->
             <div x-data="{ visible: false }" x-intersect="visible = true">
-                @if($profile?->hero_image)
+                @if($profile && $profile->hasMedia('work_image'))
                 <div x-show="visible" x-transition:enter="transition ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
-                    <img src="{{ Storage::url($profile->hero_image) }}"
+                    <img src="{{ $profile->getFirstMediaUrl('work_image', 'optimized') }}"
                          alt="Andreas arbetar"
                          class="rounded-2xl shadow-2xl border border-white/10 hover:scale-105 transition-transform duration-500">
                 </div>
@@ -179,28 +179,28 @@
                         <!-- Tech Icon Display (Positioned Above Each Year) -->
 
                         <!-- HTML Icon (12.5% - 2004) -->
-                        <div class="absolute -top-20 left-[12.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'html'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                        <div class="absolute -top-20 left-[12.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'html'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-orange-500 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" class="w-12 h-12 drop-shadow-lg">
                             </div>
                         </div>
 
                         <!-- PHP Icon (37.5% - 2010) -->
-                        <div class="absolute -top-20 left-[37.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'php'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                        <div class="absolute -top-20 left-[37.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'php'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-purple-600 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="https://cdn.simpleicons.org/php/777BB4" alt="PHP" class="w-12 h-12 drop-shadow-lg">
                             </div>
                         </div>
 
                         <!-- Laravel Icon (62.5% - 2017) -->
-                        <div class="absolute -top-20 left-[62.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'laravel'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                        <div class="absolute -top-20 left-[62.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'laravel'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-red-600 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" class="w-12 h-12 drop-shadow-lg">
                             </div>
                         </div>
 
                         <!-- AI Icon (87.5% - 2023) -->
-                        <div class="absolute -top-20 left-[87.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'ai'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-75" x-cloak>
+                        <div class="absolute -top-20 left-[87.5%] -translate-x-1/2 flex items-center justify-center" x-show="currentIcon === 'ai'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-amber-600 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="https://cdn.simpleicons.org/anthropic/CC9B7A" alt="Anthropic" class="w-12 h-12 drop-shadow-lg">
                             </div>
