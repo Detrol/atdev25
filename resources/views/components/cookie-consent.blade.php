@@ -49,10 +49,12 @@
             {{-- Cookie Categories --}}
             <div class="space-y-3">
                 {{-- Essential Cookies (Always On) --}}
-                <div class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <label class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
                     <input type="checkbox"
+                           id="cookie-essential"
                            checked
                            disabled
+                           aria-label="Nödvändiga cookies - Alltid aktiva"
                            class="mt-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                     <div class="flex-1">
                         <div class="flex items-center space-x-2">
@@ -65,7 +67,7 @@
                             Krävs för att webbplatsen ska fungera (CSRF-skydd, sessioner)
                         </p>
                     </div>
-                </div>
+                </label>
 
                 {{-- Functional Cookies --}}
                 <label class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
