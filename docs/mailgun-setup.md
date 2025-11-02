@@ -82,7 +82,7 @@ match_recipient("reply-.*@atdev.me")
 ```
 
 **Actions**:
-- **Store and Notify**: `https://atdev.me/webhooks/mailgun/inbound`
+- **Store and Notify**: `https://webhooks.atdev.me/mailgun/inbound`
 
 4. Klicka på **Create Route**
 
@@ -94,8 +94,8 @@ curl -s --user 'api:YOUR_API_KEY' \
     -F priority=10 \
     -F description='ATDev Reply Handler' \
     -F expression='match_recipient("reply-.*@atdev.me")' \
-    -F action='forward("https://atdev.me/webhooks/mailgun/inbound")' \
-    -F action='store(notify="https://atdev.me/webhooks/mailgun/inbound")'
+    -F action='forward("https://webhooks.atdev.me/mailgun/inbound")' \
+    -F action='store(notify="https://webhooks.atdev.me/mailgun/inbound")'
 ```
 
 ---
@@ -104,9 +104,26 @@ curl -s --user 'api:YOUR_API_KEY' \
 
 ### Testa att webhook fungerar:
 
-1. Skicka ett testmail manuellt till `reply-test123@atdev.me`
-2. Kolla Laravel logs: `storage/logs/laravel.log`
-3. Du borde se:
+**Viktigt**: Webhook körs på en separat subdomain (`webhooks.atdev.me`) som INTE går genom Cloudflare proxy för att undvika Bot Fight Mode.
+
+1. Verifiera DNS:
+   ```bash
+   dig webhooks.atdev.me
+   # Ska peka direkt på din server IP (inte Cloudflare)
+   ```
+
+2. Testa endpoint:
+   ```bash
+   curl -X POST https://webhooks.atdev.me/mailgun/inbound \
+     -d "timestamp=1234567890" \
+     -d "token=test" \
+     -d "signature=invalid"
+   ```
+   Expected: `{"error":"Invalid signature"}` (401)
+
+3. Skicka ett testmail manuellt till `reply-test123@atdev.me`
+4. Kolla Laravel logs: `storage/logs/laravel.log`
+5. Du borde se:
    - `Mailgun webhook: Kunde inte hitta meddelande för token` (normalt för test-token)
    - ELLER ett felmeddelande om signature är ogiltig
 
