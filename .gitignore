@@ -30,3 +30,4 @@ Homestead.json
 auth.json
 /.idea
 CLAUDE.md
+resources/views/home.blade.php.backup

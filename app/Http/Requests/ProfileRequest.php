@@ -22,13 +22,8 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'title' => ['required', 'string', 'max:255'],
-            'bio' => ['required', 'string'],
-            'avatar' => ['nullable', 'string', 'max:500'],
-            'hero_image' => ['nullable', 'string', 'max:500'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:50'],
+            'avatar' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp'],
+            'hero_image' => ['nullable', 'image', 'max:5120', 'mimes:jpg,jpeg,png,webp'],
             'github' => ['nullable', 'url', 'max:255'],
             'linkedin' => ['nullable', 'url', 'max:255'],
             'twitter' => ['nullable', 'url', 'max:255'],
