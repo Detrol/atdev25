@@ -6,62 +6,50 @@
     <p class="mt-2 text-sm text-gray-700">Hantera din portfolio-profil</p>
 </div>
 
-<form action="/admin/profile" method="POST" class="space-y-8 bg-white shadow sm:rounded-lg">
+<form action="/admin/profile" method="POST" enctype="multipart/form-data" class="space-y-8 bg-white shadow sm:rounded-lg">
     @csrf
     @method('PUT')
     
     <div class="px-4 py-6 sm:p-8">
         <div class="grid grid-cols-1 gap-6">
-            <!-- Name -->
+            <!-- Avatar (Profilbild) -->
             <div>
-                <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Namn *</label>
-                <input type="text" name="name" id="name" value="{{ old('name', $profile->name ?? '') }}" required
-                    class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3">
-                @error('name')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Title -->
-            <div>
-                <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Titel</label>
-                <input type="text" name="title" id="title" value="{{ old('title', $profile->title ?? '') }}"
-                    class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3"
-                    placeholder="t.ex. Fullstack-utvecklare">
-                @error('title')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Bio -->
-            <div>
-                <label for="bio" class="block text-sm font-medium leading-6 text-gray-900">Bio</label>
-                <textarea name="bio" id="bio" rows="5"
-                    class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3">{{ old('bio', $profile->bio ?? '') }}</textarea>
-                @error('bio')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Contact Info -->
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <div>
-                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">E-post</label>
-                    <input type="email" name="email" id="email" value="{{ old('email', $profile->email ?? '') }}"
-                        class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3">
-                    @error('email')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <label class="block text-sm font-medium leading-6 text-gray-900">Profilbild (Avatar)</label>
+                <div class="mt-2 flex items-center gap-4">
+                    @if($profile->avatar)
+                        <img src="{{ Storage::url($profile->avatar) }}" alt="Avatar" class="h-24 w-24 rounded-full object-cover border-2 border-gray-200">
+                    @else
+                        <div class="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center">
+                            <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                    @endif
+                    <div class="flex-1">
+                        <input type="file" name="avatar" id="avatar" accept="image/*"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 2MB</p>
+                    </div>
                 </div>
+                @error('avatar')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <div>
-                    <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Telefon</label>
-                    <input type="text" name="phone" id="phone" value="{{ old('phone', $profile->phone ?? '') }}"
-                        class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3">
-                    @error('phone')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+            <!-- Hero Image (Arbetsbild) -->
+            <div>
+                <label class="block text-sm font-medium leading-6 text-gray-900">Arbetsbild (Hero Image)</label>
+                <div class="mt-2">
+                    @if($profile->hero_image)
+                        <img src="{{ Storage::url($profile->hero_image) }}" alt="Hero Image" class="h-48 w-full object-cover rounded-lg mb-4 border-2 border-gray-200">
+                    @endif
+                    <input type="file" name="hero_image" id="hero_image" accept="image/*"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                    <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP upp till 5MB</p>
                 </div>
+                @error('hero_image')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Social Links -->
