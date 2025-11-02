@@ -32,6 +32,33 @@ document.addEventListener('DOMContentLoaded', function() {
         requestAnimationFrame(animation);
     }
 
+    // Pre-render all x-intersect sections to fix lazy loading scroll issues
+    function preRenderIntersectSections(callback) {
+        // Check if Alpine is loaded
+        if (typeof Alpine === 'undefined') {
+            callback();
+            return;
+        }
+
+        // Find all elements with x-intersect
+        const intersectElements = document.querySelectorAll('[x-intersect]');
+
+        // Trigger all x-intersect sections by setting visible = true
+        intersectElements.forEach(el => {
+            try {
+                const alpineData = Alpine.$data(el);
+                if (alpineData && 'visible' in alpineData) {
+                    alpineData.visible = true;
+                }
+            } catch (e) {
+                // Element might not have Alpine data yet, skip
+            }
+        });
+
+        // Wait for DOM updates (50ms should be enough for Alpine to react)
+        setTimeout(callback, 50);
+    }
+
     // Smooth scroll to anchors without hash in URL
     // Handles both #section and /#section links
     document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach(anchor => {
@@ -54,17 +81,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 const target = document.querySelector(hash);
                 if (target) {
-                    // Use offsetTop for more reliable positioning
-                    // (getBoundingClientRect can be affected by animations/intersect)
-                    const targetPosition = target.offsetTop;
+                    // Pre-render all x-intersect sections before calculating position
+                    // This ensures accurate scroll position even with lazy-loaded content
+                    preRenderIntersectSections(() => {
+                        // Calculate position with small offset
+                        const targetPosition = target.offsetTop - 20;
 
-                    // Use custom smooth scroll
-                    smoothScrollTo(targetPosition, 800);
+                        // Use custom smooth scroll
+                        smoothScrollTo(targetPosition, 800);
 
-                    // Remove hash from URL without adding to browser history
-                    setTimeout(() => {
-                        history.replaceState(null, '', window.location.pathname);
-                    }, 10);
+                        // Show navigation after scroll completes (800ms duration + small buffer)
+                        setTimeout(() => {
+                            const nav = document.querySelector('nav');
+                            if (nav && typeof Alpine !== 'undefined') {
+                                const alpineData = Alpine.$data(nav);
+                                if (alpineData && 'showNav' in alpineData) {
+                                    alpineData.showNav = true;
+                                }
+                            }
+                        }, 850);
+
+                        // Remove hash from URL without adding to browser history
+                        setTimeout(() => {
+                            history.replaceState(null, '', window.location.pathname);
+                        }, 10);
+                    });
                 }
             }
             // If different page, let browser navigate normally (will load page then scroll to hash)
@@ -77,15 +118,29 @@ document.addEventListener('DOMContentLoaded', function() {
             const hash = window.location.hash;
             const target = document.querySelector(hash);
             if (target) {
-                // Small delay to ensure page is fully rendered
+                // Small delay to ensure page is fully rendered, then pre-render sections
                 setTimeout(() => {
-                    const targetPosition = target.offsetTop;
-                    smoothScrollTo(targetPosition, 800);
+                    preRenderIntersectSections(() => {
+                        // Calculate position with small offset
+                        const targetPosition = target.offsetTop - 20;
+                        smoothScrollTo(targetPosition, 800);
 
-                    // Remove hash from URL
-                    setTimeout(() => {
-                        history.replaceState(null, '', window.location.pathname);
-                    }, 10);
+                        // Show navigation after scroll completes
+                        setTimeout(() => {
+                            const nav = document.querySelector('nav');
+                            if (nav && typeof Alpine !== 'undefined') {
+                                const alpineData = Alpine.$data(nav);
+                                if (alpineData && 'showNav' in alpineData) {
+                                    alpineData.showNav = true;
+                                }
+                            }
+                        }, 850);
+
+                        // Remove hash from URL
+                        setTimeout(() => {
+                            history.replaceState(null, '', window.location.pathname);
+                        }, 10);
+                    });
                 }, 100);
             }
         }
