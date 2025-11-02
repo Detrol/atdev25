@@ -119,7 +119,11 @@
         <div class="mb-8" x-data="{
             visible: false,
             progress: 0,
-            currentIcon: null
+            showHtml: false,
+            showPhp: false,
+            showLaravel: false,
+            showAi: false,
+            mobileCurrentStep: -1
         }" x-intersect="visible = true" x-init="
             $watch('visible', value => {
                 if (value) {
@@ -127,30 +131,33 @@
                         // Trigger smooth CSS animation
                         progress = 100;
 
-                        // Show icons when progress bar reaches each year position
+                        // Show icons when progress bar reaches each year position (and keep them visible)
                         // HTML at 12.5% = 1.25s
-                        setTimeout(() => {
-                            currentIcon = 'html';
-                            setTimeout(() => { currentIcon = null }, 1800);
-                        }, 1250);
+                        setTimeout(() => { showHtml = true; }, 1250);
 
                         // PHP at 37.5% = 3.75s
-                        setTimeout(() => {
-                            currentIcon = 'php';
-                            setTimeout(() => { currentIcon = null }, 1800);
-                        }, 3750);
+                        setTimeout(() => { showPhp = true; }, 3750);
 
                         // Laravel at 62.5% = 6.25s
-                        setTimeout(() => {
-                            currentIcon = 'laravel';
-                            setTimeout(() => { currentIcon = null }, 1800);
-                        }, 6250);
+                        setTimeout(() => { showLaravel = true; }, 6250);
 
                         // AI at 87.5% = 8.75s
-                        setTimeout(() => {
-                            currentIcon = 'ai';
-                            setTimeout(() => { currentIcon = null }, 1800);
-                        }, 8750);
+                        setTimeout(() => { showAi = true; }, 8750);
+
+                        // Mobile animation (sequential grid highlights that stay)
+                        if (window.innerWidth < 768) {
+                            // Step 0: HTML (2004) at 0s
+                            setTimeout(() => { mobileCurrentStep = 0; }, 0);
+
+                            // Step 1: PHP (2010) at 2.5s
+                            setTimeout(() => { mobileCurrentStep = 1; }, 2500);
+
+                            // Step 2: Laravel (2017) at 5s
+                            setTimeout(() => { mobileCurrentStep = 2; }, 5000);
+
+                            // Step 3: AI (2023) at 7.5s
+                            setTimeout(() => { mobileCurrentStep = 3; }, 7500);
+                        }
                     }, 800);
                 }
             });
@@ -160,7 +167,7 @@
                 <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
 
                 <div class="relative z-10">
-                    <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center justify-between mb-20">
                         <div>
                             <h3 class="text-3xl md:text-4xl font-bold text-white mb-2">20+ Års Utvecklingsresa</h3>
                             <p class="text-white/90 text-lg">Från ASP till AI-Driven Laravel</p>
@@ -179,40 +186,40 @@
                         <!-- Tech Icon Display (Positioned Above Each Year) -->
 
                         <!-- HTML Icon (12.5% - 2004) -->
-                        <div class="hidden md:flex absolute -top-20 left-[12.5%] -translate-x-1/2 items-center justify-center" x-show="currentIcon === 'html'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
-                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-orange-500 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" class="w-12 h-12 drop-shadow-lg">
+                        <div class="hidden md:flex absolute -top-20 left-[12.5%] -translate-x-1/2 items-center justify-center" x-show="showHtml" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-orange-500 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
 
                         <!-- PHP Icon (37.5% - 2010) -->
-                        <div class="hidden md:flex absolute -top-20 left-[37.5%] -translate-x-1/2 items-center justify-center" x-show="currentIcon === 'php'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
-                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-purple-600 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="https://cdn.simpleicons.org/php/777BB4" alt="PHP" class="w-12 h-12 drop-shadow-lg">
+                        <div class="hidden md:flex absolute -top-20 left-[37.5%] -translate-x-1/2 items-center justify-center" x-show="showPhp" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-purple-600 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/php/777BB4" alt="PHP" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
 
                         <!-- Laravel Icon (62.5% - 2017) -->
-                        <div class="hidden md:flex absolute -top-20 left-[62.5%] -translate-x-1/2 items-center justify-center" x-show="currentIcon === 'laravel'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
-                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-red-600 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" class="w-12 h-12 drop-shadow-lg">
+                        <div class="hidden md:flex absolute -top-20 left-[62.5%] -translate-x-1/2 items-center justify-center" x-show="showLaravel" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-red-600 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
 
                         <!-- AI Icon (87.5% - 2023) -->
-                        <div class="hidden md:flex absolute -top-20 left-[87.5%] -translate-x-1/2 items-center justify-center" x-show="currentIcon === 'ai'" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition-all ease-in duration-400" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-50 translate-y-20" x-cloak>
-                            <div class="bg-white/95 backdrop-blur-sm p-3 rounded-2xl shadow-2xl border-2 border-amber-600 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="https://cdn.simpleicons.org/anthropic/CC9B7A" alt="Anthropic" class="w-12 h-12 drop-shadow-lg">
+                        <div class="hidden md:flex absolute -top-20 left-[87.5%] -translate-x-1/2 items-center justify-center" x-show="showAi" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                            <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-amber-600 animate-[sway_2s_ease-in-out_infinite]">
+                                <img src="https://cdn.simpleicons.org/anthropic/CC9B7A" alt="Anthropic" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
 
                         <!-- Progress Bar Background -->
-                        <div class="h-2 bg-white/20 rounded-full overflow-hidden mb-4">
+                        <div class="hidden md:block h-2 bg-white/20 rounded-full overflow-hidden mb-4">
                             <div class="h-full bg-white/90 rounded-full transition-all duration-[10000ms] ease-linear" :style="`width: ${progress}%`"></div>
                         </div>
 
-                        <!-- Milestones -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- Milestones - Desktop Version -->
+                        <div class="hidden md:grid grid-cols-4 gap-4">
                             <div class="text-center" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                                 <div class="text-2xl font-bold text-white mb-1">2004</div>
                                 <div class="text-white/80 text-sm">HTML & ASP</div>
@@ -228,6 +235,61 @@
                             <div class="text-center" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-900" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                                 <div class="text-2xl font-bold text-white mb-1">2023</div>
                                 <div class="text-white/80 text-sm">AI Integration</div>
+                            </div>
+                        </div>
+
+                        <!-- Milestones - Mobile Version with Sequential Highlights -->
+                        <div class="md:hidden grid grid-cols-2 gap-4">
+                            <!-- 2004 - HTML & ASP -->
+                            <div class="relative rounded-xl p-4 transition-all duration-400" :class="mobileCurrentStep >= 0 ? 'bg-white/30 ring-2 ring-orange-400 shadow-lg shadow-orange-500/50' : 'bg-white/10'" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                                <div class="text-2xl font-bold text-white mb-1 transition-all" :class="mobileCurrentStep >= 0 ? 'opacity-100 scale-110' : 'opacity-80 scale-100'">2004</div>
+                                <div class="text-white/80 text-sm transition-opacity" :class="mobileCurrentStep >= 0 ? 'opacity-100' : 'opacity-60'">HTML & ASP</div>
+
+                                <!-- Icon popup -->
+                                <div class="absolute -top-3 -right-3" x-show="mobileCurrentStep >= 0" x-transition:enter="transition-all ease-out duration-500" x-transition:enter-start="opacity-0 scale-0 rotate-45" x-transition:enter-end="opacity-100 scale-100 rotate-0" x-cloak>
+                                    <div class="bg-white/95 backdrop-blur-sm p-2 rounded-xl shadow-2xl border-2 border-orange-500 animate-[sway_1.8s_ease-in-out_infinite]">
+                                        <img src="https://cdn.simpleicons.org/html5/E34F26" alt="HTML5" class="w-10 h-10 drop-shadow-lg">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2010 - PHP & MySQL -->
+                            <div class="relative rounded-xl p-4 transition-all duration-400" :class="mobileCurrentStep >= 1 ? 'bg-white/30 ring-2 ring-purple-400 shadow-lg shadow-purple-500/50' : 'bg-white/10'" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                                <div class="text-2xl font-bold text-white mb-1 transition-all" :class="mobileCurrentStep >= 1 ? 'opacity-100 scale-110' : 'opacity-80 scale-100'">2010</div>
+                                <div class="text-white/80 text-sm transition-opacity" :class="mobileCurrentStep >= 1 ? 'opacity-100' : 'opacity-60'">PHP & MySQL</div>
+
+                                <!-- Icon popup -->
+                                <div class="absolute -top-3 -right-3" x-show="mobileCurrentStep >= 1" x-transition:enter="transition-all ease-out duration-500" x-transition:enter-start="opacity-0 scale-0 rotate-45" x-transition:enter-end="opacity-100 scale-100 rotate-0" x-cloak>
+                                    <div class="bg-white/95 backdrop-blur-sm p-2 rounded-xl shadow-2xl border-2 border-purple-600 animate-[sway_1.8s_ease-in-out_infinite]">
+                                        <img src="https://cdn.simpleicons.org/php/777BB4" alt="PHP" class="w-10 h-10 drop-shadow-lg">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2017 - Laravel -->
+                            <div class="relative rounded-xl p-4 transition-all duration-400" :class="mobileCurrentStep >= 2 ? 'bg-white/30 ring-2 ring-red-400 shadow-lg shadow-red-500/50' : 'bg-white/10'" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-700" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                                <div class="text-2xl font-bold text-white mb-1 transition-all" :class="mobileCurrentStep >= 2 ? 'opacity-100 scale-110' : 'opacity-80 scale-100'">2017</div>
+                                <div class="text-white/80 text-sm transition-opacity" :class="mobileCurrentStep >= 2 ? 'opacity-100' : 'opacity-60'">Laravel</div>
+
+                                <!-- Icon popup -->
+                                <div class="absolute -top-3 -right-3" x-show="mobileCurrentStep >= 2" x-transition:enter="transition-all ease-out duration-500" x-transition:enter-start="opacity-0 scale-0 rotate-45" x-transition:enter-end="opacity-100 scale-100 rotate-0" x-cloak>
+                                    <div class="bg-white/95 backdrop-blur-sm p-2 rounded-xl shadow-2xl border-2 border-red-600 animate-[sway_1.8s_ease-in-out_infinite]">
+                                        <img src="https://cdn.simpleicons.org/laravel/FF2D20" alt="Laravel" class="w-10 h-10 drop-shadow-lg">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2023 - AI Integration -->
+                            <div class="relative rounded-xl p-4 transition-all duration-400" :class="mobileCurrentStep >= 3 ? 'bg-white/30 ring-2 ring-amber-400 shadow-lg shadow-amber-500/50' : 'bg-white/10'" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-900" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                                <div class="text-2xl font-bold text-white mb-1 transition-all" :class="mobileCurrentStep >= 3 ? 'opacity-100 scale-110' : 'opacity-80 scale-100'">2023</div>
+                                <div class="text-white/80 text-sm transition-opacity" :class="mobileCurrentStep >= 3 ? 'opacity-100' : 'opacity-60'">AI Integration</div>
+
+                                <!-- Icon popup -->
+                                <div class="absolute -top-3 -right-3" x-show="mobileCurrentStep >= 3" x-transition:enter="transition-all ease-out duration-500" x-transition:enter-start="opacity-0 scale-0 rotate-45" x-transition:enter-end="opacity-100 scale-100 rotate-0" x-cloak>
+                                    <div class="bg-white/95 backdrop-blur-sm p-2 rounded-xl shadow-2xl border-2 border-amber-600 animate-[sway_1.8s_ease-in-out_infinite]">
+                                        <img src="https://cdn.simpleicons.org/anthropic/CC9B7A" alt="Anthropic" class="w-10 h-10 drop-shadow-lg">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -282,12 +344,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                         </svg>
                     </div>
-                    <div class="text-5xl font-bold bg-gradient-to-r from-pink-600 to-pink-800 dark:from-pink-400 dark:to-pink-600 bg-clip-text text-transparent mb-2">3</div>
+                    <div class="text-5xl font-bold bg-gradient-to-r from-pink-600 to-pink-800 dark:from-pink-400 dark:to-pink-600 bg-clip-text text-transparent mb-2">4</div>
                     <div class="text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold mb-2">Kärnområden</div>
                     <div class="flex flex-wrap gap-2">
-                        <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-medium">E-handel</span>
-                        <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-medium">CRM</span>
-                        <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-medium">Bokning</span>
+                        <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-medium">Webbapplikationer</span>
+                        <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-medium">AI-Integration</span>
+                        <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-medium">API Development</span>
+                        <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-lg text-xs font-medium">Systemintegration</span>
                     </div>
                 </div>
             </div>
@@ -320,7 +383,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                     </div>
-                    <div class="text-5xl font-bold bg-gradient-to-r from-orange-600 to-orange-800 dark:from-orange-400 dark:to-orange-600 bg-clip-text text-transparent mb-2">2-6</div>
+                    <div class="text-5xl font-bold bg-gradient-to-r from-orange-600 to-orange-800 dark:from-orange-400 dark:to-orange-600 bg-clip-text text-transparent mb-2">1-4</div>
                     <div class="text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold mb-2">Veckor Leverans</div>
                     <p class="text-sm text-gray-500 dark:text-gray-500">Typisk projekttid</p>
                 </div>
