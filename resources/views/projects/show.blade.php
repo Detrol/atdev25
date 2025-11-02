@@ -19,6 +19,15 @@
             </a>
         </div>
 
+        <!-- Breadcrumbs -->
+        <div class="mb-8">
+            <x-breadcrumbs :items="[
+                ['label' => 'Hem', 'url' => '/'],
+                ['label' => 'Projekt', 'url' => '/#projects'],
+                ['label' => $project->title, 'url' => '']
+            ]" />
+        </div>
+
         <!-- Project Header -->
         <header>
             <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">{{ $project->title }}</h1>

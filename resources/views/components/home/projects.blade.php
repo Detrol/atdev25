@@ -52,8 +52,9 @@
                             @endif
 
                             <a href="/projects/{{ $project->slug }}"
+                               aria-label="Visa projekt: {{ $project->title }}"
                                class="absolute bottom-8 right-8 w-14 h-14 bg-white/20 border border-white/30 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30 hover:scale-110">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                                 </svg>
                             </a>
@@ -114,8 +115,10 @@
                                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Tech Stack Visualizer</h2>
                                 <p class="text-gray-600 dark:text-gray-400 mt-1">Interaktiv graf över teknologier och deras relationer</p>
                             </div>
-                            <button @click="techStackOpen = false" class="p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
-                                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button @click="techStackOpen = false"
+                                    class="p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+                                    aria-label="Stäng Tech Stack Visualizer">
+                                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
                             </button>

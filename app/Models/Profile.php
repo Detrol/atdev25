@@ -44,10 +44,34 @@ class Profile extends Model implements HasMedia
      */
     public function registerMediaConversions(?Media $media = null): void
     {
-        // Avatar conversions
+        // Avatar conversions - Multiple sizes for responsive images
+        $this->addMediaConversion('tiny')
+            ->width(128)
+            ->height(128)
+            ->sharpen(10)
+            ->quality(85)
+            ->format('webp')
+            ->performOnCollections('avatar');
+
         $this->addMediaConversion('thumb')
             ->width(200)
             ->height(200)
+            ->sharpen(10)
+            ->quality(85)
+            ->format('webp')
+            ->performOnCollections('avatar');
+
+        $this->addMediaConversion('small')
+            ->width(256)
+            ->height(256)
+            ->sharpen(10)
+            ->quality(85)
+            ->format('webp')
+            ->performOnCollections('avatar');
+
+        $this->addMediaConversion('medium')
+            ->width(512)
+            ->height(512)
             ->sharpen(10)
             ->quality(85)
             ->format('webp')

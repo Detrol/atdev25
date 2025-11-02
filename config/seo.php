@@ -120,6 +120,7 @@ return [
 
         'preconnect' => [
             'https://cdn.jsdelivr.net',
+            'https://cdn.simpleicons.org',
         ],
     ],
 ];
