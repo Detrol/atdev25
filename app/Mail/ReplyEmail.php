@@ -40,6 +40,7 @@ class ReplyEmail extends Mailable
     public function content(): Content
     {
         return new Content(
+            html: 'emails.reply.html',
             text: 'emails.reply',
             with: [
                 'originalMessage' => $this->originalMessage,
