@@ -9,6 +9,9 @@
 {{-- About/Journey Section --}}
 <x-home.about :profile="$profile" />
 
+{{-- How I Work Section --}}
+<x-home.how-i-work />
+
 {{-- Timeline & Stats Section --}}
 <x-home.timeline />
 
