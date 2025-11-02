@@ -35,17 +35,17 @@
                         progress = 100;
 
                         // Show icons when progress bar reaches each year position (and keep them visible)
-                        setTimeout(() => { showHtml = true; }, 1250);
-                        setTimeout(() => { showPhp = true; }, 3750);
-                        setTimeout(() => { showLaravel = true; }, 6250);
-                        setTimeout(() => { showAi = true; }, 8750);
+                        setTimeout(() => { showHtml = true; }, 625);
+                        setTimeout(() => { showPhp = true; }, 1875);
+                        setTimeout(() => { showLaravel = true; }, 3125);
+                        setTimeout(() => { showAi = true; }, 4375);
 
                         // Mobile animation
                         if (window.innerWidth < 768) {
                             setTimeout(() => { mobileCurrentStep = 0; }, 0);
-                            setTimeout(() => { mobileCurrentStep = 1; }, 2500);
-                            setTimeout(() => { mobileCurrentStep = 2; }, 5000);
-                            setTimeout(() => { mobileCurrentStep = 3; }, 7500);
+                            setTimeout(() => { mobileCurrentStep = 1; }, 1250);
+                            setTimeout(() => { mobileCurrentStep = 2; }, 2500);
+                            setTimeout(() => { mobileCurrentStep = 3; }, 3750);
                         }
                     }, 800);
                 }
@@ -95,7 +95,7 @@
 
                         <!-- Progress Bar -->
                         <div class="hidden md:block h-2 bg-white/20 rounded-full overflow-hidden mb-4">
-                            <div class="h-full bg-white/90 rounded-full transition-all duration-[10000ms] ease-linear" :style="`width: ${progress}%`"></div>
+                            <div class="h-full bg-white/90 rounded-full transition-all duration-[5000ms] ease-linear" :style="`width: ${progress}%`"></div>
                         </div>
 
                         <!-- Milestones - Desktop -->

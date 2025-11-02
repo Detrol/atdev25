@@ -40,7 +40,8 @@ Route::get('/gdpr/confirm-deletion/{token}', [GdprController::class, 'confirmDel
 Route::post('/gdpr/process-deletion/{token}', [GdprController::class, 'processDeletion'])->name('gdpr.process-deletion');
 
 // Webhook routes (utan CSRF protection)
-Route::post('/webhooks/mailgun/inbound', [WebhookController::class, 'handleInbound'])
+// Körs på webhooks.atdev.me subdomain (utan Cloudflare proxy)
+Route::post('/mailgun/inbound', [WebhookController::class, 'handleInbound'])
     ->middleware('throttle:100,1')
     ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
