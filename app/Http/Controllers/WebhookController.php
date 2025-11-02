@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendCustomerReplyNotification;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -59,7 +60,7 @@ class WebhookController extends Controller
             $messageBody = ! empty($strippedText) ? $strippedText : $bodyPlain;
 
             // Skapa reply från användaren
-            ContactMessage::create([
+            $customerReply = ContactMessage::create([
                 'parent_id' => $originalMessage->parent_id ?: $originalMessage->id,
                 'name' => $originalMessage->name,
                 'email' => $originalMessage->email,
@@ -70,6 +71,9 @@ class WebhookController extends Controller
                 'status' => 'pending',
                 'read' => false,
             ]);
+
+            // Skicka notifikation till admin
+            SendCustomerReplyNotification::dispatch($originalMessage, $customerReply);
 
             Log::info('Mailgun webhook: Svar mottaget', [
                 'original_message_id' => $originalMessage->id,

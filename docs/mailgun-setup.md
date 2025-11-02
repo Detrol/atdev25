@@ -10,9 +10,12 @@ Systemet använder Mailgun's **Inbound Email Routing** för att fånga svar frå
 
 1. Admin får ett meddelande från en användare
 2. Systemet genererar en **unik reply-token** för meddelandet
-3. När admin svarar (från panel eller email), får användaren ett email med Reply-To: `reply-{token}@atdev.me`
+3. När admin svarar (från panel eller email), får användaren ett email med Reply-To: `reply-{token}@mg.atdev.me`
 4. När användaren svarar, skickar Mailgun emailet till vår webhook
-5. Webhook parsear emailet och skapar automatiskt ett svar i konversationen
+5. Webhook parsear emailet och:
+   - Skapar automatiskt ett svar i konversationen
+   - Skickar en notifikation till admin's email
+6. Admin kan svara direkt från sin email-klient eller via admin-panelen
 
 ---
 
