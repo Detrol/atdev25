@@ -23,8 +23,9 @@
                     <h3 class="text-lg font-semibold text-white">Cookie-inställningar</h3>
                 </div>
                 <button @click="closeBanner()"
-                        class="text-white/80 hover:text-white transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="text-white/80 hover:text-white transition-colors"
+                        aria-label="Stäng cookie-inställningar">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
@@ -67,8 +68,9 @@
                 </div>
 
                 {{-- Functional Cookies --}}
-                <div class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                <label class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                     <input type="checkbox"
+                           id="cookie-functional"
                            x-model="preferences.functional"
                            class="mt-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                     <div class="flex-1">
@@ -77,11 +79,12 @@
                             Sparar dina preferenser (mörkt läge, chat-historik)
                         </p>
                     </div>
-                </div>
+                </label>
 
                 {{-- Analytics Cookies --}}
-                <div class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                <label class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                     <input type="checkbox"
+                           id="cookie-analytics"
                            x-model="preferences.analytics"
                            class="mt-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                     <div class="flex-1">
@@ -90,11 +93,12 @@
                             Hjälper oss förstå hur du använder webbplatsen
                         </p>
                     </div>
-                </div>
+                </label>
 
                 {{-- Marketing Cookies --}}
-                <div class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                <label class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                     <input type="checkbox"
+                           id="cookie-marketing"
                            x-model="preferences.marketing"
                            class="mt-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                     <div class="flex-1">
@@ -103,7 +107,7 @@
                             Används för att visa relevanta annonser
                         </p>
                     </div>
-                </div>
+                </label>
             </div>
 
             {{-- Links --}}

@@ -224,7 +224,7 @@
                         {{ $message }}
                     </p>
                     @else
-                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Vi svarar vanligtvis inom 24 timmar.</p>
+                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">Vi svarar vanligtvis inom 24 timmar.</p>
                     @enderror
                 </div>
 

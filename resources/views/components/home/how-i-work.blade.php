@@ -266,7 +266,7 @@
 
         <!-- Values Grid -->
         <div class="mb-16">
-            <h3 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">Mina Värderingar</h3>
+            <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">Mina Värderingar</h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" x-data="{ visible: false }" x-intersect="visible = true">
 
                 <!-- Value 1 -->
@@ -335,7 +335,7 @@
 
         <!-- Additional Services -->
         <div>
-            <h3 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">Tilläggstjänster</h3>
+            <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">Tilläggstjänster</h2>
             <div class="grid md:grid-cols-3 gap-6" x-data="{ visible: false }" x-intersect="visible = true">
 
                 <!-- Service 1: Hosting -->
