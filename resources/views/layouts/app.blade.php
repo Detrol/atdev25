@@ -25,7 +25,7 @@
     <!-- CSRF Token for AJAX requests -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js', 'resources/js/chat-widget.js', 'resources/js/cookie-consent.js'])
+    @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js'])
 
     <!-- Structured Data (JSON-LD) -->
     @isset($structuredData)
@@ -231,10 +231,6 @@
     <!-- Page-specific scripts -->
     @stack('scripts')
 
-    <!-- Alpine.js Plugins -->
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
-    <!-- Alpine.js Core -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js is now bundled via Vite in app.js -->
 </body>
 </html>

@@ -1,3 +1,371 @@
+// Import Alpine.js and plugins
+import Alpine from 'alpinejs';
+import intersect from '@alpinejs/intersect';
+import persist from '@alpinejs/persist';
+import collapse from '@alpinejs/collapse';
+
+// Register Alpine.js plugins
+Alpine.plugin(intersect);
+Alpine.plugin(persist);
+Alpine.plugin(collapse);
+
+// Register Cookie Consent component
+Alpine.data('cookieConsent', () => ({
+    showBanner: false,
+    preferences: {
+        essential: true,
+        functional: false,
+        analytics: false,
+        marketing: false
+    },
+
+    init() {
+        this.checkConsentStatus();
+        window.addEventListener('open-cookie-banner', () => {
+            this.showBanner = true;
+        });
+    },
+
+    async checkConsentStatus() {
+        try {
+            const response = await fetch('/api/consent');
+            const data = await response.json();
+
+            if (!data.has_choice_made) {
+                this.showBanner = true;
+            } else {
+                this.preferences = data.preferences;
+                this.applyConsent();
+            }
+        } catch (error) {
+            console.error('Failed to check consent status:', error);
+            this.showBanner = true;
+        }
+    },
+
+    async saveChoices() {
+        try {
+            const response = await fetch('/api/consent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify(this.preferences)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                this.showSuccessMessage('Cookie-inställningar sparade!');
+                this.showBanner = false;
+                this.applyConsent();
+            }
+        } catch (error) {
+            console.error('Failed to save consent:', error);
+            this.showErrorMessage('Kunde inte spara inställningar');
+        }
+    },
+
+    async acceptAll() {
+        try {
+            const response = await fetch('/api/consent/accept-all', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                this.preferences = data.preferences;
+                this.showSuccessMessage('Alla cookies accepterade!');
+                this.showBanner = false;
+                this.applyConsent();
+            }
+        } catch (error) {
+            console.error('Failed to accept all:', error);
+            this.showErrorMessage('Kunde inte acceptera cookies');
+        }
+    },
+
+    async rejectAll() {
+        try {
+            const response = await fetch('/api/consent/reject-all', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                this.preferences = data.preferences;
+                this.showSuccessMessage('Endast nödvändiga cookies aktiverade');
+                this.showBanner = false;
+                this.applyConsent();
+            }
+        } catch (error) {
+            console.error('Failed to reject cookies:', error);
+            this.showErrorMessage('Kunde inte avvisa cookies');
+        }
+    },
+
+    closeBanner() {
+        if (!this.hasChoiceMade()) {
+            this.rejectAll();
+        } else {
+            this.showBanner = false;
+        }
+    },
+
+    async hasChoiceMade() {
+        try {
+            const response = await fetch('/api/consent');
+            const data = await response.json();
+            return data.has_choice_made;
+        } catch {
+            return false;
+        }
+    },
+
+    applyConsent() {
+        if (!this.preferences.functional) {
+            localStorage.removeItem('darkMode');
+            localStorage.removeItem('chat_session_id');
+        }
+
+        if (this.preferences.analytics) {
+            this.loadAnalytics();
+        }
+
+        if (this.preferences.marketing) {
+            this.loadMarketingScripts();
+        }
+
+        window.dispatchEvent(new CustomEvent('consent-updated', {
+            detail: { preferences: this.preferences }
+        }));
+    },
+
+    loadAnalytics() {
+        console.log('Analytics enabled');
+    },
+
+    loadMarketingScripts() {
+        console.log('Marketing scripts enabled');
+    },
+
+    showSuccessMessage(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    },
+
+    showErrorMessage(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 z-50 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+}));
+
+// Register Chat Widget component
+Alpine.data('chatWidget', () => ({
+    isOpen: false,
+    sessionId: null,
+    messages: [],
+    inputMessage: '',
+    isLoading: false,
+    error: null,
+    hasLoadedHistory: false,
+
+    async init() {
+        this.sessionId = await this.getOrCreateSessionId();
+        console.log('Chat widget initialized with session:', this.sessionId);
+    },
+
+    async getOrCreateSessionId() {
+        const hasFunctionalConsent = await this.checkFunctionalConsent();
+        let sessionId = null;
+
+        if (hasFunctionalConsent) {
+            sessionId = localStorage.getItem('chat_session_id');
+            if (!sessionId) {
+                sessionId = this.generateUUID();
+                localStorage.setItem('chat_session_id', sessionId);
+            }
+        } else {
+            if (!window._tempChatSessionId) {
+                window._tempChatSessionId = this.generateUUID();
+            }
+            sessionId = window._tempChatSessionId;
+        }
+
+        return sessionId;
+    },
+
+    async checkFunctionalConsent() {
+        try {
+            const response = await fetch('/api/consent/check/functional');
+            const data = await response.json();
+            return data.has_consent;
+        } catch {
+            return false;
+        }
+    },
+
+    generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    },
+
+    toggleChat() {
+        this.isOpen = !this.isOpen;
+
+        if (this.isOpen && !this.hasLoadedHistory) {
+            this.loadHistory();
+        }
+
+        if (this.isOpen) {
+            this.$nextTick(() => {
+                this.$refs.messageInput?.focus();
+            });
+        }
+    },
+
+    async loadHistory() {
+        try {
+            const response = await fetch(`/api/chat/history?session_id=${this.sessionId}`);
+            const data = await response.json();
+
+            if (data.success && data.history.length > 0) {
+                this.messages = data.history.map(chat => ([
+                    { role: 'user', content: chat.question },
+                    { role: 'assistant', content: chat.answer }
+                ])).flat();
+
+                this.hasLoadedHistory = true;
+                this.scrollToBottom();
+            }
+        } catch (error) {
+            console.error('Failed to load chat history:', error);
+        }
+    },
+
+    async sendMessage() {
+        if (!this.inputMessage.trim() || this.isLoading) {
+            return;
+        }
+
+        const userMessage = this.inputMessage.trim();
+        this.inputMessage = '';
+        this.error = null;
+
+        this.messages.push({
+            role: 'user',
+            content: userMessage
+        });
+
+        this.scrollToBottom();
+        this.isLoading = true;
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({
+                    message: userMessage,
+                    session_id: this.sessionId
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Ett fel uppstod');
+            }
+
+            this.messages.push({
+                role: 'assistant',
+                content: data.response
+            });
+
+            this.scrollToBottom();
+
+        } catch (error) {
+            console.error('Chat error:', error);
+            this.error = error.message || 'Kunde inte skicka meddelandet. Försök igen.';
+            this.messages.pop();
+        } finally {
+            this.isLoading = false;
+        }
+    },
+
+    handleKeydown(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            this.sendMessage();
+        }
+    },
+
+    scrollToBottom() {
+        this.$nextTick(() => {
+            const messagesContainer = this.$refs.messagesContainer;
+            if (messagesContainer) {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        });
+    },
+
+    clearError() {
+        this.error = null;
+    },
+
+    selectSuggestedQuestion(question) {
+        this.inputMessage = question;
+        this.$nextTick(() => {
+            this.$refs.messageInput?.focus();
+            this.sendMessage();
+        });
+    },
+
+    getFormattedTime(timestamp) {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+    }
+}));
+
+// Helper function for checking consent
+window.hasConsent = async function(category) {
+    try {
+        const response = await fetch(`/api/consent/check/${category}`);
+        const data = await response.json();
+        return data.has_consent;
+    } catch {
+        return category === 'essential';
+    }
+};
+
+// Start Alpine.js
+window.Alpine = Alpine;
+Alpine.start();
+
 // Form validation and interaction enhancements
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-hide flash messages after 5 seconds
