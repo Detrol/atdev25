@@ -27,29 +27,18 @@ class Profile extends Model implements HasMedia
     }
 
     /**
-     * Register media collections with unique filename generation.
+     * Register media collections.
+     * Spatie automatically uses UUID-based filenames which provides uniqueness.
      */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg'])
-            ->usingFileName(function (string $fileName): string {
-                // Generate unique filename with timestamp for cache busting
-                $baseName = pathinfo($fileName, PATHINFO_FILENAME);
-                $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-                return $baseName . '-' . time() . '.' . $extension;
-            });
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg']);
 
         $this->addMediaCollection('work_image')
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg'])
-            ->usingFileName(function (string $fileName): string {
-                // Generate unique filename with timestamp for cache busting
-                $baseName = pathinfo($fileName, PATHINFO_FILENAME);
-                $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-                return $baseName . '-' . time() . '.' . $extension;
-            });
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg']);
     }
 
     /**
@@ -122,6 +111,7 @@ class Profile extends Model implements HasMedia
     /**
      * Prepare media URLs with fallback to original if conversions don't exist.
      * Returns array with srcset, sizes, and individual conversion URLs.
+     * Adds cache-busting query parameter based on media update time.
      */
     public function prepareMediaUrls(string $collection): array
     {
@@ -131,13 +121,16 @@ class Profile extends Model implements HasMedia
 
         $media = $this->getFirstMedia($collection);
 
+        // Cache busting: use media updated_at timestamp
+        $version = $media->updated_at->timestamp;
+
         // Always use getUrl() which handles conversion existence automatically
         // Spatie will return conversion URL if it exists, otherwise original
         $urls = [
-            'tiny' => $media->getUrl('tiny'),
-            'small' => $media->getUrl('small'),
-            'medium' => $media->getUrl('medium'),
-            'optimized' => $media->getUrl('optimized'),
+            'tiny' => $media->getUrl('tiny') . '?v=' . $version,
+            'small' => $media->getUrl('small') . '?v=' . $version,
+            'medium' => $media->getUrl('medium') . '?v=' . $version,
+            'optimized' => $media->getUrl('optimized') . '?v=' . $version,
         ];
 
         // Build srcset attribute
