@@ -11,23 +11,23 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {{-- GTmetrix Performance Badge --}}
-            <a href="https://gtmetrix.com/reports/atdev.me/8F7GVll0/"
+            {{-- PageSpeed Insights Performance Badge --}}
+            <a href="https://pagespeed.web.dev/analysis/https-atdev-me/p65kwc5jud"
                target="_blank"
                rel="noopener noreferrer"
                class="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 hover:scale-105">
                 <div class="text-center">
                     <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
-                        <span class="text-2xl font-bold text-white">A</span>
+                        <span class="text-2xl font-bold text-white">97</span>
                     </div>
                     <div class="mb-2">
-                        <div class="text-3xl font-bold text-white mb-1">89%</div>
+                        <div class="text-3xl font-bold text-white mb-1">97%</div>
                         <div class="text-xs text-gray-400">Performance</div>
                     </div>
-                    <div class="text-sm font-semibold text-gray-300 mb-1">GTmetrix</div>
-                    <div class="text-xs text-gray-500">Structure: 98%</div>
+                    <div class="text-sm font-semibold text-gray-300 mb-1">Google PageSpeed</div>
+                    <div class="text-xs text-gray-500">Mobile Score</div>
                     <div class="mt-3 text-xs text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Se fullständig rapport →
+                        Se fullständig analys →
                     </div>
                 </div>
             </a>
@@ -109,7 +109,7 @@
                 </summary>
                 <div class="mt-4 p-4 bg-white/5 rounded-lg border border-white/10 max-w-2xl">
                     <ul class="text-xs text-gray-400 space-y-2">
-                        <li><strong class="text-gray-300">GTmetrix:</strong> Mäter sidladdningstid, PageSpeed och användarupplevelse</li>
+                        <li><strong class="text-gray-300">Google PageSpeed:</strong> Googles officiella verktyg för Core Web Vitals och SEO-ranking</li>
                         <li><strong class="text-gray-300">Mozilla Observatory:</strong> Verifierar säkerhetsheaders (HSTS, CSP, etc.)</li>
                         <li><strong class="text-gray-300">SecurityHeaders:</strong> Analyserar HTTP-headers för säkerhetsbrister</li>
                         <li><strong class="text-gray-300">Website Carbon:</strong> Beräknar webbplatsens miljöpåverkan och energieffektivitet</li>
