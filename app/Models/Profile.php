@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -46,35 +47,35 @@ class Profile extends Model implements HasMedia
     {
         // Avatar conversions - Perfect squares for aspect ratio compliance
         $this->addMediaConversion('tiny')
-            ->fit('crop', 128, 128)
+            ->fit(Fit::Crop, 128, 128)
             ->sharpen(10)
             ->quality(85)
             ->format('webp')
             ->performOnCollections('avatar');
 
         $this->addMediaConversion('thumb')
-            ->fit('crop', 200, 200)
+            ->fit(Fit::Crop, 200, 200)
             ->sharpen(10)
             ->quality(85)
             ->format('webp')
             ->performOnCollections('avatar');
 
         $this->addMediaConversion('small')
-            ->fit('crop', 256, 256)
+            ->fit(Fit::Crop, 256, 256)
             ->sharpen(10)
             ->quality(85)
             ->format('webp')
             ->performOnCollections('avatar');
 
         $this->addMediaConversion('medium')
-            ->fit('crop', 512, 512)
+            ->fit(Fit::Crop, 512, 512)
             ->sharpen(10)
             ->quality(85)
             ->format('webp')
             ->performOnCollections('avatar');
 
         $this->addMediaConversion('optimized')
-            ->fit('crop', 800, 800)
+            ->fit(Fit::Crop, 800, 800)
             ->sharpen(10)
             ->quality(85)
             ->format('webp')
