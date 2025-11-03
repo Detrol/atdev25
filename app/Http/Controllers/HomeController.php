@@ -47,10 +47,14 @@ class HomeController extends Controller
         $seoKeywords = 'webbutveckling, AI-utveckling, Laravel-utvecklare, React-utvecklare, prompt engineering, AI-expert, Andreas Thun, ATDev, Stockholm, Sverige, fullstack-utvecklare, AI-automation';
         $seoImage = $profile?->hero_image ? asset('storage/' . $profile->hero_image) : asset('images/og-default.jpg');
 
+        // Prepare avatar media with conversion fallbacks
+        $avatarMedia = $profile?->prepareMediaUrls('avatar') ?? [];
+
+        // Prepare work image media with conversion fallbacks
+        $workImageMedia = $profile?->prepareMediaUrls('work_image') ?? [];
+
         // Preload critical hero image for performance
-        $preloadImage = $profile?->hasMedia('avatar')
-            ? $profile->getFirstMediaUrl('avatar', 'optimized')
-            : null;
+        $preloadImage = $avatarMedia['optimized'] ?? null;
 
         return view('home', compact(
             'profile',
@@ -61,7 +65,9 @@ class HomeController extends Controller
             'seoDescription',
             'seoKeywords',
             'seoImage',
-            'preloadImage'
+            'preloadImage',
+            'avatarMedia',
+            'workImageMedia'
         ));
     }
 }

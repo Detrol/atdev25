@@ -1,5 +1,5 @@
 {{-- Hero Section Component --}}
-@props(['profile'])
+@props(['profile', 'avatarMedia' => []])
 
 <section id="main-content" class="relative min-h-screen flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 gradient-mesh"></div>
@@ -10,18 +10,19 @@
                 <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span><span class="text-sm font-medium">Tillgänglig för nya projekt</span>
             </div>
 
-            @if($profile && $profile->hasMedia('avatar'))
+            @if(!empty($avatarMedia))
             <div class="fade-in-delay-100">
-                <x-responsive-image
-                    :media="$profile->getFirstMedia('avatar')"
-                    alt="Andreas Thun - AI-driven utvecklare med 20+ års erfarenhet"
+                <img
+                    srcset="{{ $avatarMedia['srcset'] }}"
                     sizes="(max-width: 768px) 128px, 256px"
+                    src="{{ $avatarMedia['src'] }}"
+                    alt="Andreas Thun - AI-driven utvecklare med 20+ års erfarenhet"
                     width="128"
                     height="128"
                     fetchpriority="high"
                     loading="eager"
                     decoding="async"
-                    class="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-white/20 shadow-2xl" />
+                    class="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-white/20 shadow-2xl">
             </div>
             @endif
 
