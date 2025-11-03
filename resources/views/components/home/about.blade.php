@@ -1,5 +1,5 @@
 {{-- About/Journey Section Component --}}
-@props(['profile'])
+@props(['profile', 'workImageMedia' => []])
 
 <!-- Om Mig Section -->
 <section id="om-mig" class="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
@@ -32,9 +32,11 @@
 
             <!-- Foto -->
             <div x-data="{ visible: false }" x-intersect="visible = true">
-                @if($profile && $profile->hasMedia('work_image'))
+                @if(!empty($workImageMedia))
                 <div x-show="visible" x-transition:enter="transition ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
-                    <img src="{{ $profile->getFirstMediaUrl('work_image', 'optimized') }}"
+                    <img srcset="{{ $workImageMedia['srcset'] }}"
+                         sizes="(max-width: 768px) 100vw, 600px"
+                         src="{{ $workImageMedia['src'] }}"
                          alt="Andreas Thun arbetar - utvecklare vid sitt skrivbord"
                          loading="lazy"
                          decoding="async"

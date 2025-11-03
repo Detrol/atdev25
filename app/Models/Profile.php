@@ -110,4 +110,40 @@ class Profile extends Model implements HasMedia
         $media = $this->getFirstMedia('work_image');
         return $media ? $media->getUrl('optimized') : null;
     }
+
+    /**
+     * Prepare media URLs with fallback to original if conversions don't exist.
+     * Returns array with srcset, sizes, and individual conversion URLs.
+     */
+    public function prepareMediaUrls(string $collection): array
+    {
+        if (!$this->hasMedia($collection)) {
+            return [];
+        }
+
+        $media = $this->getFirstMedia($collection);
+
+        // Always use getUrl() which handles conversion existence automatically
+        // Spatie will return conversion URL if it exists, otherwise original
+        $urls = [
+            'tiny' => $media->getUrl('tiny'),
+            'small' => $media->getUrl('small'),
+            'medium' => $media->getUrl('medium'),
+            'optimized' => $media->getUrl('optimized'),
+        ];
+
+        // Build srcset attribute
+        $urls['srcset'] = sprintf(
+            '%s 128w, %s 256w, %s 512w, %s 800w',
+            $urls['tiny'],
+            $urls['small'],
+            $urls['medium'],
+            $urls['optimized']
+        );
+
+        // Default src (fallback) - use small for best balance
+        $urls['src'] = $urls['small'];
+
+        return $urls;
+    }
 }

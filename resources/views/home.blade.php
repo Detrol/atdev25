@@ -4,10 +4,10 @@
 @include('partials.navigation', ['currentPage' => 'home'])
 
 {{-- Hero Section --}}
-<x-home.hero :profile="$profile" />
+<x-home.hero :profile="$profile" :avatarMedia="$avatarMedia" />
 
 {{-- About/Journey Section --}}
-<x-home.about :profile="$profile" />
+<x-home.about :profile="$profile" :workImageMedia="$workImageMedia" />
 
 {{-- How I Work Section --}}
 <x-home.how-i-work />
