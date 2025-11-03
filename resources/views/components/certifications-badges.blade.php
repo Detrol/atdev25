@@ -12,16 +12,16 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {{-- PageSpeed Insights Performance Badge --}}
-            <a href="https://pagespeed.web.dev/analysis/https-atdev-me/p65kwc5jud"
+            <a href="https://pagespeed.web.dev/analysis/https-atdev-me/n7wcb1lb4i"
                target="_blank"
                rel="noopener noreferrer"
                class="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 hover:scale-105">
                 <div class="text-center">
                     <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
-                        <span class="text-2xl font-bold text-white">97</span>
+                        <span class="text-2xl font-bold text-white">99</span>
                     </div>
                     <div class="mb-2">
-                        <div class="text-3xl font-bold text-white mb-1">97%</div>
+                        <div class="text-3xl font-bold text-white mb-1">99%</div>
                         <div class="text-xs text-gray-400">Performance</div>
                     </div>
                     <div class="text-sm font-semibold text-gray-300 mb-1">Google PageSpeed</div>
