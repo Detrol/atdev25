@@ -27,17 +27,29 @@ class Profile extends Model implements HasMedia
     }
 
     /**
-     * Register media collections.
+     * Register media collections with unique filename generation.
      */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg']);
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg'])
+            ->usingFileName(function (string $fileName): string {
+                // Generate unique filename with timestamp for cache busting
+                $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+                $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+                return $baseName . '-' . time() . '.' . $extension;
+            });
 
         $this->addMediaCollection('work_image')
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg']);
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp', 'image/jpg'])
+            ->usingFileName(function (string $fileName): string {
+                // Generate unique filename with timestamp for cache busting
+                $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+                $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+                return $baseName . '-' . time() . '.' . $extension;
+            });
     }
 
     /**
