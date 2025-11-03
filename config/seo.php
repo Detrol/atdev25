@@ -114,11 +114,11 @@ return [
 
     'resource_hints' => [
         'dns_prefetch' => [
-            '//cdn.simpleicons.org',
+            // No external CDNs used
         ],
 
         'preconnect' => [
-            'https://cdn.simpleicons.org',
+            // No external CDNs used
         ],
     ],
 ];
