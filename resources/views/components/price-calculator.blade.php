@@ -107,7 +107,7 @@
             </div>
 
             <!-- Results Section (shown after estimation) -->
-            <div x-show="result" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+            <div id="price-results" x-show="result" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
 
                 <!-- Project Analysis Card -->
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
@@ -368,13 +368,16 @@ function priceCalculator() {
                 if (response.ok && data.success) {
                     this.result = data.estimation;
                     this.estimationId = data.estimation_id;
-                    // Scroll to results
+                    // Scroll to results section
                     setTimeout(() => {
-                        document.querySelector('#price-calculator').scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }, 100);
+                        const resultsSection = document.querySelector('#price-results');
+                        if (resultsSection) {
+                            resultsSection.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }, 200); // Slight delay to allow for transition animation
                 } else {
                     this.error = data.error || 'Ett fel uppstod vid estimering.';
                 }
