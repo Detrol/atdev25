@@ -106,7 +106,7 @@ class WebsiteDataCollector
     private function takeScreenshot(string $url): ?string
     {
         try {
-            $filename = 'audits/'.md5($url.time()).'.png';
+            $filename = 'audits/'.md5($url.time()).'.webp';
             $path = storage_path('app/public/'.$filename);
 
             // Ensure directory exists
@@ -118,6 +118,7 @@ class WebsiteDataCollector
             Browsershot::url($url)
                 ->waitUntilNetworkIdle()
                 ->windowSize(1920, 1080)
+                ->setScreenshotType('webp', 85)  // WebP with 85% quality for optimization
                 ->timeout(30)
                 ->save($path);
 
