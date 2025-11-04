@@ -100,17 +100,17 @@
             <div x-show="currentPlace && !loading" x-transition class="space-y-8" x-cloak>
                 <!-- Place Header -->
                 <div class="glass-morph p-8 rounded-2xl text-center">
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" x-text="currentPlace.name"></h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4" x-text="currentPlace.formatted_address"></p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" x-text="currentPlace ? currentPlace.name : ''"></h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4" x-text="currentPlace ? currentPlace.formatted_address : ''"></p>
 
                     <div class="flex items-center justify-center gap-3 mb-4">
-                        <div class="flex text-yellow-400 text-2xl" x-html="renderStars(currentPlace.rating)"></div>
-                        <span class="text-3xl font-bold text-gray-900 dark:text-white" x-text="currentPlace.rating"></span>
+                        <div class="flex text-yellow-400 text-2xl" x-html="currentPlace ? renderStars(currentPlace.rating) : ''"></div>
+                        <span class="text-3xl font-bold text-gray-900 dark:text-white" x-text="currentPlace ? currentPlace.rating : ''"></span>
                         <span class="text-gray-600 dark:text-gray-400">/  5.0</span>
                     </div>
 
                     <p class="text-gray-600 dark:text-gray-400">
-                        Baserat på <span class="font-semibold" x-text="currentPlace.user_ratings_total"></span> recensioner från Google
+                        Baserat på <span class="font-semibold" x-text="currentPlace ? currentPlace.user_ratings_total : ''"></span> recensioner från Google
                     </p>
 
                     <template x-if="cacheInfo">

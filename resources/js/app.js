@@ -4,6 +4,12 @@ import intersect from '@alpinejs/intersect';
 import persist from '@alpinejs/persist';
 import collapse from '@alpinejs/collapse';
 
+// Import demo components before Alpine starts
+import './demos/product-viewer.js';
+import './demos/before-after-slider.js';
+import './demos/smart-menu.js';
+import './demos/google-reviews.js';
+
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
 Alpine.plugin(persist);

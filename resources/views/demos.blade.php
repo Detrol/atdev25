@@ -143,10 +143,7 @@
 </section>
 
 @push('scripts')
-@vite('resources/js/demos/product-viewer.js')
-@vite('resources/js/demos/before-after-slider.js')
-@vite('resources/js/demos/smart-menu.js')
-@vite('resources/js/demos/google-reviews.js')
+{{-- Demo scripts now loaded via app.js for proper Alpine initialization --}}
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 @endpush
 
