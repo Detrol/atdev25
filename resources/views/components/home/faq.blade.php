@@ -405,7 +405,7 @@
                 </button>
                 <div x-show="openFaq === 7" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
                     <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
-                        <p class="font-semibold text-gray-900 dark:text-white">Ja! Jag erbjuder hosting på min kraftfulla VPS.</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">Ja! Jag erbjuder hosting på min kraftfulla VPS för <span class="text-cyan-600 dark:text-cyan-400">250 kr/månad</span> (exkl moms).</p>
 
                         <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-cyan-200 dark:border-cyan-700/30">
                             <h4 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
@@ -554,9 +554,33 @@
                         </div>
 
                         <!-- Praktiskt -->
-                        <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-                            <p class="text-sm">
-                                <strong>Praktiskt:</strong> Du faktureras via mitt egenanställningsföretag Frilans Finans, som tar 6% avgift för deras tjänster - detta läggs på totalkostnaden. Om du är ett företag utanför Sverige behöver jag även ditt momsnummer.
+                        <div class="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Fakturering & Betalning:</h4>
+                                <ul class="space-y-1.5 text-sm">
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span><strong>Faktura via e-post</strong> från Frilans Finans</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span><strong>Betalningsvillkor: 7 dagar</strong></span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <svg class="w-4 h-4 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span>Frilans Finans tar 6% avgift (läggs på totalkostnaden)</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <p class="text-xs text-gray-500 dark:text-gray-500">
+                                <strong>OBS:</strong> Företag utanför Sverige behöver ange momsnummer för reverse charge (omvänd skattskyldighet).
                             </p>
                         </div>
                     </div>
