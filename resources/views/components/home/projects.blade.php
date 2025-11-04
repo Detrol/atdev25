@@ -87,7 +87,6 @@
                 });
             },
             loadTechStack() {
-                // Load D3.js if not already loaded
                 if (typeof d3 === 'undefined') {
                     const script = document.createElement('script');
                     script.src = 'https://d3js.org/d3.v7.min.js';
@@ -102,34 +101,11 @@
                     const response = await fetch('/api/tech-stack');
                     const techData = await response.json();
                     this.techDataLoaded = true;
-
-                    // Render D3 graph
                     window.renderTechGraph(techData);
-
-                    // Render stats
-                    this.renderStats(techData.technologies);
+                    window.renderTechStats(techData.technologies);
                 } catch (error) {
                     console.error('Failed to load tech stack data:', error);
                 }
-            },
-            renderStats(technologies) {
-                const container = document.getElementById('tech-stats-modal');
-                container.innerHTML = technologies.map(tech => `
-                    <div class=\"border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow\">
-                        <div class=\"flex items-center justify-between mb-2\">
-                            <h4 class=\"text-lg font-semibold text-gray-900 dark:text-white\">${tech.name}</h4>
-                            <span class=\"bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded\">
-                                ${tech.count} projekt
-                            </span>
-                        </div>
-                        <div class=\"text-sm text-gray-600 dark:text-gray-400\">
-                            <p class=\"font-medium mb-1\">Används i:</p>
-                            <ul class=\"list-disc list-inside space-y-1\">
-                                ${tech.projects.map(project => `<li class=\"text-gray-700 dark:text-gray-300\">${project}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                `).join('');
             }
         }">
             <div class="relative inline-block">
@@ -227,6 +203,33 @@
 
 @push('scripts')
 <script>
+// Tech Stack Statistics Renderer
+window.renderTechStats = function(technologies) {
+    const container = document.getElementById('tech-stats-modal');
+    if (!container) return;
+
+    const statsHtml = technologies.map(tech => {
+        const projectsList = tech.projects.map(project =>
+            '<li class="text-gray-700 dark:text-gray-300">' + project + '</li>'
+        ).join('');
+
+        return '<div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">' +
+            '<div class="flex items-center justify-between mb-2">' +
+                '<h4 class="text-lg font-semibold text-gray-900 dark:text-white">' + tech.name + '</h4>' +
+                '<span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded">' +
+                    tech.count + ' projekt' +
+                '</span>' +
+            '</div>' +
+            '<div class="text-sm text-gray-600 dark:text-gray-400">' +
+                '<p class="font-medium mb-1">Används i:</p>' +
+                '<ul class="list-disc list-inside space-y-1">' + projectsList + '</ul>' +
+            '</div>' +
+        '</div>';
+    }).join('');
+
+    container.innerHTML = statsHtml;
+};
+
 // Tech Stack D3.js Visualization
 window.renderTechGraph = function(techData) {
     // Clear any existing graph
