@@ -20,7 +20,7 @@ class TakeProjectScreenshot implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Project $project)
+    public function __construct(public int $projectId)
     {
         //
     }
@@ -31,30 +31,44 @@ class TakeProjectScreenshot implements ShouldQueue
     public function handle(): void
     {
         Log::info('TakeProjectScreenshot: Job started', [
-            'project_id' => $this->project->id,
-            'project_slug' => $this->project->slug,
-            'project_title' => $this->project->title,
+            'project_id' => $this->projectId,
         ]);
 
-        if (! $this->project->live_url) {
+        // Fetch project from database
+        $project = Project::find($this->projectId);
+
+        if (! $project) {
+            Log::error('TakeProjectScreenshot: Project not found', [
+                'project_id' => $this->projectId,
+            ]);
+            return;
+        }
+
+        Log::info('TakeProjectScreenshot: Project loaded', [
+            'project_id' => $project->id,
+            'project_slug' => $project->slug,
+            'project_title' => $project->title,
+        ]);
+
+        if (! $project->live_url) {
             Log::warning('TakeProjectScreenshot: Skipped - no live_url', [
-                'project_id' => $this->project->id,
+                'project_id' => $project->id,
             ]);
 
             return;
         }
 
         Log::info('TakeProjectScreenshot: Preparing screenshot', [
-            'project_id' => $this->project->id,
-            'live_url' => $this->project->live_url,
+            'project_id' => $project->id,
+            'live_url' => $project->live_url,
         ]);
 
         try {
-            $filename = 'screenshots/'.$this->project->slug.'-'.time().'.png';
+            $filename = 'screenshots/'.$project->slug.'-'.time().'.png';
             $path = storage_path('app/public/'.$filename);
 
             Log::info('TakeProjectScreenshot: File paths prepared', [
-                'project_id' => $this->project->id,
+                'project_id' => $project->id,
                 'filename' => $filename,
                 'full_path' => $path,
             ]);
@@ -77,39 +91,39 @@ class TakeProjectScreenshot implements ShouldQueue
 
             // Take screenshot (matching WebsiteDataCollector implementation)
             Log::info('TakeProjectScreenshot: Starting Browsershot', [
-                'project_id' => $this->project->id,
-                'url' => $this->project->live_url,
+                'project_id' => $project->id,
+                'url' => $project->live_url,
             ]);
 
-            Browsershot::url($this->project->live_url)
+            Browsershot::url($project->live_url)
                 ->waitUntilNetworkIdle()
                 ->windowSize(1920, 1080)
                 ->timeout(30)
                 ->save($path);
 
             Log::info('TakeProjectScreenshot: Screenshot saved', [
-                'project_id' => $this->project->id,
+                'project_id' => $project->id,
                 'path' => $path,
                 'file_exists' => file_exists($path),
                 'file_size' => file_exists($path) ? filesize($path) : 0,
             ]);
 
             // Update project
-            $this->project->update([
+            $project->update([
                 'screenshot_path' => $filename,
                 'screenshot_taken_at' => now(),
             ]);
 
             Log::info('TakeProjectScreenshot: SUCCESS - Screenshot taken and saved', [
-                'project_id' => $this->project->id,
+                'project_id' => $project->id,
                 'path' => $filename,
                 'full_path' => $path,
                 'file_size' => file_exists($path) ? filesize($path).' bytes' : 'unknown',
             ]);
         } catch (CouldNotTakeBrowsershot $e) {
             Log::error('TakeProjectScreenshot: FAILED - Browsershot exception', [
-                'project_id' => $this->project->id,
-                'url' => $this->project->live_url,
+                'project_id' => $project->id,
+                'url' => $project->live_url,
                 'error_message' => $e->getMessage(),
                 'error_trace' => $e->getTraceAsString(),
             ]);
@@ -117,8 +131,8 @@ class TakeProjectScreenshot implements ShouldQueue
             throw $e;
         } catch (\Exception $e) {
             Log::error('TakeProjectScreenshot: FAILED - Unexpected exception', [
-                'project_id' => $this->project->id,
-                'url' => $this->project->live_url,
+                'project_id' => $project->id,
+                'url' => $project->live_url,
                 'error_type' => get_class($e),
                 'error_message' => $e->getMessage(),
                 'error_trace' => $e->getTraceAsString(),

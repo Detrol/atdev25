@@ -63,7 +63,7 @@ class ProjectController extends Controller
                 'live_url' => $project->live_url,
             ]);
 
-            TakeProjectScreenshot::dispatch($project);
+            TakeProjectScreenshot::dispatch($project->id);
         } else {
             Log::info('ProjectController: No screenshot job - no live_url provided', [
                 'project_id' => $project->id,
@@ -117,7 +117,7 @@ class ProjectController extends Controller
                 'new_url' => $project->live_url,
             ]);
 
-            TakeProjectScreenshot::dispatch($project);
+            TakeProjectScreenshot::dispatch($project->id);
         } else {
             Log::info('ProjectController: No screenshot job - live_url unchanged or empty', [
                 'project_id' => $project->id,
@@ -168,7 +168,7 @@ class ProjectController extends Controller
             'queue_connection' => config('queue.default'),
         ]);
 
-        TakeProjectScreenshot::dispatch($project);
+        TakeProjectScreenshot::dispatch($project->id);
 
         Log::info('ProjectController: Screenshot job dispatched successfully', [
             'project_id' => $project->id,
