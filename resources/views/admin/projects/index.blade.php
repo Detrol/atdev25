@@ -61,10 +61,10 @@
                                         <a href="/projects/{{ $project->slug }}" target="_blank" class="text-gray-600 hover:text-gray-900">
                                             Visa
                                         </a>
-                                        <a href="/admin/projects/{{ $project->id }}/edit" class="text-indigo-600 hover:text-indigo-900">
+                                        <a href="/admin/projects/{{ $project->slug }}/edit" class="text-indigo-600 hover:text-indigo-900">
                                             Redigera
                                         </a>
-                                        <form action="/admin/projects/{{ $project->id }}" method="POST" class="inline" onsubmit="return confirm('Är du säker på att du vill radera detta projekt?');">
+                                        <form action="/admin/projects/{{ $project->slug }}" method="POST" class="inline" onsubmit="return confirm('Är du säker på att du vill radera detta projekt?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-900">
