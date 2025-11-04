@@ -30,29 +30,69 @@ class TakeProjectScreenshot implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('TakeProjectScreenshot: Job started', [
+            'project_id' => $this->project->id,
+            'project_slug' => $this->project->slug,
+            'project_title' => $this->project->title,
+        ]);
+
         if (! $this->project->live_url) {
-            Log::warning('Project screenshot skipped: no live_url', ['project_id' => $this->project->id]);
+            Log::warning('TakeProjectScreenshot: Skipped - no live_url', [
+                'project_id' => $this->project->id,
+            ]);
 
             return;
         }
+
+        Log::info('TakeProjectScreenshot: Preparing screenshot', [
+            'project_id' => $this->project->id,
+            'live_url' => $this->project->live_url,
+        ]);
 
         try {
             $filename = 'screenshots/'.$this->project->slug.'-'.time().'.png';
             $path = storage_path('app/public/'.$filename);
 
+            Log::info('TakeProjectScreenshot: File paths prepared', [
+                'project_id' => $this->project->id,
+                'filename' => $filename,
+                'full_path' => $path,
+            ]);
+
             // Ensure directory exists
             $directory = dirname($path);
-            if (! is_dir($directory)) {
+            if (! file_exists($directory)) {
+                Log::info('TakeProjectScreenshot: Creating directory', [
+                    'directory' => $directory,
+                ]);
                 mkdir($directory, 0755, true);
             }
 
-            // Take screenshot
+            Log::info('TakeProjectScreenshot: Directory ready', [
+                'directory' => $directory,
+                'exists' => file_exists($directory),
+                'is_dir' => is_dir($directory),
+                'writable' => is_writable($directory),
+            ]);
+
+            // Take screenshot (matching WebsiteDataCollector implementation)
+            Log::info('TakeProjectScreenshot: Starting Browsershot', [
+                'project_id' => $this->project->id,
+                'url' => $this->project->live_url,
+            ]);
+
             Browsershot::url($this->project->live_url)
-                ->windowSize(1920, 1080)
-                ->setScreenshotType('png')
-                ->timeout(60)
                 ->waitUntilNetworkIdle()
+                ->windowSize(1920, 1080)
+                ->timeout(30)
                 ->save($path);
+
+            Log::info('TakeProjectScreenshot: Screenshot saved', [
+                'project_id' => $this->project->id,
+                'path' => $path,
+                'file_exists' => file_exists($path),
+                'file_size' => file_exists($path) ? filesize($path) : 0,
+            ]);
 
             // Update project
             $this->project->update([
@@ -60,15 +100,28 @@ class TakeProjectScreenshot implements ShouldQueue
                 'screenshot_taken_at' => now(),
             ]);
 
-            Log::info('Project screenshot taken', [
+            Log::info('TakeProjectScreenshot: SUCCESS - Screenshot taken and saved', [
                 'project_id' => $this->project->id,
                 'path' => $filename,
+                'full_path' => $path,
+                'file_size' => file_exists($path) ? filesize($path).' bytes' : 'unknown',
             ]);
         } catch (CouldNotTakeBrowsershot $e) {
-            Log::error('Failed to take screenshot', [
+            Log::error('TakeProjectScreenshot: FAILED - Browsershot exception', [
                 'project_id' => $this->project->id,
                 'url' => $this->project->live_url,
-                'error' => $e->getMessage(),
+                'error_message' => $e->getMessage(),
+                'error_trace' => $e->getTraceAsString(),
+            ]);
+
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('TakeProjectScreenshot: FAILED - Unexpected exception', [
+                'project_id' => $this->project->id,
+                'url' => $this->project->live_url,
+                'error_type' => get_class($e),
+                'error_message' => $e->getMessage(),
+                'error_trace' => $e->getTraceAsString(),
             ]);
 
             throw $e;
