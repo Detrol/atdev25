@@ -21,11 +21,13 @@ class PriceCalculatorController extends Controller
     }
 
     /**
-     * Estimate project price based on description
+     * Estimate project price based on description and service category
      */
     public function estimate(PriceEstimateRequest $request): JsonResponse
     {
-        $description = $request->validated()['description'];
+        $validated = $request->validated();
+        $description = $validated['description'];
+        $serviceCategory = $validated['service_category'];
 
         // Rate limiting (5 requests per 10 minutes per IP) - Exempt for authenticated admins
         // Check if user is authenticated by checking session cookie
@@ -43,7 +45,7 @@ class PriceCalculatorController extends Controller
 
         try {
             // Get AI analysis (project type, complexity, tech, features)
-            $aiAnalysis = $this->aiService->estimateProjectPrice($description);
+            $aiAnalysis = $this->aiService->estimateProjectPrice($description, $serviceCategory);
 
             // Map to predefined time and price ranges for consistency
             $priceEstimate = PriceEstimateMapper::map(
@@ -57,6 +59,7 @@ class PriceCalculatorController extends Controller
             // Save estimation to database
             $priceEstimationRecord = PriceEstimation::create([
                 'description' => $description,
+                'service_category' => $serviceCategory,
                 'project_type' => $estimation['project_type'],
                 'complexity' => $estimation['complexity'],
                 'project_type_label' => $estimation['project_type_label'],
@@ -96,6 +99,7 @@ class PriceCalculatorController extends Controller
             Log::info('Price estimation successful', [
                 'ip' => $request->ip(),
                 'estimation_id' => $priceEstimationRecord->id,
+                'service_category' => $serviceCategory,
                 'project_type' => $estimation['project_type'],
                 'complexity' => $estimation['complexity'],
                 'hours_range_traditional' => $estimation['hours_range_traditional'],

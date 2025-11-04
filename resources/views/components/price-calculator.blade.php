@@ -26,6 +26,28 @@
             <!-- Input Section -->
             <div class="relative bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
                 <div class="mb-6">
+                    <label for="service-category" class="block text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        Välj tjänstekategori:
+                    </label>
+                    <select
+                        id="service-category"
+                        x-model="serviceCategory"
+                        @change="updatePlaceholder()"
+                        class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 transition-all text-gray-900 dark:text-white mb-4"
+                    >
+                        <option value="">-- Välj en tjänst --</option>
+                        <option value="web_development">Webbutveckling från Grunden</option>
+                        <option value="mobile_app">Mobilapputveckling</option>
+                        <option value="bug_fixes">Buggfix och Felsökning</option>
+                        <option value="performance">Prestandaoptimering</option>
+                        <option value="api_integration">API-utveckling och Integration</option>
+                        <option value="security">Säkerhet och Compliance</option>
+                        <option value="maintenance">Underhåll och Support</option>
+                        <option value="modernization">Modernisering och Uppgradering</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
                     <label for="project-description" class="block text-lg font-semibold text-gray-900 dark:text-white mb-2">
                         Beskriv ditt projekt:
                     </label>
@@ -37,7 +59,7 @@
                         x-model="description"
                         @input="error = null"
                         rows="6"
-                        placeholder="T.ex: Jag behöver en webbshop där kunder kan köpa produkter, lägga i kundvagn, betala via Stripe, och jag vill ha en admin-panel för att hantera produkter, lager och ordrar. Viktigt med mobilanpassning och SEO."
+                        :placeholder="placeholder"
                         class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 transition-all resize-none text-gray-900 dark:text-white placeholder-gray-400"
                         :class="{ 'border-red-500 dark:border-red-400': error }"
                     ></textarea>
@@ -61,7 +83,7 @@
 
                 <button
                     @click="estimate()"
-                    :disabled="loading || description.length < 20 || description.length > 2000"
+                    :disabled="loading || !serviceCategory || description.length < 20 || description.length > 2000"
                     class="w-full py-5 px-8 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
                 >
                     <template x-if="!loading">
@@ -285,12 +307,38 @@
 function priceCalculator() {
     return {
         description: '',
+        serviceCategory: '',
         loading: false,
         result: null,
         error: null,
         estimationId: null,
+        placeholder: 'Välj en tjänstekategori ovan för att få relevanta exempel...',
+
+        placeholders: {
+            'web_development': 'T.ex: Jag behöver en webbshop där kunder kan köpa produkter, lägga i kundvagn, betala via Stripe, och jag vill ha en admin-panel för att hantera produkter, lager och ordrar. Viktigt med mobilanpassning och SEO.',
+            'mobile_app': 'T.ex: Jag vill ha en iOS och Android-app för [beskrivning]. Appen ska ha [funktioner], integration med [API/system], push-notifikationer, och offline-funktionalitet.',
+            'bug_fixes': 'T.ex: Min webbplats/app har ett problem med [specifik funktion]. Felet uppstår när [scenario]. Jag behöver snabb åtgärd och rotorsaksanalys.',
+            'performance': 'T.ex: Min webbplats laddar långsamt (nuvarande laddningstid: X sekunder). Jag vill optimera Core Web Vitals, databasfrågor, och implementera caching för bättre prestanda.',
+            'api_integration': 'T.ex: Jag behöver integration med [Stripe/Klarna/Mailgun/etc]. API:et ska hantera [funktionalitet] och jag vill ha dokumentation och säker autentisering.',
+            'security': 'T.ex: Jag behöver säkerhetsanalys av min webbplats/app. Viktigast är [GDPR/penetrationstestning/SSL/2FA]. Vi hanterar [typ av data] och behöver [compliance-krav].',
+            'maintenance': 'T.ex: Jag behöver kontinuerligt underhåll av [webbplats/app]. Det inkluderar säkerhetsuppdateringar, övervakning, backups, och [X timmar/månad] support för ändringar.',
+            'modernization': 'T.ex: Min webbplats är byggd med [gammal teknologi] och behöver uppgraderas till [ny teknologi]. Viktigt att behålla [data/funktionalitet] och minimera driftavbrott.'
+        },
+
+        updatePlaceholder() {
+            if (this.serviceCategory && this.placeholders[this.serviceCategory]) {
+                this.placeholder = this.placeholders[this.serviceCategory];
+            } else {
+                this.placeholder = 'Välj en tjänstekategori ovan för att få relevanta exempel...';
+            }
+        },
 
         async estimate() {
+            if (!this.serviceCategory) {
+                this.error = 'Vänligen välj en tjänstekategori.';
+                return;
+            }
+
             if (this.description.length < 20 || this.description.length > 2000) {
                 this.error = 'Beskrivningen måste vara mellan 20 och 2000 tecken.';
                 return;
@@ -310,7 +358,8 @@ function priceCalculator() {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        description: this.description
+                        description: this.description,
+                        service_category: this.serviceCategory
                     })
                 });
 

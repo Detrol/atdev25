@@ -43,9 +43,9 @@
             <div class="text-sm text-gray-600 mt-2">Poäng</div>
         </div>
 
-        <div class="bg-blue-50 rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold mb-4">Performance</h3>
-            <div class="text-5xl font-bold text-blue-700">{{ $audit->performance_score }}</div>
+        <div class="bg-amber-50 rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Teknisk Optimering</h3>
+            <div class="text-5xl font-bold text-amber-700">{{ $audit->technical_score }}</div>
             <div class="text-sm text-gray-600 mt-2">Poäng</div>
         </div>
         @endif

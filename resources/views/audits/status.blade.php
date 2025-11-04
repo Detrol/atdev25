@@ -48,9 +48,9 @@
                     <div class="text-sm font-semibold text-gray-700 dark:text-gray-300">SEO</div>
                 </div>
 
-                <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <div class="text-5xl font-bold text-blue-600 dark:text-blue-400 mb-2">{{ $audit->performance_score }}</div>
-                    <div class="text-sm font-semibold text-gray-700 dark:text-gray-300">Performance</div>
+                <div class="text-center p-6 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl border border-amber-200 dark:border-amber-800">
+                    <div class="text-5xl font-bold text-amber-600 dark:text-amber-400 mb-2">{{ $audit->technical_score }}</div>
+                    <div class="text-sm font-semibold text-gray-700 dark:text-gray-300">Teknisk Optimering</div>
                 </div>
 
                 <div class="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200 dark:border-green-800">

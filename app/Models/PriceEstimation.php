@@ -9,6 +9,7 @@ class PriceEstimation extends Model
 {
     protected $fillable = [
         'description',
+        'service_category',
         'project_type',
         'complexity',
         'project_type_label',

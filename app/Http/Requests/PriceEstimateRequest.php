@@ -20,6 +20,7 @@ class PriceEstimateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'service_category' => 'required|string|in:web_development,mobile_app,bug_fixes,performance,api_integration,security,maintenance,modernization',
             'description' => 'required|string|min:20|max:2000',
         ];
     }
@@ -30,6 +31,8 @@ class PriceEstimateRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'service_category.required' => 'Vänligen välj en tjänstekategori.',
+            'service_category.in' => 'Ogiltig tjänstekategori vald.',
             'description.required' => 'Vänligen beskriv ditt projekt.',
             'description.min' => 'Projektbeskrivningen måste vara minst :min tecken.',
             'description.max' => 'Projektbeskrivningen får inte överstiga :max tecken.',

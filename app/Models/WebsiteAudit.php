@@ -18,7 +18,7 @@ class WebsiteAudit extends Model
         'collected_data',
         'ai_report',
         'seo_score',
-        'performance_score',
+        'technical_score',
         'overall_score',
         'screenshot_path',
         'completed_at',

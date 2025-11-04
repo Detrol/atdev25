@@ -288,15 +288,18 @@ Analysera och betygsätt:
 - **Bildoptimering**: Alt-texter, antal bilder
 - **Teknisk SEO**: Canonical, robots, schema markup
 
-## Performance-Analys (Poäng: X/100)
+## Teknisk Optimering (Poäng: X/100)
 Analysera och betygsätt:
-- **Laddningstid**: Bedömning baserat på mätvärden
-- **Sidstorlek**: HTML-storlek, totalt antal resurser
-- **Resurser**: Scripts, stylesheets, bilder
-- **Mobilvänlighet**: Viewport, responsivitet
+- **Kodkvalitet**: Inline styles/scripts, render-blocking resurser, minifiering
+- **Bildoptimering**: WebP/AVIF-format, lazy loading, dimensioner, srcset
+- **Tillgänglighet**: ARIA landmarks, formulärlabels, heading-hierarki
+- **Best Practices**: Semantisk HTML5, DOM-djup, deprecated tags
+- **Mobil Responsivitet**: Viewport, media queries, mobilmeny, touch targets
+- **Konverteringsoptimering**: CTA-placering, kontaktinfo synlighet, formulär
+- **Förtroendesignaler**: SSL, integritetspolicy, cookies, företagsinfo
 
 ## Övergripande Betyg (Poäng: X/100)
-[Viktat medelvärde av SEO och Performance, med kort motivering]
+[Viktat medelvärde av SEO och Teknisk Optimering, med kort motivering]
 
 ## Förbättringsförslag
 Prioriterad lista (1-8 förslag):
@@ -390,14 +393,105 @@ PROMPT;
         $message .= "- Interna: {$data['links']['internal']} st\n";
         $message .= "- Externa: {$data['links']['external']} st\n";
 
-        // Performance
-        $message .= "\n## PRESTANDA\n";
-        $message .= "- Laddningstid: {$data['performance']['load_time']} sekunder\n";
-        $message .= "- Sidstorlek: {$data['performance']['page_size_formatted']}\n";
-        $message .= "- Antal scripts: {$data['performance']['scripts_count']} st\n";
-        $message .= "- Antal stylesheets: {$data['performance']['stylesheets_count']} st\n";
-        $message .= "- Antal bilder: {$data['performance']['images_count']} st\n";
-        $message .= "- Totalt resurser: {$data['performance']['total_resources']} st\n";
+        // Technical Optimization
+        if (isset($data['technical_optimization'])) {
+            $techOpt = $data['technical_optimization'];
+
+            $message .= "\n## TEKNISK OPTIMERING\n";
+
+            // Code Quality
+            if (isset($techOpt['code_quality'])) {
+                $cq = $techOpt['code_quality'];
+                $message .= "\n### Kodkvalitet:\n";
+                $message .= "- Inline styles: {$cq['inline_styles_count']} st\n";
+                $message .= "- Element med style-attribut: {$cq['elements_with_style_attr']} st\n";
+                $message .= "- Inline scripts: {$cq['inline_scripts_count']} st\n";
+                $message .= "- Inline event handlers: {$cq['inline_event_handlers']} st\n";
+                $message .= "- Blocking scripts i head: {$cq['blocking_scripts_in_head']} st\n";
+                $message .= "- HTML-kommentarer: ".($cq['has_html_comments'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Verkar minifierad: ".($cq['appears_minified'] ? 'Ja' : 'Nej')."\n";
+            }
+
+            // Image Optimization
+            if (isset($techOpt['image_optimization'])) {
+                $io = $techOpt['image_optimization'];
+                $message .= "\n### Bildoptimering:\n";
+                $message .= "- Totalt bilder: {$io['total_images']} st\n";
+                $message .= "- Med lazy loading: {$io['with_lazy_loading']} st ({$io['lazy_loading_percentage']}%)\n";
+                $message .= "- Med dimensioner (width/height): {$io['with_dimensions']} st ({$io['dimensions_percentage']}%)\n";
+                $message .= "- Med srcset: {$io['with_srcset']} st\n";
+                $message .= "- <picture> element: {$io['picture_elements']} st\n";
+                $message .= "- Moderna format (WebP/AVIF): ".($io['modern_formats_detected'] ? 'Ja' : 'Nej')."\n";
+            }
+
+            // Accessibility
+            if (isset($techOpt['accessibility'])) {
+                $acc = $techOpt['accessibility'];
+                $message .= "\n### Tillgänglighet:\n";
+                $message .= "- ARIA landmarks: {$acc['aria_landmarks']} st\n";
+                $message .= "- Semantiska landmarks: {$acc['semantic_landmarks']} st\n";
+                $message .= "- Formulär: {$acc['form_count']} st\n";
+                $message .= "- Inputs: {$acc['input_count']} st\n";
+                $message .= "- Labels: {$acc['label_count']} st (ratio: {$acc['label_ratio']})\n";
+                $message .= "- H1: {$acc['headings']['h1']}, H2: {$acc['headings']['h2']}, H3: {$acc['headings']['h3']}\n";
+                $message .= "- Korrekt heading-hierarki: ".($acc['has_proper_heading_hierarchy'] ? 'Ja' : 'Nej')."\n";
+            }
+
+            // Best Practices
+            if (isset($techOpt['best_practices'])) {
+                $bp = $techOpt['best_practices'];
+                $message .= "\n### Best Practices:\n";
+                $message .= "- Semantiska HTML5 tags: {$bp['semantic_tags_count']} st\n";
+                $message .= "- Deprecated tags: {$bp['deprecated_tags_count']} st\n";
+                $message .= "- Max DOM-djup: {$bp['max_dom_depth']} nivåer\n";
+                $message .= "- Totalt element: {$bp['total_elements']} st\n";
+                $message .= "- Viewport meta: ".($bp['has_viewport_meta'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Doctype: ".($bp['has_doctype'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Överdrivet stort DOM: ".($bp['excessive_dom_size'] ? 'Ja (>1500 element)' : 'Nej')."\n";
+                $message .= "- Överdrivet djupt DOM: ".($bp['excessive_dom_depth'] ? 'Ja (>32 nivåer)' : 'Nej')."\n";
+            }
+
+            // Mobile Responsiveness
+            if (isset($techOpt['mobile_responsiveness'])) {
+                $mr = $techOpt['mobile_responsiveness'];
+                $message .= "\n### Mobil Responsivitet:\n";
+                $message .= "- Viewport meta: ".($mr['has_viewport'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Media queries: {$mr['media_query_count']} st\n";
+                $message .= "- Mobilmeny: ".($mr['has_mobile_menu'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Responsiva bilder: {$mr['responsive_images']} st\n";
+                $message .= "- Touch-vänliga targets: ".($mr['has_touch_targets'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Mobiloptimerad: ".($mr['mobile_optimized'] ? 'Ja' : 'Nej')."\n";
+            }
+
+            // CTA Effectiveness
+            if (isset($techOpt['cta_effectiveness'])) {
+                $cta = $techOpt['cta_effectiveness'];
+                $message .= "\n### Konverteringsoptimering (CTA):\n";
+                $message .= "- Knappar: {$cta['button_count']} st\n";
+                $message .= "- Länkar: {$cta['link_count']} st\n";
+                $message .= "- Telefonnummer synligt: ".($cta['phone_visible'] ? 'Ja' : 'Nej')." ({$cta['tel_links']} tel-länkar)\n";
+                $message .= "- Email synlig: ".($cta['email_visible'] ? 'Ja' : 'Nej')." ({$cta['mailto_links']} mailto-länkar)\n";
+                $message .= "- Kontaktformulär: {$cta['contact_forms']} st\n";
+                $message .= "- Formulär med email-fält: {$cta['forms_with_email_field']} st\n";
+                $message .= "- CTA i första skärmen: ".($cta['cta_in_first_screen'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Generiska knappar (dåligt): ".($cta['has_generic_button_text'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- CTA/innehåll-ratio: {$cta['cta_to_content_ratio']}\n";
+            }
+
+            // Trust Signals
+            if (isset($techOpt['trust_signals'])) {
+                $ts = $techOpt['trust_signals'];
+                $message .= "\n### Förtroendesignaler:\n";
+                $message .= "- SSL (HTTPS): ".($ts['has_ssl'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Integritetspolicy: ".($ts['has_privacy_policy'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Cookie consent: ".($ts['has_cookie_consent'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Företagsinfo i footer: ".($ts['footer_has_company_info'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Org-nummer: ".($ts['has_org_number'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Adress: ".($ts['has_address'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Certifieringar synliga: ".($ts['displays_certifications'] ? 'Ja' : 'Nej')."\n";
+                $message .= "- Förtroende-score: {$ts['trust_score']}/100\n";
+            }
+        }
 
         // Technical
         $message .= "\n## TEKNISKT\n";
@@ -425,7 +519,7 @@ PROMPT;
     {
         $scores = [
             'seo_score' => null,
-            'performance_score' => null,
+            'technical_score' => null,
             'overall_score' => null,
         ];
 
@@ -434,9 +528,9 @@ PROMPT;
             $scores['seo_score'] = (int) $matches[1];
         }
 
-        // Försök extrahera Performance-poäng
-        if (preg_match('/Performance.*?Poäng:\s*(\d+)\/100/i', $report, $matches)) {
-            $scores['performance_score'] = (int) $matches[1];
+        // Försök extrahera Teknisk Optimering-poäng
+        if (preg_match('/Teknisk\s+Optimering.*?Poäng:\s*(\d+)\/100/i', $report, $matches)) {
+            $scores['technical_score'] = (int) $matches[1];
         }
 
         // Försök extrahera Övergripande betyg
@@ -448,11 +542,11 @@ PROMPT;
         if ($scores['seo_score'] === null) {
             $scores['seo_score'] = 50; // Default neutral
         }
-        if ($scores['performance_score'] === null) {
-            $scores['performance_score'] = 50;
+        if ($scores['technical_score'] === null) {
+            $scores['technical_score'] = 50;
         }
         if ($scores['overall_score'] === null) {
-            $scores['overall_score'] = (int) (($scores['seo_score'] + $scores['performance_score']) / 2);
+            $scores['overall_score'] = (int) (($scores['seo_score'] + $scores['technical_score']) / 2);
         }
 
         return $scores;
@@ -615,7 +709,7 @@ HTML;
     /**
      * Estimerar projektpris och komplexitet baserat på beskrivning
      */
-    public function estimateProjectPrice(string $description): array
+    public function estimateProjectPrice(string $description, string $serviceCategory): array
     {
         $apiKey = Config::get('services.anthropic.api_key');
 
@@ -628,12 +722,15 @@ HTML;
 
         $systemPrompt = $this->createPriceEstimationPrompt();
 
+        // Inkludera tjänstekategori i user message för bättre context
+        $userMessage = "Tjänstekategori: {$serviceCategory}\n\nBeskrivning: {$description}";
+
         $data = [
             'model' => 'claude-3-7-sonnet-20250219',
             'messages' => [
                 [
                     'role' => 'user',
-                    'content' => $description,
+                    'content' => $userMessage,
                 ],
             ],
             'system' => [
@@ -1066,6 +1163,58 @@ Använd denna kategori när projektet inte passar någon annan typ eller är myc
 ### KOMPLEXITET 5-6: Medel komplexitet
 ### KOMPLEXITET 7-8: Komplex custom work
 ### KOMPLEXITET 9-10: Highly specialized
+
+---
+
+## TJÄNSTEKATEGORIER (Service Categories)
+
+Användaren har valt en tjänstekategori som ger dig extra context om projekttypen.
+Använd denna information för att bättre förstå vad kunden behöver och välja rätt komplexitet:
+
+**web_development** - Webbutveckling från Grunden
+- Skräddarsydda webbplatser och webbapplikationer
+- Från enkla landningssidor till avancerade e-handelsplattformar och SaaS-lösningar
+- SEO-optimerad struktur, CMS-integration, PWA-möjlighet
+
+**mobile_app** - Mobilapputveckling
+- Native och hybrid mobilappar för iOS och Android
+- MVP-prototyper till fullskaliga applikationer
+- API-integration, push-notifikationer, offline-funktionalitet
+
+**bug_fixes** - Buggfix och Felsökning
+- Snabb och effektiv felsökning av webbplatser och applikationer
+- Identifiering och åtgärdande av buggar, prestandaproblem och säkerhetsbrister
+- OBS: Ofta lägre komplexitet (1-4) eftersom det är punktinsatser
+
+**performance** - Prestandaoptimering
+- Optimering av laddningstider, databasfrågor, caching
+- Core Web Vitals optimering (LCP, FID, CLS)
+- CDN-konfiguration, lazy loading, code splitting
+- Komplexitet beror på omfattning: enstaka optimering (2-4) vs helsystem (6-8)
+
+**api_integration** - API-utveckling och Integration
+- RESTful och GraphQL API-utveckling
+- Integration med tredjepartstjänster (Stripe, Klarna, Mailgun, etc)
+- API-dokumentation, autentisering (OAuth2, JWT)
+
+**security** - Säkerhet och Compliance
+- Säkerhetsanalys, penetrationstestning
+- GDPR-anpassning, SSL-certifikat, säker datahantering
+- OWASP Top 10 säkerhetsanalys
+- Komplexitet beror på omfattning: basic audit (3-5) vs full compliance (7-9)
+
+**maintenance** - Underhåll och Support
+- Kontinuerligt underhåll, proaktiv övervakning
+- Säkerhetsuppdateringar, backups, teknisk support
+- Komplexitet beror på omfattning: basic support (2-4) vs 24/7 full monitoring (6-8)
+
+**modernization** - Modernisering och Uppgradering
+- Modernisera äldre webbplatser och system
+- Framework-uppgraderingar, migration till cloud
+- Containerisering, CI/CD implementation
+- Komplexitet beror på omfattning: enkel upgrade (3-5) vs complete overhaul (8-10)
+
+**VIKTIGT:** Använd tjänstekategorin som VÄGLEDNING men välj fortfarande project_type och complexity baserat på den faktiska beskrivningen och exemplen ovan.
 
 ---
 

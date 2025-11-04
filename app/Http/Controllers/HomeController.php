@@ -6,6 +6,7 @@ use App\Models\Profile;
 use App\Models\Project;
 use App\Models\Service;
 use App\Services\StructuredDataService;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -15,7 +16,9 @@ class HomeController extends Controller
      * Data contract:
      * - profile: Profile (name, title, bio, avatar, hero_image, email, phone, github, linkedin, twitter)
      * - services: Collection<Service> (id, slug, title, description, icon, features, sort_order)
-     * - projects: Collection<Project> (id, slug, title, summary, cover_image, technologies, featured)
+     * - projects: Collection<Project> (id, slug, title, summary, description, cover_image, screenshot_path,
+     *             technologies, client_name, testimonial, live_url, repo_url, created_at)
+     *             Max 6 featured projects, cached for 1 hour
      * - structuredData: string (JSON-LD schema markup for SEO)
      */
     public function index(StructuredDataService $seo)
@@ -26,11 +29,19 @@ class HomeController extends Controller
             ->ordered()
             ->get();
 
-        $projects = Project::published()
-            ->featured()
-            ->orderBy('sort_order')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $projects = Cache::remember('featured-projects', 3600, function () {
+            return Project::published()
+                ->featured()
+                ->select([
+                    'id', 'slug', 'title', 'summary', 'description',
+                    'cover_image', 'screenshot_path', 'technologies',
+                    'client_name', 'testimonial', 'live_url', 'repo_url', 'created_at'
+                ])
+                ->orderBy('sort_order')
+                ->orderBy('created_at', 'desc')
+                ->limit(6)
+                ->get();
+        });
 
         // Generate structured data for SEO
         $schemas = [
