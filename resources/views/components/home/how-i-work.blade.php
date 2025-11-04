@@ -103,7 +103,7 @@
                                 </svg>
                             </div>
                             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Prisättning</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Småjobb (&lt;15k) utan förskott. Större projekt får fast offert med tydligt scope och leveransdatum.</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Småjobb (&lt;5k) utan förskott. Större projekt får fast offert med tydligt scope och leveransdatum.</p>
                         </div>
                     </div>
                 </div>

@@ -38,9 +38,15 @@
         {
             "@type": "ListItem",
             "position": {{ $index + 1 }},
-            "name": "{{ $item['label'] }}"@if(!empty($item['url'])),
-            "item": "{{ url($item['url']) }}"@endif
-        }@if($index < count($items) - 1),@endif
+            "name": "{{ $item['label'] }}"
+            @if(!empty($item['url']))
+            ,
+            "item": "{{ url($item['url']) }}"
+            @endif
+        }
+        @if($index < count($items) - 1)
+        ,
+        @endif
         @endforeach
     ]
 }
