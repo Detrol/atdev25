@@ -114,24 +114,6 @@
                     @enderror
                 </div>
             </div>
-
-            @if($project->live_url)
-                <div>
-                    @if($project->screenshot_path)
-                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Nuvarande Screenshot</label>
-                        <img src="{{ asset('storage/' . $project->screenshot_path) }}" alt="Screenshot" class="max-w-md rounded-lg shadow-lg">
-                    @else
-                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Screenshot</label>
-                        <p class="text-sm text-gray-500 mb-4">Ingen screenshot tagen ännu. Klicka på knappen nedan för att ta en screenshot av live-sidan.</p>
-                    @endif
-                    <form action="/admin/projects/{{ $project->slug }}/screenshot" method="POST" class="mt-4">
-                        @csrf
-                        <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-                            {{ $project->screenshot_path ? 'Uppdatera Screenshot' : 'Ta Screenshot' }}
-                        </button>
-                    </form>
-                </div>
-            @endif
         </div>
     </div>
 
@@ -142,4 +124,31 @@
         </button>
     </div>
 </form>
+
+{{-- Screenshot section (outside main form to avoid nested forms) --}}
+@if($project->live_url)
+    <div class="mt-8 bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-6 sm:p-8">
+            <h3 class="text-lg font-semibold leading-6 text-gray-900 mb-4">Screenshot</h3>
+
+            @if($project->screenshot_path)
+                <div class="mb-4">
+                    <img src="{{ asset('storage/' . $project->screenshot_path) }}" alt="Screenshot" class="max-w-2xl rounded-lg shadow-lg border">
+                    <p class="mt-2 text-sm text-gray-500">
+                        Tagen: {{ $project->screenshot_taken_at?->diffForHumans() ?? 'Okänt' }}
+                    </p>
+                </div>
+            @else
+                <p class="text-sm text-gray-600 mb-4">Ingen screenshot tagen ännu. Klicka på knappen nedan för att ta en screenshot av live-sidan.</p>
+            @endif
+
+            <form action="/admin/projects/{{ $project->slug }}/screenshot" method="POST">
+                @csrf
+                <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    {{ $project->screenshot_path ? 'Uppdatera Screenshot' : 'Ta Screenshot' }}
+                </button>
+            </form>
+        </div>
+    </div>
+@endif
 @endsection
