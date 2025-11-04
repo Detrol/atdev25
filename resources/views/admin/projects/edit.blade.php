@@ -60,6 +60,31 @@
                 @enderror
             </div>
 
+            <!-- Client & Testimonial -->
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    <label for="client_name" class="block text-sm font-medium leading-6 text-gray-900">Klientnamn</label>
+                    <input type="text" name="client_name" id="client_name" value="{{ old('client_name', $project->client_name) }}"
+                        class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3"
+                        placeholder="Företag AB">
+                    <p class="mt-2 text-sm text-gray-500">Valfritt - visas bara om ifyllt</p>
+                    @error('client_name')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="testimonial" class="block text-sm font-medium leading-6 text-gray-900">Testimonial</label>
+                    <textarea name="testimonial" id="testimonial" rows="3"
+                        class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3"
+                        placeholder="Ett fantastiskt projekt...">{{ old('testimonial', $project->testimonial) }}</textarea>
+                    <p class="mt-2 text-sm text-gray-500">Valfritt - visas bara om ifyllt</p>
+                    @error('testimonial')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                     <label for="live_url" class="block text-sm font-medium leading-6 text-gray-900">Live URL</label>

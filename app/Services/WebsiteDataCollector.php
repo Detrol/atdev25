@@ -57,7 +57,7 @@ class WebsiteDataCollector
                 'headings' => $this->extractHeadings(),
                 'images' => $this->analyzeImages(),
                 'links' => $this->analyzeLinks(),
-                'performance' => $this->calculatePerformance(),
+                'technical_optimization' => $this->analyzeTechnicalOptimization(),
                 'technical' => $this->analyzeTechnical($url),
                 'content' => $this->analyzeContent(),
             ];
@@ -285,26 +285,551 @@ class WebsiteDataCollector
     }
 
     /**
-     * Calculate performance metrics
+     * Analyze technical optimization opportunities
      */
-    private function calculatePerformance(): array
+    private function analyzeTechnicalOptimization(): array
     {
-        $pageSize = strlen($this->html);
+        return [
+            'code_quality' => $this->analyzeCodeQuality(),
+            'image_optimization' => $this->analyzeImageOptimization(),
+            'accessibility' => $this->analyzeAccessibility(),
+            'best_practices' => $this->analyzeBestPractices(),
+            'mobile_responsiveness' => $this->analyzeMobileResponsiveness(),
+            'cta_effectiveness' => $this->analyzeCTAElements(),
+            'trust_signals' => $this->analyzeTrustSignals(),
+        ];
+    }
 
-        // Estimate based on content
-        $scripts = $this->crawler->filter('script')->count();
-        $stylesheets = $this->crawler->filter('link[rel="stylesheet"]')->count();
-        $images = $this->crawler->filter('img')->count();
+    /**
+     * Analyze code quality issues
+     */
+    private function analyzeCodeQuality(): array
+    {
+        // Detect inline styles in body
+        $inlineStyles = $this->crawler->filter('body style')->count();
+        $elementsWithStyleAttr = $this->crawler->filter('body [style]')->count();
+
+        // Detect inline scripts in body
+        $inlineScripts = $this->crawler->filter('body script:not([src])')->count();
+        $elementsWithOnclick = $this->crawler->filter('body [onclick], body [onload], body [onchange]')->count();
+
+        // Check for render-blocking resources in head
+        $blockingScripts = $this->crawler->filter('head script:not([defer]):not([async])')->count();
+
+        // Check if HTML appears minified (look for excessive whitespace/comments)
+        $hasHtmlComments = str_contains($this->html, '<!--');
+        $whitespaceRatio = (strlen($this->html) - strlen(preg_replace('/\s+/', '', $this->html))) / strlen($this->html);
 
         return [
-            'load_time' => $this->loadTime,
-            'page_size' => $pageSize,
-            'page_size_formatted' => $this->formatBytes($pageSize),
-            'scripts_count' => $scripts,
-            'stylesheets_count' => $stylesheets,
-            'images_count' => $images,
-            'total_resources' => $scripts + $stylesheets + $images,
+            'inline_styles_count' => $inlineStyles,
+            'elements_with_style_attr' => $elementsWithStyleAttr,
+            'inline_scripts_count' => $inlineScripts,
+            'inline_event_handlers' => $elementsWithOnclick,
+            'blocking_scripts_in_head' => $blockingScripts,
+            'has_html_comments' => $hasHtmlComments,
+            'whitespace_ratio' => round($whitespaceRatio, 3),
+            'appears_minified' => $whitespaceRatio < 0.05 && !$hasHtmlComments,
         ];
+    }
+
+    /**
+     * Analyze image optimization
+     */
+    private function analyzeImageOptimization(): array
+    {
+        $images = $this->crawler->filter('img');
+        $totalImages = $images->count();
+
+        if ($totalImages === 0) {
+            return [
+                'total_images' => 0,
+                'with_lazy_loading' => 0,
+                'with_dimensions' => 0,
+                'with_srcset' => 0,
+                'with_alt' => 0,
+                'modern_formats_detected' => false,
+            ];
+        }
+
+        $lazyImages = 0;
+        $withDimensions = 0;
+        $withSrcset = 0;
+        $withAlt = 0;
+        $modernFormats = false;
+
+        $images->each(function (Crawler $img) use (&$lazyImages, &$withDimensions, &$withSrcset, &$withAlt, &$modernFormats) {
+            // Check lazy loading
+            if ($img->attr('loading') === 'lazy') {
+                $lazyImages++;
+            }
+
+            // Check dimensions
+            if ($img->attr('width') && $img->attr('height')) {
+                $withDimensions++;
+            }
+
+            // Check srcset
+            if ($img->attr('srcset')) {
+                $withSrcset++;
+            }
+
+            // Check alt text
+            if ($img->attr('alt') !== null) {
+                $withAlt++;
+            }
+
+            // Check for modern formats (WebP, AVIF)
+            $src = $img->attr('src') ?? '';
+            if (str_contains($src, '.webp') || str_contains($src, '.avif')) {
+                $modernFormats = true;
+            }
+        });
+
+        // Check for <picture> elements (best practice for responsive images)
+        $pictureElements = $this->crawler->filter('picture')->count();
+
+        return [
+            'total_images' => $totalImages,
+            'with_lazy_loading' => $lazyImages,
+            'with_dimensions' => $withDimensions,
+            'with_srcset' => $withSrcset,
+            'with_alt' => $withAlt,
+            'picture_elements' => $pictureElements,
+            'modern_formats_detected' => $modernFormats,
+            'lazy_loading_percentage' => $totalImages > 0 ? round(($lazyImages / $totalImages) * 100, 1) : 0,
+            'dimensions_percentage' => $totalImages > 0 ? round(($withDimensions / $totalImages) * 100, 1) : 0,
+        ];
+    }
+
+    /**
+     * Analyze accessibility features
+     */
+    private function analyzeAccessibility(): array
+    {
+        // ARIA landmarks
+        $ariaLandmarks = $this->crawler->filter('[role="main"], [role="navigation"], [role="banner"], [role="contentinfo"], [role="complementary"]')->count();
+
+        // Semantic HTML5 landmarks
+        $semanticLandmarks = $this->crawler->filter('main, nav, header, footer, aside')->count();
+
+        // Form labels
+        $forms = $this->crawler->filter('form')->count();
+        $inputs = $this->crawler->filter('input:not([type="hidden"]), textarea, select')->count();
+        $labels = $this->crawler->filter('label')->count();
+
+        // Heading hierarchy
+        $headings = [
+            'h1' => $this->crawler->filter('h1')->count(),
+            'h2' => $this->crawler->filter('h2')->count(),
+            'h3' => $this->crawler->filter('h3')->count(),
+            'h4' => $this->crawler->filter('h4')->count(),
+            'h5' => $this->crawler->filter('h5')->count(),
+            'h6' => $this->crawler->filter('h6')->count(),
+        ];
+
+        // Check if heading hierarchy is properly maintained
+        $hasProperHierarchy = $this->checkHeadingHierarchy($headings);
+
+        // Buttons vs links
+        $buttons = $this->crawler->filter('button')->count();
+        $links = $this->crawler->filter('a')->count();
+
+        return [
+            'aria_landmarks' => $ariaLandmarks,
+            'semantic_landmarks' => $semanticLandmarks,
+            'has_landmarks' => $ariaLandmarks > 0 || $semanticLandmarks > 0,
+            'form_count' => $forms,
+            'input_count' => $inputs,
+            'label_count' => $labels,
+            'label_ratio' => $inputs > 0 ? round(($labels / $inputs), 2) : 0,
+            'headings' => $headings,
+            'has_proper_heading_hierarchy' => $hasProperHierarchy,
+            'button_count' => $buttons,
+            'link_count' => $links,
+        ];
+    }
+
+    /**
+     * Check if heading hierarchy is properly maintained
+     */
+    private function checkHeadingHierarchy(array $headings): bool
+    {
+        // Should have exactly one H1
+        if ($headings['h1'] !== 1) {
+            return false;
+        }
+
+        // Check no skipped levels
+        $hasContent = false;
+        foreach (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as $level) {
+            if ($headings[$level] > 0) {
+                if ($hasContent === false) {
+                    $hasContent = true;
+                }
+            } elseif ($hasContent) {
+                // Found a gap in hierarchy
+                $restHasContent = false;
+                foreach (array_slice(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], array_search($level, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])) as $laterLevel) {
+                    if ($headings[$laterLevel] > 0) {
+                        $restHasContent = true;
+                        break;
+                    }
+                }
+                if ($restHasContent) {
+                    return false; // Skipped a level
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Analyze best practices
+     */
+    private function analyzeBestPractices(): array
+    {
+        // Semantic HTML5 usage
+        $semanticTags = $this->crawler->filter('article, section, nav, header, footer, aside, main, figure, figcaption')->count();
+
+        // Deprecated tags
+        $deprecatedTags = $this->crawler->filter('font, center, marquee, blink, big, strike, tt')->count();
+
+        // Calculate DOM depth (approximate)
+        $domDepth = $this->calculateMaxDomDepth();
+
+        // Check for excessive DOM size
+        $totalElements = $this->crawler->filter('*')->count();
+
+        // Meta viewport
+        $hasViewport = $this->crawler->filter('meta[name="viewport"]')->count() > 0;
+
+        // Charset declaration
+        $hasCharset = $this->crawler->filter('meta[charset]')->count() > 0 ||
+                     str_contains($this->html, 'charset=');
+
+        // Doctype
+        $hasDoctype = str_starts_with(trim($this->html), '<!DOCTYPE') ||
+                     str_starts_with(trim($this->html), '<!doctype');
+
+        return [
+            'semantic_tags_count' => $semanticTags,
+            'deprecated_tags_count' => $deprecatedTags,
+            'max_dom_depth' => $domDepth,
+            'total_elements' => $totalElements,
+            'has_viewport_meta' => $hasViewport,
+            'has_charset_declaration' => $hasCharset,
+            'has_doctype' => $hasDoctype,
+            'excessive_dom_size' => $totalElements > 1500,
+            'excessive_dom_depth' => $domDepth > 32,
+        ];
+    }
+
+    /**
+     * Calculate maximum DOM depth (simplified approach)
+     */
+    private function calculateMaxDomDepth(): int
+    {
+        try {
+            $maxDepth = 0;
+            $this->crawler->filter('body *')->each(function (Crawler $node) use (&$maxDepth) {
+                $depth = 0;
+                $current = $node->getNode(0);
+
+                while ($current !== null && $current->parentNode !== null) {
+                    $depth++;
+                    $current = $current->parentNode;
+
+                    // Stop at body to avoid counting html/head
+                    if ($current->nodeName === 'body') {
+                        break;
+                    }
+                }
+
+                if ($depth > $maxDepth) {
+                    $maxDepth = $depth;
+                }
+            });
+
+            return $maxDepth;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Analyze mobile responsiveness
+     */
+    private function analyzeMobileResponsiveness(): array
+    {
+        // Check viewport meta
+        $hasViewport = $this->crawler->filter('meta[name="viewport"]')->count() > 0;
+
+        // Count media queries in inline styles and style tags
+        $mediaQueryCount = 0;
+        $styleBlocks = $this->crawler->filter('style')->each(function (Crawler $node) {
+            return $node->text();
+        });
+
+        foreach ($styleBlocks as $style) {
+            $mediaQueryCount += substr_count(strtolower($style), '@media');
+        }
+
+        // Also check for media queries in link rel stylesheets (can't read external CSS, but can check link attributes)
+        $mediaQueryCount += $this->crawler->filter('link[rel="stylesheet"][media]')->count();
+
+        // Detect mobile menu indicators
+        $mobileMenuIndicators = [
+            '.mobile-menu', '.mobile-nav', '.hamburger', '.menu-toggle',
+            '[class*="mobile-menu"]', '[class*="hamburger"]',
+            '.navbar-toggler', '.nav-toggle',
+        ];
+
+        $hasMobileMenu = false;
+        foreach ($mobileMenuIndicators as $selector) {
+            try {
+                if ($this->crawler->filter($selector)->count() > 0) {
+                    $hasMobileMenu = true;
+                    break;
+                }
+            } catch (\Exception $e) {
+                // Ignore invalid selectors
+            }
+        }
+
+        // Check for responsive image techniques
+        $responsiveImages = $this->crawler->filter('img[srcset], picture')->count();
+
+        // Detect touch-friendly indicators (buttons with reasonable sizing classes)
+        $touchFriendlyClasses = [
+            '[class*="btn-lg"]', '[class*="btn-large"]',
+            '[class*="touch-target"]', '[class*="tap-target"]',
+        ];
+
+        $hasTouchTargets = false;
+        foreach ($touchFriendlyClasses as $selector) {
+            try {
+                if ($this->crawler->filter($selector)->count() > 0) {
+                    $hasTouchTargets = true;
+                    break;
+                }
+            } catch (\Exception $e) {
+                // Ignore
+            }
+        }
+
+        return [
+            'has_viewport' => $hasViewport,
+            'media_query_count' => $mediaQueryCount,
+            'has_mobile_menu' => $hasMobileMenu,
+            'responsive_images' => $responsiveImages,
+            'has_touch_targets' => $hasTouchTargets,
+            'mobile_optimized' => $hasViewport && $mediaQueryCount > 0,
+        ];
+    }
+
+    /**
+     * Analyze CTA (Call-to-Action) effectiveness
+     */
+    private function analyzeCTAElements(): array
+    {
+        // Count buttons and links
+        $buttons = $this->crawler->filter('button, input[type="submit"], input[type="button"], .btn, [class*="button"]')->count();
+        $links = $this->crawler->filter('a')->count();
+
+        // Find phone numbers (tel: links and common phone patterns in text)
+        $telLinks = $this->crawler->filter('a[href^="tel:"]')->count();
+
+        // Simple Swedish phone number pattern in href
+        $phonePattern = '/(\+46|0)[\s-]?\d{1,3}[\s-]?\d{5,8}/';
+        $phoneInText = preg_match_all($phonePattern, $this->html);
+
+        // Find email addresses (mailto: links and patterns)
+        $mailtoLinks = $this->crawler->filter('a[href^="mailto:"]')->count();
+        $emailPattern = '/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/';
+        $emailInText = preg_match_all($emailPattern, $this->html);
+
+        // Detect contact forms
+        $contactForms = $this->crawler->filter('form')->count();
+        $formsWithEmail = $this->crawler->filter('form input[type="email"], form input[name*="email"], form input[id*="email"]')->count();
+
+        // Check if CTA appears in first screen (approximate - first 1000 chars of body HTML)
+        $bodyHtml = '';
+        try {
+            $bodyNode = $this->crawler->filter('body')->first();
+            if ($bodyNode->count() > 0) {
+                $bodyHtml = $bodyNode->html();
+            }
+        } catch (\Exception $e) {
+            // Ignore
+        }
+
+        $firstScreenHtml = substr($bodyHtml, 0, 1500);
+        $ctaInFirstScreen = (
+            stripos($firstScreenHtml, '<button') !== false ||
+            stripos($firstScreenHtml, 'type="submit"') !== false ||
+            stripos($firstScreenHtml, 'class="btn') !== false ||
+            stripos($firstScreenHtml, 'href="tel:') !== false ||
+            stripos($firstScreenHtml, 'href="mailto:') !== false
+        );
+
+        // Analyze button text quality (look for generic vs specific)
+        $genericButtonTexts = ['klicka här', 'click here', 'läs mer', 'read more', 'skicka', 'send', 'submit'];
+        $hasGenericButtons = false;
+
+        $buttonTexts = $this->crawler->filter('button, input[type="submit"], .btn')->each(function (Crawler $node) {
+            return strtolower(trim($node->text() ?: $node->attr('value') ?: ''));
+        });
+
+        foreach ($buttonTexts as $text) {
+            foreach ($genericButtonTexts as $generic) {
+                if ($text === $generic) {
+                    $hasGenericButtons = true;
+                    break 2;
+                }
+            }
+        }
+
+        return [
+            'button_count' => $buttons,
+            'link_count' => $links,
+            'phone_visible' => $telLinks > 0 || $phoneInText > 0,
+            'tel_links' => $telLinks,
+            'email_visible' => $mailtoLinks > 0 || $emailInText > 0,
+            'mailto_links' => $mailtoLinks,
+            'contact_forms' => $contactForms,
+            'forms_with_email_field' => $formsWithEmail,
+            'cta_in_first_screen' => $ctaInFirstScreen,
+            'has_generic_button_text' => $hasGenericButtons,
+            'cta_to_content_ratio' => $buttons > 0 ? round($buttons / max($links, 1), 3) : 0,
+        ];
+    }
+
+    /**
+     * Analyze trust signals
+     */
+    private function analyzeTrustSignals(): array
+    {
+        // SSL is checked in analyzeTechnical, but we'll note it here too for context
+        $hasSSL = str_contains($this->html, 'https://');
+
+        // Privacy policy links (Swedish and English)
+        $privacyPolicyKeywords = [
+            'integritetspolicy', 'privacy policy', 'integritet', 'privacy',
+            'personuppgiftspolicy', 'dataskyddspolicy', 'gdpr',
+        ];
+
+        $hasPrivacyPolicy = false;
+        $privacyLinks = $this->crawler->filter('a')->each(function (Crawler $node) {
+            return strtolower($node->text().' '.$node->attr('href'));
+        });
+
+        foreach ($privacyLinks as $linkText) {
+            foreach ($privacyPolicyKeywords as $keyword) {
+                if (str_contains($linkText, $keyword)) {
+                    $hasPrivacyPolicy = true;
+                    break 2;
+                }
+            }
+        }
+
+        // Cookie consent banners (common class names and text)
+        $cookieConsentIndicators = [
+            '[class*="cookie"]', '[id*="cookie"]',
+            '[class*="consent"]', '[id*="consent"]',
+            '[class*="gdpr"]', '[id*="gdpr"]',
+        ];
+
+        $hasCookieConsent = false;
+        foreach ($cookieConsentIndicators as $selector) {
+            try {
+                if ($this->crawler->filter($selector)->count() > 0) {
+                    $hasCookieConsent = true;
+                    break;
+                }
+            } catch (\Exception $e) {
+                // Ignore
+            }
+        }
+
+        // Also check text content for cookie-related words
+        if (! $hasCookieConsent) {
+            $cookieTextPatterns = ['vi använder cookies', 'we use cookies', 'denna webbplats använder cookies'];
+            foreach ($cookieTextPatterns as $pattern) {
+                if (stripos($this->html, $pattern) !== false) {
+                    $hasCookieConsent = true;
+                    break;
+                }
+            }
+        }
+
+        // Footer company info (Swedish patterns)
+        $footerContent = '';
+        try {
+            $footer = $this->crawler->filter('footer');
+            if ($footer->count() > 0) {
+                $footerContent = strtolower($footer->text());
+            }
+        } catch (\Exception $e) {
+            // Ignore
+        }
+
+        // Look for org number pattern (XXXXXX-XXXX)
+        $hasOrgNumber = preg_match('/\d{6}-?\d{4}/', $footerContent);
+
+        // Look for address indicators
+        $addressKeywords = ['address', 'adress', 'väg', 'gata', 'box', 'sweden', 'sverige'];
+        $hasAddress = false;
+        foreach ($addressKeywords as $keyword) {
+            if (str_contains($footerContent, $keyword)) {
+                $hasAddress = true;
+                break;
+            }
+        }
+
+        // Certification badges (common patterns)
+        $certificationIndicators = [
+            'iso', 'ssl', 'secure', 'certified', 'certifierad',
+            'trustpilot', 'verified', 'verifierad',
+        ];
+
+        $hasCertifications = false;
+        foreach ($certificationIndicators as $keyword) {
+            if (stripos($this->html, $keyword) !== false) {
+                $hasCertifications = true;
+                break;
+            }
+        }
+
+        return [
+            'has_ssl' => $hasSSL,
+            'has_privacy_policy' => $hasPrivacyPolicy,
+            'has_cookie_consent' => $hasCookieConsent,
+            'footer_has_company_info' => $hasAddress || $hasOrgNumber,
+            'has_org_number' => (bool) $hasOrgNumber,
+            'has_address' => $hasAddress,
+            'displays_certifications' => $hasCertifications,
+            'trust_score' => $this->calculateTrustScore([
+                'ssl' => $hasSSL,
+                'privacy' => $hasPrivacyPolicy,
+                'cookie' => $hasCookieConsent,
+                'company_info' => $hasAddress || $hasOrgNumber,
+            ]),
+        ];
+    }
+
+    /**
+     * Calculate trust score (0-100)
+     */
+    private function calculateTrustScore(array $signals): int
+    {
+        $score = 0;
+        $score += $signals['ssl'] ? 40 : 0; // SSL is critical
+        $score += $signals['privacy'] ? 20 : 0;
+        $score += $signals['cookie'] ? 20 : 0;
+        $score += $signals['company_info'] ? 20 : 0;
+
+        return $score;
     }
 
     /**

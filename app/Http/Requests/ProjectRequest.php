@@ -58,6 +58,8 @@ class ProjectRequest extends FormRequest
             'repo_url' => ['nullable', 'url', 'max:500'],
             'technologies' => ['nullable', 'array'],
             'technologies.*' => ['string', 'max:100'],
+            'client_name' => ['nullable', 'string', 'max:100'],
+            'testimonial' => ['nullable', 'string', 'max:500'],
             'status' => ['required', Rule::enum(ProjectStatus::class)],
             'featured' => ['boolean'],
             'sort_order' => ['integer', 'min:0'],

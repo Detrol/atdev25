@@ -8,10 +8,12 @@
             <p class="text-xl text-gray-600 dark:text-gray-400">En samling av mina senaste arbeten</p>
         </div>
 
-        <div class="grid md:grid-cols-12 gap-6">
-            @forelse($projects as $index => $project)
-            <div class="group relative {{ $index === 0 ? 'md:col-span-12' : 'md:col-span-6' }} transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02]">
-                <div class="relative w-full {{ $index === 0 ? 'h-96' : 'h-80' }} rounded-3xl overflow-hidden">
+        <!-- Consistent 3-column grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($projects as $project)
+            <div class="group relative transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer"
+                 onclick="openProjectModal('{{ $project->slug }}')">
+                <div class="relative w-full h-80 rounded-3xl overflow-hidden">
                     <!-- Gradient border on hover -->
                     <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -32,32 +34,65 @@
 
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
 
-                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                            <h3 class="text-3xl font-bold text-white mb-3">
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                            <!-- Metadata badges at top -->
+                            <div class="absolute top-4 left-4 right-4 flex flex-wrap gap-2">
+                                @if($project->client_name)
+                                <span class="px-3 py-1 bg-purple-500/90 backdrop-blur-sm text-white text-xs font-medium rounded-full flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    {{ $project->client_name }}
+                                </span>
+                                @endif
+
+                                @if($project->live_url)
+                                <span class="px-3 py-1 bg-green-500/90 backdrop-blur-sm text-white text-xs font-medium rounded-full flex items-center gap-1">
+                                    <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                                    Live
+                                </span>
+                                @endif
+                            </div>
+
+                            <h3 class="text-2xl font-bold text-white mb-2">
                                 {{ $project->title }}
                             </h3>
 
-                            <p class="text-white/90 mb-6 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <!-- Summary: always visible on mobile, hover on desktop -->
+                            <p class="text-white/90 mb-4 line-clamp-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                                 {{ $project->summary }}
                             </p>
 
+                            <!-- Technologies -->
                             @if($project->technologies)
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                @foreach((is_array($project->technologies) ? $project->technologies : json_decode($project->technologies, true)) as $tech)
-                                <span class="px-3 py-1 bg-white/20 border border-white/30 text-white text-sm rounded-full">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                @foreach(array_slice((is_array($project->technologies) ? $project->technologies : json_decode($project->technologies, true)), 0, 3) as $tech)
+                                <span class="px-3 py-1 bg-white/20 border border-white/30 text-white text-xs rounded-full">
                                     {{ trim($tech) }}
                                 </span>
                                 @endforeach
+                                @if(count(is_array($project->technologies) ? $project->technologies : json_decode($project->technologies, true)) > 3)
+                                <span class="px-3 py-1 bg-white/10 text-white/70 text-xs rounded-full">
+                                    +{{ count(is_array($project->technologies) ? $project->technologies : json_decode($project->technologies, true)) - 3 }}
+                                </span>
+                                @endif
                             </div>
                             @endif
 
-                            <a href="/projects/{{ $project->slug }}"
-                               aria-label="Visa projekt: {{ $project->title }}"
-                               class="absolute bottom-8 right-8 w-14 h-14 bg-white/20 border border-white/30 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30 hover:scale-110">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <!-- Date -->
+                            <p class="text-white/60 text-xs mb-3">
+                                {{ \Carbon\Carbon::parse($project->created_at)->locale('sv')->isoFormat('MMMM YYYY') }}
+                            </p>
+
+                            <!-- CTA Button - Always visible -->
+                            <button
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 border border-white/30 text-white rounded-full font-medium transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:scale-105"
+                                aria-label="Visa projekt: {{ $project->title }}">
+                                <span>Se projekt</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -170,6 +205,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Project Modal -->
+    <x-home.project-modal :projects="$projects" />
 </section>
 
 @push('scripts')

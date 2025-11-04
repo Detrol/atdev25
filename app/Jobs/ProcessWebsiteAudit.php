@@ -70,7 +70,7 @@ class ProcessWebsiteAudit implements ShouldQueue
             $this->audit->update([
                 'ai_report' => $analysis['ai_report'],
                 'seo_score' => $analysis['seo_score'],
-                'performance_score' => $analysis['performance_score'],
+                'technical_score' => $analysis['technical_score'],
                 'overall_score' => $analysis['overall_score'],
             ]);
 
