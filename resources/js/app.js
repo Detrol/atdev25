@@ -4,6 +4,10 @@ import intersect from '@alpinejs/intersect';
 import persist from '@alpinejs/persist';
 import collapse from '@alpinejs/collapse';
 
+// Import D3.js for Tech Stack Visualizer
+import * as d3 from 'd3';
+window.d3 = d3;
+
 // Import demo components before Alpine starts
 import './demos/product-viewer.js';
 import './demos/before-after-slider.js';

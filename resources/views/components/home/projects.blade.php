@@ -173,9 +173,6 @@
 </section>
 
 @push('scripts')
-<!-- D3.js Library -->
-<script src="https://d3js.org/d3.v7.min.js"></script>
-
 <script>
 // Tech Stack Modal State
 let techStackData = null;
