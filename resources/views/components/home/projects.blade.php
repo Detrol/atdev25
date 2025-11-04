@@ -17,8 +17,8 @@
 
                     <!-- Content wrapper -->
                     <div class="absolute inset-[2px] rounded-3xl h-full overflow-hidden bg-white dark:bg-gray-900">
-                        @if($project->cover_image)
-                        <img src="{{ asset('storage/' . $project->cover_image) }}"
+                        @if($project->cover_image || $project->screenshot_path)
+                        <img src="{{ asset('storage/' . ($project->cover_image ?? $project->screenshot_path)) }}"
                              alt="Skärmdump av projektet {{ $project->title }} - {{ $project->summary }}"
                              loading="lazy"
                              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">

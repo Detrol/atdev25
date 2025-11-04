@@ -44,30 +44,11 @@ class ProjectController extends Controller
      */
     public function store(ProjectRequest $request)
     {
-        Log::info('ProjectController: Creating new project', [
-            'title' => $request->input('title'),
-            'live_url' => $request->input('live_url'),
-        ]);
-
         $project = Project::create($request->validated());
-
-        Log::info('ProjectController: Project created', [
-            'project_id' => $project->id,
-            'project_slug' => $project->slug,
-        ]);
 
         // Dispatch screenshot job if live_url provided
         if ($project->live_url) {
-            Log::info('ProjectController: Auto-dispatching screenshot job for new project', [
-                'project_id' => $project->id,
-                'live_url' => $project->live_url,
-            ]);
-
             TakeProjectScreenshot::dispatch($project->id);
-        } else {
-            Log::info('ProjectController: No screenshot job - no live_url provided', [
-                'project_id' => $project->id,
-            ]);
         }
 
         return redirect()->route('admin.projects.index')
@@ -100,30 +81,11 @@ class ProjectController extends Controller
      */
     public function update(ProjectRequest $request, Project $project)
     {
-        Log::info('ProjectController: Updating project', [
-            'project_id' => $project->id,
-            'project_slug' => $project->slug,
-            'old_live_url' => $project->live_url,
-            'new_live_url' => $request->input('live_url'),
-        ]);
-
         $project->update($request->validated());
 
         // Dispatch screenshot job if live_url changed
         if ($project->wasChanged('live_url') && $project->live_url) {
-            Log::info('ProjectController: Auto-dispatching screenshot job - live_url changed', [
-                'project_id' => $project->id,
-                'old_url' => $project->getOriginal('live_url'),
-                'new_url' => $project->live_url,
-            ]);
-
             TakeProjectScreenshot::dispatch($project->id);
-        } else {
-            Log::info('ProjectController: No screenshot job - live_url unchanged or empty', [
-                'project_id' => $project->id,
-                'live_url_changed' => $project->wasChanged('live_url'),
-                'has_live_url' => !empty($project->live_url),
-            ]);
         }
 
         return redirect()->route('admin.projects.index')
@@ -146,33 +108,12 @@ class ProjectController extends Controller
      */
     public function screenshot(Project $project)
     {
-        Log::info('ProjectController: Screenshot requested', [
-            'project_id' => $project->id,
-            'project_slug' => $project->slug,
-            'project_title' => $project->title,
-            'live_url' => $project->live_url,
-            'user_id' => auth()->id(),
-        ]);
-
         if (! $project->live_url) {
-            Log::warning('ProjectController: Screenshot rejected - no live URL', [
-                'project_id' => $project->id,
-            ]);
-
             return redirect()->back()
                 ->with('error', 'Projektet saknar live URL!');
         }
 
-        Log::info('ProjectController: Dispatching TakeProjectScreenshot job', [
-            'project_id' => $project->id,
-            'queue_connection' => config('queue.default'),
-        ]);
-
         TakeProjectScreenshot::dispatch($project->id);
-
-        Log::info('ProjectController: Screenshot job dispatched successfully', [
-            'project_id' => $project->id,
-        ]);
 
         return redirect()->back()
             ->with('success', 'Screenshot-jobb startat!');

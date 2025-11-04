@@ -30,83 +30,36 @@ class TakeProjectScreenshot implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('TakeProjectScreenshot: Job started', [
-            'project_id' => $this->projectId,
-        ]);
-
         // Fetch project from database
         $project = Project::find($this->projectId);
 
         if (! $project) {
-            Log::error('TakeProjectScreenshot: Project not found', [
-                'project_id' => $this->projectId,
-            ]);
+            Log::error('Screenshot failed: Project not found', ['project_id' => $this->projectId]);
             return;
         }
-
-        Log::info('TakeProjectScreenshot: Project loaded', [
-            'project_id' => $project->id,
-            'project_slug' => $project->slug,
-            'project_title' => $project->title,
-        ]);
 
         if (! $project->live_url) {
-            Log::warning('TakeProjectScreenshot: Skipped - no live_url', [
-                'project_id' => $project->id,
-            ]);
-
             return;
         }
 
-        Log::info('TakeProjectScreenshot: Preparing screenshot', [
-            'project_id' => $project->id,
-            'live_url' => $project->live_url,
-        ]);
-
         try {
-            $filename = 'screenshots/'.$project->slug.'-'.time().'.png';
+            // Generate optimized filename with webp format
+            $filename = 'screenshots/'.$project->slug.'-'.time().'.webp';
             $path = storage_path('app/public/'.$filename);
-
-            Log::info('TakeProjectScreenshot: File paths prepared', [
-                'project_id' => $project->id,
-                'filename' => $filename,
-                'full_path' => $path,
-            ]);
 
             // Ensure directory exists
             $directory = dirname($path);
             if (! file_exists($directory)) {
-                Log::info('TakeProjectScreenshot: Creating directory', [
-                    'directory' => $directory,
-                ]);
                 mkdir($directory, 0755, true);
             }
 
-            Log::info('TakeProjectScreenshot: Directory ready', [
-                'directory' => $directory,
-                'exists' => file_exists($directory),
-                'is_dir' => is_dir($directory),
-                'writable' => is_writable($directory),
-            ]);
-
-            // Take screenshot (matching WebsiteDataCollector implementation)
-            Log::info('TakeProjectScreenshot: Starting Browsershot', [
-                'project_id' => $project->id,
-                'url' => $project->live_url,
-            ]);
-
+            // Take screenshot with optimization
             Browsershot::url($project->live_url)
                 ->waitUntilNetworkIdle()
                 ->windowSize(1920, 1080)
+                ->setScreenshotType('webp', 85)  // WebP with 85% quality for optimization
                 ->timeout(30)
                 ->save($path);
-
-            Log::info('TakeProjectScreenshot: Screenshot saved', [
-                'project_id' => $project->id,
-                'path' => $path,
-                'file_exists' => file_exists($path),
-                'file_size' => file_exists($path) ? filesize($path) : 0,
-            ]);
 
             // Update project
             $project->update([
@@ -114,28 +67,15 @@ class TakeProjectScreenshot implements ShouldQueue
                 'screenshot_taken_at' => now(),
             ]);
 
-            Log::info('TakeProjectScreenshot: SUCCESS - Screenshot taken and saved', [
+            Log::info('Screenshot captured successfully', [
                 'project_id' => $project->id,
-                'path' => $filename,
-                'full_path' => $path,
-                'file_size' => file_exists($path) ? filesize($path).' bytes' : 'unknown',
+                'filename' => $filename,
             ]);
         } catch (CouldNotTakeBrowsershot $e) {
-            Log::error('TakeProjectScreenshot: FAILED - Browsershot exception', [
+            Log::error('Screenshot failed', [
                 'project_id' => $project->id,
                 'url' => $project->live_url,
-                'error_message' => $e->getMessage(),
-                'error_trace' => $e->getTraceAsString(),
-            ]);
-
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error('TakeProjectScreenshot: FAILED - Unexpected exception', [
-                'project_id' => $project->id,
-                'url' => $project->live_url,
-                'error_type' => get_class($e),
-                'error_message' => $e->getMessage(),
-                'error_trace' => $e->getTraceAsString(),
+                'error' => $e->getMessage(),
             ]);
 
             throw $e;
