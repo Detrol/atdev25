@@ -30,25 +30,6 @@
 
 {{-- Structured Data (JSON-LD) --}}
 <script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-        @foreach($items as $index => $item)
-        {
-            "@type": "ListItem",
-            "position": {{ $index + 1 }},
-            "name": "{{ $item['label'] }}"
-            @if(!empty($item['url']))
-            ,
-            "item": "{{ url($item['url']) }}"
-            @endif
-        }
-        @if($index < count($items) - 1)
-        ,
-        @endif
-        @endforeach
-    ]
-}
+{!! $getJsonLd() !!}
 </script>
 @endif
