@@ -6,7 +6,7 @@
     <p class="mt-2 text-sm text-gray-700">Uppdatera projektinformation</p>
 </div>
 
-<form action="/admin/projects/{{ $project->id }}" method="POST" class="space-y-8 bg-white shadow sm:rounded-lg">
+<form action="/admin/projects/{{ $project->slug }}" method="POST" class="space-y-8 bg-white shadow sm:rounded-lg">
     @csrf
     @method('PUT')
     
@@ -119,7 +119,7 @@
                 <div>
                     <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Nuvarande Screenshot</label>
                     <img src="{{ asset('storage/' . $project->screenshot_path) }}" alt="Screenshot" class="max-w-md rounded-lg shadow-lg">
-                    <form action="/admin/projects/{{ $project->id }}/screenshot" method="POST" class="mt-4">
+                    <form action="/admin/projects/{{ $project->slug }}/screenshot" method="POST" class="mt-4">
                         @csrf
                         <button type="submit" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                             Uppdatera Screenshot
