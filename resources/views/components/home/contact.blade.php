@@ -45,7 +45,7 @@
                 <div>
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Nytt hos mig? Testa riskfritt!</h3>
                     <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                        För projekt under <strong>15 000 kr</strong> tar jag inget förskott.
+                        För projekt under <strong>5 000 kr</strong> tar jag inget förskott.
                         Du betalar först när du är 100% nöjd med leveransen.
                         Perfekt för att se hur vi jobbar tillsammans!
                     </p>
