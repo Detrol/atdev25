@@ -115,14 +115,19 @@
                 </div>
             </div>
 
-            @if($project->screenshot_path)
+            @if($project->live_url)
                 <div>
-                    <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Nuvarande Screenshot</label>
-                    <img src="{{ asset('storage/' . $project->screenshot_path) }}" alt="Screenshot" class="max-w-md rounded-lg shadow-lg">
+                    @if($project->screenshot_path)
+                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Nuvarande Screenshot</label>
+                        <img src="{{ asset('storage/' . $project->screenshot_path) }}" alt="Screenshot" class="max-w-md rounded-lg shadow-lg">
+                    @else
+                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Screenshot</label>
+                        <p class="text-sm text-gray-500 mb-4">Ingen screenshot tagen ännu. Klicka på knappen nedan för att ta en screenshot av live-sidan.</p>
+                    @endif
                     <form action="/admin/projects/{{ $project->slug }}/screenshot" method="POST" class="mt-4">
                         @csrf
-                        <button type="submit" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            Uppdatera Screenshot
+                        <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                            {{ $project->screenshot_path ? 'Uppdatera Screenshot' : 'Ta Screenshot' }}
                         </button>
                     </form>
                 </div>
