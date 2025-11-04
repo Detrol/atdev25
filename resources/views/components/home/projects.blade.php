@@ -76,7 +76,62 @@
         </div>
 
         <!-- Tech Stack CTA -->
-        <div class="mt-16 text-center" x-data="{ techStackOpen: false }">
+        <div class="mt-16 text-center" x-data="{
+            techStackOpen: false,
+            techDataLoaded: false,
+            init() {
+                this.$watch('techStackOpen', value => {
+                    if (value && !this.techDataLoaded) {
+                        this.loadTechStack();
+                    }
+                });
+            },
+            loadTechStack() {
+                // Load D3.js if not already loaded
+                if (typeof d3 === 'undefined') {
+                    const script = document.createElement('script');
+                    script.src = 'https://d3js.org/d3.v7.min.js';
+                    script.onload = () => this.initTechGraph();
+                    document.head.appendChild(script);
+                } else {
+                    this.initTechGraph();
+                }
+            },
+            async initTechGraph() {
+                try {
+                    const response = await fetch('/api/tech-stack');
+                    const techData = await response.json();
+                    this.techDataLoaded = true;
+
+                    // Render D3 graph
+                    window.renderTechGraph(techData);
+
+                    // Render stats
+                    this.renderStats(techData.technologies);
+                } catch (error) {
+                    console.error('Failed to load tech stack data:', error);
+                }
+            },
+            renderStats(technologies) {
+                const container = document.getElementById('tech-stats-modal');
+                container.innerHTML = technologies.map(tech => `
+                    <div class=\"border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow\">
+                        <div class=\"flex items-center justify-between mb-2\">
+                            <h4 class=\"text-lg font-semibold text-gray-900 dark:text-white\">${tech.name}</h4>
+                            <span class=\"bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded\">
+                                ${tech.count} projekt
+                            </span>
+                        </div>
+                        <div class=\"text-sm text-gray-600 dark:text-gray-400\">
+                            <p class=\"font-medium mb-1\">Används i:</p>
+                            <ul class=\"list-disc list-inside space-y-1\">
+                                ${tech.projects.map(project => `<li class=\"text-gray-700 dark:text-gray-300\">${project}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }">
             <div class="relative inline-block">
                 <div class="absolute inset-0 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
                 <button @click="techStackOpen = true" class="relative px-10 py-5 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 text-white rounded-3xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-105 active:scale-95 flex items-center gap-3">
@@ -170,5 +225,152 @@
     </div>
 </section>
 
+@push('scripts')
+<script>
+// Tech Stack D3.js Visualization
+window.renderTechGraph = function(techData) {
+    // Clear any existing graph
+    d3.select('#tech-graph-modal').selectAll('*').remove();
+
+    // Color mapping for categories
+    const colors = {
+        frontend: '#3B82F6',  // blue
+        backend: '#10B981',   // green
+        database: '#8B5CF6',  // purple
+        devops: '#F59E0B',    // orange
+        other: '#6B7280'      // gray
+    };
+
+    // Set up SVG
+    const container = document.getElementById('tech-graph-modal');
+    const width = container.clientWidth;
+    const height = 500;
+
+    const svg = d3.select('#tech-graph-modal')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox', [0, 0, width, height]);
+
+    // Create tooltip
+    const tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'fixed bg-gray-900 text-white px-3 py-2 rounded-lg text-sm shadow-lg pointer-events-none opacity-0 transition-opacity duration-200 z-[9999]');
+
+    // Create force simulation
+    const simulation = d3.forceSimulation(techData.nodes)
+        .force('link', d3.forceLink(techData.links)
+            .id(d => d.id)
+            .distance(d => 100 - (d.value * 10))) // Stronger links = closer together
+        .force('charge', d3.forceManyBody().strength(-300))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(d => Math.sqrt(d.count) * 10 + 10));
+
+    // Draw links
+    const link = svg.append('g')
+        .selectAll('line')
+        .data(techData.links)
+        .join('line')
+        .attr('stroke', '#cbd5e1')
+        .attr('stroke-opacity', d => 0.3 + (d.value * 0.1))
+        .attr('stroke-width', d => Math.sqrt(d.value));
+
+    // Draw nodes
+    const node = svg.append('g')
+        .selectAll('g')
+        .data(techData.nodes)
+        .join('g')
+        .call(d3.drag()
+            .on('start', dragstarted)
+            .on('drag', dragged)
+            .on('end', dragended));
+
+    // Add circles to nodes
+    node.append('circle')
+        .attr('r', d => Math.sqrt(d.count) * 10 + 5)
+        .attr('fill', d => colors[d.group])
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 2)
+        .style('cursor', 'pointer')
+        .on('mouseover', function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('r', Math.sqrt(d.count) * 10 + 8);
+
+            tooltip
+                .style('opacity', 1)
+                .html(`<strong>${d.name}</strong><br/>${d.count} ${d.count === 1 ? 'projekt' : 'projekt'}`)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 10) + 'px');
+        })
+        .on('mouseout', function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr('r', Math.sqrt(d.count) * 10 + 5);
+
+            tooltip.style('opacity', 0);
+        });
+
+    // Add text labels to nodes
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    node.append('text')
+        .text(d => d.name)
+        .attr('x', 0)
+        .attr('y', d => Math.sqrt(d.count) * 10 + 20)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '12px')
+        .attr('font-weight', '600')
+        .attr('fill', isDarkMode ? '#e5e7eb' : '#1f2937')
+        .style('pointer-events', 'none')
+        .style('user-select', 'none');
+
+    // Update positions on simulation tick
+    simulation.on('tick', () => {
+        link
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+
+        node
+            .attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+
+    // Drag functions
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+    // Responsive resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const newWidth = container.clientWidth;
+            svg.attr('width', newWidth)
+                .attr('viewBox', [0, 0, newWidth, height]);
+
+            simulation.force('center', d3.forceCenter(newWidth / 2, height / 2));
+            simulation.alpha(0.3).restart();
+        }, 250);
+    });
+};
+</script>
+@endpush
 
 <!-- Interactive Demos CTA Section -->
