@@ -60,12 +60,19 @@ class ProjectController extends Controller
      * Data contract:
      * - project: Project
      * - statuses: array (ProjectStatus enum values)
+     * - technologiesString: string (comma-separated)
      */
     public function edit(Project $project)
     {
         $statuses = ProjectStatus::cases();
 
-        return view('admin.projects.edit', compact('project', 'statuses'));
+        // Convert technologies array to comma-separated string for the form
+        $oldTechnologies = old('technologies', $project->technologies ?? []);
+        $technologiesString = is_array($oldTechnologies)
+            ? implode(', ', $oldTechnologies)
+            : $oldTechnologies;
+
+        return view('admin.projects.edit', compact('project', 'statuses', 'technologiesString'));
     }
 
     /**

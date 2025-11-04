@@ -50,8 +50,8 @@
 
             <div>
                 <label for="technologies" class="block text-sm font-medium leading-6 text-gray-900">Teknologier</label>
-                <input type="text" name="technologies" id="technologies" 
-                    value="{{ old('technologies', is_array($project->technologies) ? implode(', ', $project->technologies) : '') }}"
+                <input type="text" name="technologies" id="technologies"
+                    value="{{ $technologiesString }}"
                     class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-3"
                     placeholder="Laravel, Vue.js, Tailwind CSS">
                 <p class="mt-2 text-sm text-gray-500">Separera med kommatecken</p>
