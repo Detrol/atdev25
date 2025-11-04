@@ -36,6 +36,7 @@
 
             <a href="/#services" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Tjänster</a>
             <a href="/#projects" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Projekt</a>
+            <a href="/#faq" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">FAQ</a>
             <a href="/demos" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? '{{ $currentPage === 'demos' ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' }}' : '{{ $currentPage === 'demos' ? 'text-white font-semibold' : 'text-white/80 hover:text-white' }}'">Demos</a>
             <a href="/#contact" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Kontakt</a>
 
@@ -75,6 +76,7 @@
 
             <a href="/#services" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Tjänster</a>
             <a href="/#projects" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Projekt</a>
+            <a href="/#faq" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">FAQ</a>
             <a href="/demos" class="block py-2 font-medium transition-colors {{ $currentPage === 'demos' ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-900 dark:text-white hover:text-purple-600' }}">Demos</a>
             <a href="/#contact" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Kontakt</a>
 
