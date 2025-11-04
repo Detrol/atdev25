@@ -6,8 +6,16 @@
     <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6 py-32 text-center text-white" style="min-height: 600px;">
         <div class="space-y-8">
-            <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 pulse-glow fade-in">
-                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span><span class="text-sm font-medium">Tillgänglig för nya projekt</span>
+            <div class="flex flex-col gap-3 justify-center items-center fade-in">
+                <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 pulse-glow">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span><span class="text-sm font-medium">Tillgänglig för nya projekt</span>
+                </div>
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 backdrop-blur-md rounded-full border border-purple-400/30">
+                    <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span class="text-xs font-semibold text-white">Småjobb utan förskott</span>
+                </div>
             </div>
 
             @if(!empty($avatarMedia))

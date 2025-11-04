@@ -38,9 +38,37 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Nej, jag bygger skräddarsydda lösningar med Laravel istället för WordPress. Detta ger bättre prestanda, säkerhet och flexibilitet. Om du behöver kunna redigera innehåll själv bygger jag ett intuitivt admin-gränssnitt specifikt för dina behov - ofta enklare och snabbare än WordPress.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <p class="font-semibold text-gray-900 dark:text-white">Nej, jag bygger skräddarsydda lösningar med Laravel.</p>
+
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Varför inte WordPress?</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                    <span><strong>Bättre prestanda</strong> - Snabbare laddningstider</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                    </svg>
+                                    <span><strong>Högre säkerhet</strong> - Färre sårbarheter</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
+                                    </svg>
+                                    <span><strong>Total flexibilitet</strong> - Exakt vad du behöver, inget annat</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p class="text-sm">
+                            <strong>Behöver du redigera innehåll själv?</strong> Jag bygger ett intuitivt admin-gränssnitt specifikt för dina behov - ofta enklare och snabbare än WordPress.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -60,9 +88,41 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Tack vare moderna AI-verktyg kan jag idag arbeta effektivt med nästan vilket programmeringsspråk som helst. Mina primära verktyg är Laravel (PHP), Vue, Alpine och React, men jag anpassar tech-stacken efter projektets behov. AI-assistans gör att jag snabbt kan leverera högkvalitativ kod även i mindre vanliga språk.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Mina primära verktyg:</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span><strong>Laravel (PHP)</strong> - Backend-ramverk</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span><strong>Vue, Alpine & React</strong> - Frontend-ramverk</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span><strong>MySQL, PostgreSQL</strong> - Databaser</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span><strong>Tailwind CSS</strong> - Modern styling</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p class="text-sm bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-700/30">
+                            <strong>AI-accelererad utveckling:</strong> Tack vare moderna AI-verktyg kan jag snabbt arbeta effektivt med nästan vilket programmeringsspråk som helst. Jag anpassar tech-stacken efter projektets behov och kan leverera högkvalitativ kod även i mindre vanliga språk.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -82,9 +142,53 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 3" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Använd <a href="#" @click.prevent="document.querySelector('.price-calculator')?.scrollIntoView({ behavior: 'smooth' })" class="text-purple-600 dark:text-purple-400 hover:underline font-semibold">priskalkylatorn</a> på denna sida och beskriv ditt projekt så detaljerat som möjligt! Ju mer information du ger om funktioner, integrationer och komplexitet, desto mer exakt blir uppskattningen. Kalkylatorn använder AI för att analysera dina behov och ge en realistisk estimering direkt.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border border-green-200 dark:border-green-700/30">
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                Snabbaste sättet: Använd AI-priskalkylatorn
+                            </h4>
+                            <p class="text-sm mb-3">
+                                <a href="#" @click.prevent="document.querySelector('.price-calculator')?.scrollIntoView({ behavior: 'smooth' })" class="text-green-700 dark:text-green-300 hover:underline font-semibold">Priskalkylatorn</a> använder AI för att analysera dina behov och ge en realistisk estimering direkt - oftast inom några sekunder!
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">För bästa resultat, beskriv:</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                    </svg>
+                                    <span><strong>Vilka funktioner</strong> behöver webbplatsen? (inloggning, formulär, betalningar...)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
+                                    </svg>
+                                    <span><strong>Integrationer</strong> - Externa system som ska kopplas in</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    <span><strong>Användarroller</strong> - Behöver olika personer olika rättigheter?</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span><strong>Design & komplexitet</strong> - Enkel/standard/avancerad design</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p class="text-sm text-gray-500 dark:text-gray-500">
+                            <strong>Tips:</strong> Ju mer detaljer, desto exaktare pris! Kalkylatorn är helt gratis att använda.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -104,9 +208,61 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Jag hjälper dig med grunderna i både SEO och GDPR. Alla webbplatser jag bygger är SEO-optimerade från start med rätt metatagg, semantisk HTML och snabba laddningstider. För GDPR implementerar jag cookie-hantering och privacy policy. Dock bör du alltid konsultera ett advokatbyrå angående GDPR för att vara säker på att din webbplats drivs enligt juridiska villkor - detta är inget jag tar ansvar för.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm flex items-center gap-2">
+                                <svg class="w-4 h-4 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                SEO-optimering ingår alltid:
+                            </h4>
+                            <ul class="space-y-1.5 text-sm ml-6">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-pink-600 dark:text-pink-400">•</span>
+                                    <span>Korrekta metatagg (title, description, Open Graph)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-pink-600 dark:text-pink-400">•</span>
+                                    <span>Semantisk HTML-struktur</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-pink-600 dark:text-pink-400">•</span>
+                                    <span>Snabba laddningstider (Core Web Vitals)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-pink-600 dark:text-pink-400">•</span>
+                                    <span>Mobilanpassad design</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm flex items-center gap-2">
+                                <svg class="w-4 h-4 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                GDPR-grundläggande:
+                            </h4>
+                            <ul class="space-y-1.5 text-sm ml-6">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-pink-600 dark:text-pink-400">•</span>
+                                    <span>Cookie-consent banner</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-pink-600 dark:text-pink-400">•</span>
+                                    <span>Integritetspolicy (Privacy Policy)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-pink-600 dark:text-pink-400">•</span>
+                                    <span>Säker datahantering</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p class="text-xs bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-700/30">
+                            <strong>OBS:</strong> För fullständig GDPR-compliance bör du alltid konsultera en jurist. Jag implementerar tekniska lösningar, men tar inget juridiskt ansvar.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -126,9 +282,47 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Ja! Tack vare AI-verktyg kan jag idag hjälpa till med både grafisk design och logotypskapande. Jag arbetar gärna kreativt tillsammans med dig för att ta fram en visuell identitet som matchar din verksamhet. Allt från mockups till färdiga designkoncept ingår i processen. Om du föredrar en professionell grafisk designer kan jag även rekommendera <a href="https://www.fiverr.com" target="_blank" rel="noopener" class="text-purple-600 dark:text-purple-400 hover:underline">Fiverr</a>, där du kan hitta designers till bra priser.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <p class="font-semibold text-gray-900 dark:text-white">Ja! Tack vare AI-verktyg kan jag hjälpa till med både design och logotyp.</p>
+
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Vad jag kan hjälpa till med:</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                                    </svg>
+                                    <span><strong>Logotypdesign</strong> med AI-assistans</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                                    </svg>
+                                    <span><strong>Grafisk profil</strong> - Färgpalett och typsnitt</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span><strong>Design-mockups</strong> innan utveckling</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span><strong>Bildgenerering</strong> för hero-sektioner och innehåll</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p class="text-sm">
+                            Vi arbetar kreativt tillsammans för att ta fram en visuell identitet som matchar din verksamhet. Processen är iterativ - vi justerar tills du är 100% nöjd.
+                        </p>
+
+                        <p class="text-xs text-gray-500 dark:text-gray-500">
+                            <strong>Föredrar du en professionell designer?</strong> Jag kan rekommendera <a href="https://www.fiverr.com" target="_blank" rel="noopener" class="text-orange-600 dark:text-orange-400 hover:underline">Fiverr</a> där du hittar designers till bra priser.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -148,9 +342,49 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 6" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Ja! Jag bygger ett skräddarsytt admin-gränssnitt där du enkelt kan redigera texter, bilder och innehåll. Gränssnittet anpassas efter exakt vad DU behöver kunna ändra - inget krångel med WordPress-widgets eller plugin. Enkel utbildning ingår vid leverans.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <p class="font-semibold text-gray-900 dark:text-white">Ja! Jag bygger ett skräddarsytt admin-gränssnitt specifikt för dina behov.</p>
+
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Vad du kan redigera själv:</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <span><strong>Texter</strong> - Rubriker, brödtext, beskrivningar</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span><strong>Bilder</strong> - Enkel upload med automatisk optimering</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <span><strong>Innehåll</strong> - Produkter, tjänster, blogginlägg</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                                    </svg>
+                                    <span><strong>Inställningar</strong> - Allt du specifikt behöver ändra</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-3 border border-indigo-200 dark:border-indigo-700/30">
+                            <p class="text-sm">
+                                <strong>Fördelar:</strong> Inget krångel med WordPress-widgets eller komplicerade plugins. Gränssnittet är byggt exakt för vad DU behöver - enklare och snabbare att lära sig.
+                            </p>
+                        </div>
+
+                        <p class="text-xs text-gray-500 dark:text-gray-500">
+                            <strong>Utbildning ingår:</strong> Vid leverans får du en genomgång av admin-gränssnittet så du känner dig trygg.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -170,9 +404,55 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 7" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Ja! Jag hyr en kraftfull VPS som jag har förkonfigurerat för optimal prestanda och säkerhet. Här kan jag erbjuda både utrymme och support för ett fast paketpris varje månad. Bonus: Om du hyr hosting hos mig ingår framtida support alltid - du behöver aldrig betala extra för bugfixar eller hjälp. Alternativt hjälper jag dig sätta upp på andra tjänster som DigitalOcean eller AWS, plus domän, SSL-certifikat och e-postkonfiguration.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <p class="font-semibold text-gray-900 dark:text-white">Ja! Jag erbjuder hosting på min kraftfulla VPS.</p>
+
+                        <div class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-cyan-200 dark:border-cyan-700/30">
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                </svg>
+                                BONUS: Gratis livslång support
+                            </h4>
+                            <p class="text-sm">
+                                Om du hyr hosting hos mig ingår framtida support <strong>alltid</strong> - du behöver aldrig betala extra för bugfixar eller teknisk hjälp!
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Vad ingår:</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Förkonfigurerad VPS för optimal prestanda</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Säkerhetsuppdateringar och backups</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>SSL-certifikat (HTTPS)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-cyan-600 dark:text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Hjälp med domän och e-postkonfiguration</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p class="text-sm">
+                            <strong>Egen hosting?</strong> Jag hjälper dig även sätta upp på DigitalOcean, AWS eller annan tjänst du föredrar.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -192,9 +472,94 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 8" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Vanligtvis delar vi upp betalningen i två eller tre delar: 30-50% vid projektstart, 30-40% vid godkänd demo/preview, och resterande vid slutleverans. Exakta villkor diskuterar vi baserat på projektets storlek. Du faktureras via mitt egenanställningsföretag CoolCompany, som tar 6% avgift för deras tjänster - detta läggs på totalkostnaden. Om du är ett företag utanför Sverige behöver jag även ditt momsnummer. Betalning via Swish eller banköverföring.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-6">
+                        <!-- Småjobb -->
+                        <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-xl p-4 border border-teal-200 dark:border-teal-700/30">
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                                För småjobb (under 15 000 kr):
+                            </h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Inget förskott krävs</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Betala först när du är 100% nöjd med leveransen</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Max 1 veckas leveranstid</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Perfekt för att testa hur vi jobbar tillsammans</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Större projekt -->
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">För större projekt (15 000+ kr):</h4>
+                            <ul class="space-y-1.5 text-sm ml-2">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-teal-600 dark:text-teal-400">•</span>
+                                    <span>30-50% vid projektstart</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-teal-600 dark:text-teal-400">•</span>
+                                    <span>30-40% vid godkänd demo/preview</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-teal-600 dark:text-teal-400">•</span>
+                                    <span>Resterande vid slutleverans</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Alla projekt inkluderar -->
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">Alla projekt inkluderar:</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                    </svg>
+                                    <span>30-dagars bugfix-garanti</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                    </svg>
+                                    <span>Gratis livslång support om du hyr hosting hos mig</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>&lt;24h responstid</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Praktiskt -->
+                        <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <p class="text-sm">
+                                <strong>Praktiskt:</strong> Du faktureras via mitt egenanställningsföretag Frilans Finans, som tar 6% avgift för deras tjänster - detta läggs på totalkostnaden. Om du är ett företag utanför Sverige behöver jag även ditt momsnummer.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -214,9 +579,49 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 9" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Inte så mycket! Vi börjar med en genomgång där du berättar om dina mål, målgrupp och önskade funktioner. Ha gärna tillgång till eventuella grafiska profiler, logotyper, exempelwebbplatser du gillar och textinnehåll. Men oroa dig inte - vi kan ta fram allt detta tillsammans om det saknas.
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <p class="font-semibold text-gray-900 dark:text-white">Inte så mycket! Vi börjar med en genomgång.</p>
+
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 text-sm">Bra att ha (men inte krav):</h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-violet-600 dark:text-violet-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                    </svg>
+                                    <span><strong>Projektmål</strong> - Vad ska webbplatsen uppnå?</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-violet-600 dark:text-violet-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    <span><strong>Målgrupp</strong> - Vilka ska använda siten?</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-violet-600 dark:text-violet-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span><strong>Grafisk profil</strong> - Logotyp, färger, typsnitt (om finns)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-violet-600 dark:text-violet-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                    </svg>
+                                    <span><strong>Inspiration</strong> - Exempel på webbplatser du gillar</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-violet-600 dark:text-violet-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <span><strong>Innehåll</strong> - Texter, bilder (vi kan skapa tillsammans)</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <p class="text-sm bg-violet-50 dark:bg-violet-900/20 rounded-lg p-3 border border-violet-200 dark:border-violet-700/30">
+                            <strong>Saknas något?</strong> Oroa dig inte - vi kan ta fram allt detta tillsammans under projektets gång!
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -236,9 +641,69 @@
                     </svg>
                 </button>
                 <div x-show="openFaq === 10" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-6" x-cloak>
-                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14">
-                        Ja, mindre justeringar och bugfixar de första 30 dagarna efter lansering ingår alltid. För att förtydliga: <strong>Support</strong> innebär att fixa saker som inte fungerar (bugfixar, tekniska problem, e-postproblem etc.) - detta ingår om du hyr hosting hos mig. Att lägga till nya funktioner eller ytterligare kod räknas dock som vidareutveckling och kräver separat offert. För löpande support och säkerhetsuppdateringar erbjuder jag flexibla underhållsavtal. Jag svarar alltid inom 24 timmar!
-                    </p>
+                    <div class="text-gray-600 dark:text-gray-400 leading-relaxed pl-14 space-y-4">
+                        <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-700/30">
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                SUPPORT (ingår alltid):
+                            </h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span><strong>30-dagars bugfix-garanti</strong> efter lansering</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span><strong>Gratis livslång support</strong> om du hyr hosting hos mig</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span><strong>&lt;24h responstid</strong> på alla frågor</span>
+                                </li>
+                            </ul>
+                            <p class="text-xs mt-3 text-gray-700 dark:text-gray-300">
+                                <em>Support = Fixa saker som inte fungerar (bugfixar, tekniska problem, e-postproblem etc.)</em>
+                            </p>
+                        </div>
+
+                        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-4 border border-rose-200 dark:border-rose-700/30">
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                VIDAREUTVECKLING (separat offert):
+                            </h4>
+                            <ul class="space-y-1.5 text-sm">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-rose-600 dark:text-rose-400">•</span>
+                                    <span>Nya funktioner eller features</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-rose-600 dark:text-rose-400">•</span>
+                                    <span>Designändringar eller omarbetning</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-rose-600 dark:text-rose-400">•</span>
+                                    <span>Integration med nya tjänster</span>
+                                </li>
+                            </ul>
+                            <p class="text-xs mt-3 text-gray-700 dark:text-gray-300">
+                                <em>Vidareutveckling = Lägga till något nytt som inte fanns från början</em>
+                            </p>
+                        </div>
+
+                        <p class="text-sm">
+                            <strong>Flexibla underhållsavtal</strong> finns för löpande support och säkerhetsuppdateringar!
+                        </p>
+                    </div>
                 </div>
             </div>
 
