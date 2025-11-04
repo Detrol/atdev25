@@ -17,6 +17,27 @@ class ProjectRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        // Convert comma-separated technologies string to array
+        if ($this->has('technologies') && is_string($this->technologies)) {
+            $this->merge([
+                'technologies' => array_filter(
+                    array_map('trim', explode(',', $this->technologies)),
+                    fn($value) => !empty($value)
+                ),
+            ]);
+        }
+
+        // Convert featured checkbox to boolean
+        if (!$this->has('featured')) {
+            $this->merge(['featured' => false]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
