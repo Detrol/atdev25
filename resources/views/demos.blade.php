@@ -18,7 +18,7 @@
             </div>
 
             <h1 class="text-5xl md:text-7xl font-bold leading-tight" x-show="visible" x-transition:enter="transition ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
-                Interactive Demos<br>
+                Interaktiva Demos<br>
                 <span class="text-white/90">Upplev Möjligheterna</span>
             </h1>
 

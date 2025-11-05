@@ -15,12 +15,12 @@
         </div>
 
         <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-            Hur Presterar Din Webbplats?
+            Maximerar Din Webbplats Sin Potential?
         </h2>
 
         <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Få en gratis, AI-driven analys av din webbplats SEO, prestanda och användarupplevelse.
-            Professionell rapport på 2-5 minuter.
+            Få en gratis, AI-driven analys av din webbplats SEO, teknisk optimering och konvertering.
+            Professionell rapport med konkreta förbättringsförslag på 2-5 minuter.
         </p>
 
         <div class="flex flex-wrap justify-center gap-4 mb-12">

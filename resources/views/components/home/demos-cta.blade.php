@@ -1,4 +1,4 @@
-{{-- Interactive Demos CTA Component --}}
+{{-- Interaktiva Demos CTA Component --}}
 
 <section class="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-700 overflow-hidden">
     <!-- Background decoration -->
@@ -31,7 +31,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span>Utforska Interactive Demos</span>
+                <span>Utforska Interaktiva Demos</span>
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                 </svg>
