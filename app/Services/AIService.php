@@ -313,23 +313,31 @@ Din uppgift är att analysera webbplatsdata och skapa en SVENSK rapport i Markdo
 ====================================
 Du kommer få två typer av data:
 
-1. **GROUND TRUTH** (§§ GROUN D_TRUTH) - 100% EXAKTA MÄTNINGAR
+1. **GROUND TRUTH** (§§ GROUND_TRUTH) - 100% EXAKTA MÄTNINGAR
    - Dessa siffror är DETERMINISTISKA och FEL-FRI
    - Du MÅSTE citera dessa EXAKT som de är
    - ALDRIG ändra, omtolka, eller räkna om ground truth-värden
    - Om ground truth säger "16 media queries" = använd "16"
-   - Om ground truth säger "12 inline styles" = använd "12"
+   - Om ground truth säger "47 user inline styles" = använd "47"
 
 2. **CONTEXT** (HTML/CSS excerpts) - FÖR FÖRSTÅELSE
    - Använd för att förstå STRUKTUR och MÖNSTER
    - ALDRIG räkna element från HTML/CSS-excerpts
    - Context är TRUNKERAD och kan vara OFULLSTÄNDIG
 
+3. **RAMVERK** (Detected Frameworks) - FÖRSTÅ VAD SOM ÄR ACCEPTABELT
+   - Ground truth visar vilka frameworks som detekterades (Alpine.js, React, Vue, etc.)
+   - Ground truth separerar "framework_generated_styles" från "user_inline_styles"
+   - VIKTIGT: Ramverksgenererade styles är TEKNISKT NÖDVÄNDIGA och ska INTE ge minuspoäng
+   - Alpine.js x-transition, React inline styles, Vue scoped styles = ACCEPTABLA
+   - ENDAST "user_inline_styles" ska bedömas för kodkvalitet
+
 EXEMPEL PÅ KORREKT ANVÄNDNING:
 ✓ "Webbplatsen har 16 media queries" (citerar ground truth exakt)
-✓ "12 element har inline style-attribut" (citerar ground truth exakt)
+✓ "47 element har statiska inline styles som kan förbättras" (använder user_inline_styles)
+✓ "Alpine.js genererar 50 inline styles för transitions vilket är acceptabelt" (förklarar ramverk)
 ✗ "Inga media queries hittades" (när ground truth säger 16)
-✗ "Cirka 10-15 inline styles" (när ground truth säger exakt 12)
+✗ "97 inline styles är dålig kodkvalitet" (när 50 är ramverksgenererade och acceptabla)
 
 OM DU AVVIKER FRÅN GROUND TRUTH = RAPPORTEN KOMMER AVVISAS OCH REGENERERAS
 ====================================
@@ -379,14 +387,38 @@ Prioriterad lista (1-8 förslag):
 - Best practices för deras situation
 - Långsiktiga förbättringsmöjligheter
 
+---
+
+## 📋 Branschspecifika Förbättringsförslag (EJ Poänggivande)
+[Analysera sidans syfte och bransch från innehållet, ge 3-5 skräddarsydda råd]
+
+**Bransch identifierad:** [Portfolio/E-handel/Företagssajt/Blog/etc.]
+
+1. [Branschspecifikt råd baserat på sidans syfte]
+2. [Branschspecifikt råd baserat på målgrupp]
+3. [Branschspecifikt råd baserat på konkurrenter]
+
+---
+
+## 🔧 Övriga Förbättringsmöjligheter (EJ Poänggivande)
+[Dessa påverkar INTE poängen men kan förbättra förtroendet och användarupplevelsen]
+
+- Företagsinformation: [Om org-nummer, adress saknas]
+- Sociala medier: [Om LinkedIn/GitHub/Twitter-länkar saknas]
+- Analytics & Spårning: [Om tracking för insikter saknas]
+- Kontaktinformation: [Om telefonnummer eller andra alternativ saknas]
+- Juridiskt: [GDPR, cookie-policy, etc. redan implementerat eller ej]
+
 VIKTIGT:
 1. Poängen MÅSTE vara exakta tal (t.ex. "72/100"), inte intervall
 2. CITERA GROUND TRUTH EXAKT - ingen omtolkning eller omräkning
-3. Var konstruktiv, inte nedlåtande
-4. Ge konkreta, genomförbara råd
-5. Fokusera på affärsnytta, inte bara tekniska detaljer
-6. Skriv på svenska med professionell ton
-7. Använd Markdown för struktur (rubriker, listor, fetstil)
+3. Ramverksgenererade inline styles PÅVERKAR INTE poängen
+4. Företagsinformation PÅVERKAR INTE poängen (endast i Övrigt-sektion)
+5. Var konstruktiv, inte nedlåtande
+6. Ge konkreta, genomförbara råd
+7. Fokusera på affärsnytta, inte bara tekniska detaljer
+8. Skriv på svenska med professionell ton
+9. Använd Markdown för struktur (rubriker, listor, fetstil)
 PROMPT;
     }
 
@@ -442,10 +474,19 @@ PROMPT;
             $message .= "## CSS (exakta räkningar):\n";
             $message .= "- Externa stylesheets: {$gt['css']['external_stylesheets']}\n";
             $message .= "- Inline <style> tags: {$gt['css']['inline_style_tags']}\n";
-            $message .= "- Element med style-attribut: {$gt['css']['elements_with_style_attr']}\n";
+            $message .= "- Element med style-attribut (totalt): {$gt['css']['elements_with_style_attr']}\n";
+            $message .= "- Ramverksgenererade styles: {$gt['css']['framework_generated_styles']} (ACCEPTABLA - ska ej ge minuspoäng)\n";
+            $message .= "- User-definerade inline styles: {$gt['css']['user_inline_styles']} (bedöm ENDAST dessa för kodkvalitet)\n";
             $message .= "- Media queries (totalt från alla källor): {$gt['css']['media_queries_total']}\n";
             $message .= "- Externa CSS-filer hämtade: {$gt['css']['external_css_fetched']}\n";
             $message .= "- Externa CSS-filer misslyckades: {$gt['css']['external_css_failed']}\n\n";
+
+            // Frameworks
+            if (isset($gt['frameworks']) && !empty($gt['frameworks']['detected'])) {
+                $message .= "## RAMVERK DETEKTERADE:\n";
+                $message .= "- Identifierade ramverk: " . implode(', ', $gt['frameworks']['detected']) . "\n";
+                $message .= "- OBS: Ramverksgenererade inline styles är tekniskt nödvändiga och ska INTE påverka poängen negativt\n\n";
+            }
 
             // JavaScript
             $message .= "## JAVASCRIPT (exakta räkningar):\n";
