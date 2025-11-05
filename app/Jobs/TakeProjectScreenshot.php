@@ -35,6 +35,7 @@ class TakeProjectScreenshot implements ShouldQueue
 
         if (! $project) {
             Log::error('Screenshot failed: Project not found', ['project_id' => $this->projectId]);
+
             return;
         }
 

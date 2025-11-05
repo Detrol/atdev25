@@ -26,7 +26,7 @@ class GdprDataRequest extends Model
     /**
      * Generera ny GDPR-request med token
      */
-    public static function createRequest(string $email, string $type, string $ipAddress = null): self
+    public static function createRequest(string $email, string $type, ?string $ipAddress = null): self
     {
         return self::create([
             'email' => $email,

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\ContactMessage;
 use App\Models\Chat;
+use App\Models\ContactMessage;
 use App\Models\GdprDataRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -82,7 +82,7 @@ class GdprDataDeletionService
     /**
      * Skapa deletion request och returnera token för bekräftelse
      */
-    public function createDeletionRequest(string $email, string $ipAddress = null): GdprDataRequest
+    public function createDeletionRequest(string $email, ?string $ipAddress = null): GdprDataRequest
     {
         return GdprDataRequest::createRequest($email, 'delete', $ipAddress);
     }
@@ -94,7 +94,7 @@ class GdprDataDeletionService
     {
         $request = GdprDataRequest::findByToken($token);
 
-        if (!$request) {
+        if (! $request) {
             throw new \Exception('Invalid or expired token');
         }
 
@@ -143,11 +143,11 @@ class GdprDataDeletionService
             'subject' => 'Bekräfta radering av dina personuppgifter',
             'to' => $email,
             'from' => 'andreas@atdev.me',
-            'body' => "Hej,\n\nDu har begärt att få dina personuppgifter raderade från ATDev.\n\n" .
-                      "För att bekräfta radering, klicka på länken nedan:\n\n" .
-                      url("/gdpr/confirm-deletion/{$token}") . "\n\n" .
-                      "Denna länk är giltig i 24 timmar.\n\n" .
-                      "Om du inte begärt denna radering, ignorera detta meddelande.\n\n" .
+            'body' => "Hej,\n\nDu har begärt att få dina personuppgifter raderade från ATDev.\n\n".
+                      "För att bekräfta radering, klicka på länken nedan:\n\n".
+                      url("/gdpr/confirm-deletion/{$token}")."\n\n".
+                      "Denna länk är giltig i 24 timmar.\n\n".
+                      "Om du inte begärt denna radering, ignorera detta meddelande.\n\n".
                       "Med vänliga hälsningar,\nATDev",
         ];
     }

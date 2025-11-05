@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\GooglePlacesService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Exception;
 
 class GoogleReviewsController extends Controller
 {
@@ -17,8 +17,6 @@ class GoogleReviewsController extends Controller
 
     /**
      * Get default place reviews (Puts i Karlstad)
-     *
-     * @return JsonResponse
      */
     public function default(): JsonResponse
     {
@@ -39,9 +37,6 @@ class GoogleReviewsController extends Controller
 
     /**
      * Search for places by name or query
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function search(Request $request): JsonResponse
     {
@@ -54,8 +49,8 @@ class GoogleReviewsController extends Controller
         ]);
 
         // Check rate limit
-        $key = 'google-search:' . $request->ip();
-        if (!$this->checkRateLimit($key, 20)) {
+        $key = 'google-search:'.$request->ip();
+        if (! $this->checkRateLimit($key, 20)) {
             return $this->errorResponse(
                 'För många sökningar. Försök igen om en minut.',
                 'RATE_LIMIT_EXCEEDED',
@@ -89,15 +84,12 @@ class GoogleReviewsController extends Controller
 
     /**
      * Get place details with reviews by Place ID
-     *
-     * @param string $placeId
-     * @return JsonResponse
      */
     public function show(string $placeId): JsonResponse
     {
         // Check rate limit
-        $key = 'google-show:' . request()->ip();
-        if (!$this->checkRateLimit($key, 30)) {
+        $key = 'google-show:'.request()->ip();
+        if (! $this->checkRateLimit($key, 30)) {
             return $this->errorResponse(
                 'För många förfrågningar. Försök igen om en minut.',
                 'RATE_LIMIT_EXCEEDED',
@@ -116,10 +108,6 @@ class GoogleReviewsController extends Controller
 
     /**
      * Check rate limit for a given key
-     *
-     * @param string $key
-     * @param int $maxAttempts
-     * @return bool
      */
     private function checkRateLimit(string $key, int $maxAttempts): bool
     {
@@ -136,8 +124,7 @@ class GoogleReviewsController extends Controller
     /**
      * Success response format
      *
-     * @param mixed $data
-     * @return JsonResponse
+     * @param  mixed  $data
      */
     private function successResponse($data): JsonResponse
     {
@@ -149,11 +136,6 @@ class GoogleReviewsController extends Controller
 
     /**
      * Error response format
-     *
-     * @param string $message
-     * @param string $code
-     * @param int $statusCode
-     * @return JsonResponse
      */
     private function errorResponse(string $message, string $code, int $statusCode = 400): JsonResponse
     {
@@ -166,9 +148,6 @@ class GoogleReviewsController extends Controller
 
     /**
      * Handle exceptions and return appropriate error response
-     *
-     * @param Exception $e
-     * @return JsonResponse
      */
     private function handleException(Exception $e): JsonResponse
     {

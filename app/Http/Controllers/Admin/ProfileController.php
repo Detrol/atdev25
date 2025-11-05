@@ -29,7 +29,7 @@ class ProfileController extends Controller
         $profile = Profile::current();
 
         // Create profile if it doesn't exist
-        if (!$profile) {
+        if (! $profile) {
             $profile = Profile::create([
                 'github' => $request->input('github'),
                 'linkedin' => $request->input('linkedin'),

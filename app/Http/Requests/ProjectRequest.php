@@ -26,13 +26,13 @@ class ProjectRequest extends FormRequest
             $this->merge([
                 'technologies' => array_filter(
                     array_map('trim', explode(',', $this->technologies)),
-                    fn($value) => !empty($value)
+                    fn ($value) => ! empty($value)
                 ),
             ]);
         }
 
         // Convert featured checkbox to boolean
-        if (!$this->has('featured')) {
+        if (! $this->has('featured')) {
             $this->merge(['featured' => false]);
         }
     }

@@ -23,12 +23,14 @@ class AddCacheHeaders
         // Vite versioned assets (immutable, 1 year cache)
         if (preg_match('/^build\/assets\/.+-[a-zA-Z0-9]{8}\.(css|js)$/', $path)) {
             $response->headers->set('Cache-Control', 'public, max-age=31536000, immutable');
+
             return $response;
         }
 
         // Image files (1 month cache)
         if (preg_match('/\.(webp|jpg|jpeg|png|gif|svg|ico)$/', $path)) {
             $response->headers->set('Cache-Control', 'public, max-age=2592000');
+
             return $response;
         }
 

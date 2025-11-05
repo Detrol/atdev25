@@ -47,16 +47,18 @@ class GenerateSitemap extends Command
                 $this->info('✓ Sitemap generated successfully');
                 $this->info('✓ Cached for 24 hours');
                 $this->newLine();
-                $this->comment('Sitemap available at: ' . route('sitemap'));
+                $this->comment('Sitemap available at: '.route('sitemap'));
 
                 return Command::SUCCESS;
             }
 
-            $this->error('Failed to generate sitemap. HTTP status: ' . $response->status());
+            $this->error('Failed to generate sitemap. HTTP status: '.$response->status());
+
             return Command::FAILURE;
 
         } catch (\Exception $e) {
-            $this->error('Error generating sitemap: ' . $e->getMessage());
+            $this->error('Error generating sitemap: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }

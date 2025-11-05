@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\GdprDataExportService;
 use App\Services\GdprDataDeletionService;
+use App\Services\GdprDataExportService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 
 class GdprController extends Controller
 {
@@ -17,8 +17,6 @@ class GdprController extends Controller
 
     /**
      * Visa Privacy Policy
-     *
-     * @return View
      */
     public function privacy(): View
     {
@@ -27,8 +25,6 @@ class GdprController extends Controller
 
     /**
      * Visa Cookie Policy
-     *
-     * @return View
      */
     public function cookies(): View
     {
@@ -37,8 +33,6 @@ class GdprController extends Controller
 
     /**
      * GDPR Showcase page - demo av alla GDPR-funktioner
-     *
-     * @return View
      */
     public function showcase(): View
     {
@@ -102,7 +96,7 @@ class GdprController extends Controller
     {
         $request = \App\Models\GdprDataRequest::findByToken($token);
 
-        if (!$request) {
+        if (! $request) {
             abort(404, 'Invalid or expired deletion request');
         }
 

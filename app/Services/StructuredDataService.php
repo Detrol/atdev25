@@ -15,7 +15,7 @@ class StructuredDataService
     {
         $profile = $profile ?? Profile::current();
 
-        if (!$profile) {
+        if (! $profile) {
             return [];
         }
 
@@ -26,7 +26,7 @@ class StructuredDataService
             'jobTitle' => $profile->title ?? 'AI-Driven Fullstack-utvecklare',
             'description' => $profile->bio ?? 'Utvecklare med 20+ års erfarenhet som kombinerar AI och automation för att leverera högkvalitativa webbapplikationer.',
             'url' => url('/'),
-            'image' => $profile->avatar ? asset('storage/' . $profile->avatar) : null,
+            'image' => $profile->avatar ? asset('storage/'.$profile->avatar) : null,
             'email' => $profile->email ?? 'andreas@atdev.me',
             'telephone' => $profile->phone,
             'address' => [
@@ -116,7 +116,7 @@ class StructuredDataService
             '@type' => 'CreativeWork',
             'name' => $project->title,
             'description' => $project->summary ?? $project->description,
-            'url' => url('/projects/' . $project->slug),
+            'url' => url('/projects/'.$project->slug),
             'inLanguage' => 'sv',
             'author' => [
                 '@type' => 'Person',
@@ -133,15 +133,15 @@ class StructuredDataService
 
         // Add image if available
         if ($project->screenshot_path) {
-            $schema['image'] = asset('storage/' . $project->screenshot_path);
+            $schema['image'] = asset('storage/'.$project->screenshot_path);
         } elseif ($project->cover_image) {
-            $schema['image'] = asset('storage/' . $project->cover_image);
+            $schema['image'] = asset('storage/'.$project->cover_image);
         }
 
         // Add live URL if available
         if ($project->live_url) {
             $schema['url'] = $project->live_url;
-            $schema['sameAs'] = url('/projects/' . $project->slug);
+            $schema['sameAs'] = url('/projects/'.$project->slug);
         }
 
         // Add repo URL if available
@@ -207,8 +207,8 @@ class StructuredDataService
         $scripts = [];
 
         foreach ($schemas as $schema) {
-            if (!empty($schema)) {
-                $scripts[] = '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . '</script>';
+            if (! empty($schema)) {
+                $scripts[] = '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT).'</script>';
             }
         }
 

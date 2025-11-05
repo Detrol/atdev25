@@ -82,7 +82,7 @@ class SitemapController extends Controller
             ->get()
             ->each(function ($project) use ($urls) {
                 $urls->push([
-                    'loc' => url('/projects/' . $project->slug),
+                    'loc' => url('/projects/'.$project->slug),
                     'lastmod' => $project->updated_at->toAtomString(),
                     'changefreq' => 'monthly',
                     'priority' => $project->featured ? '0.8' : '0.7',

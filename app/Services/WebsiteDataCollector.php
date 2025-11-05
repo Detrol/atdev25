@@ -328,7 +328,7 @@ class WebsiteDataCollector
             'blocking_scripts_in_head' => $blockingScripts,
             'has_html_comments' => $hasHtmlComments,
             'whitespace_ratio' => round($whitespaceRatio, 3),
-            'appears_minified' => $whitespaceRatio < 0.05 && !$hasHtmlComments,
+            'appears_minified' => $whitespaceRatio < 0.05 && ! $hasHtmlComments,
         ];
     }
 

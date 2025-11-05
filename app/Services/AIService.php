@@ -245,14 +245,14 @@ class AIService
             Log::info('AIService: Website analysis completed successfully', [
                 'url' => $collectedData['url'],
                 'seo_score' => $scores['seo_score'],
-                'performance_score' => $scores['performance_score'],
+                'technical_score' => $scores['technical_score'],
                 'overall_score' => $scores['overall_score'],
             ]);
 
             return [
                 'ai_report' => $aiReport,
                 'seo_score' => $scores['seo_score'],
-                'performance_score' => $scores['performance_score'],
+                'technical_score' => $scores['technical_score'],
                 'overall_score' => $scores['overall_score'],
             ];
         } catch (\Throwable $e) {
@@ -408,8 +408,8 @@ PROMPT;
                 $message .= "- Inline scripts: {$cq['inline_scripts_count']} st\n";
                 $message .= "- Inline event handlers: {$cq['inline_event_handlers']} st\n";
                 $message .= "- Blocking scripts i head: {$cq['blocking_scripts_in_head']} st\n";
-                $message .= "- HTML-kommentarer: ".($cq['has_html_comments'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Verkar minifierad: ".($cq['appears_minified'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- HTML-kommentarer: '.($cq['has_html_comments'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Verkar minifierad: '.($cq['appears_minified'] ? 'Ja' : 'Nej')."\n";
             }
 
             // Image Optimization
@@ -421,7 +421,7 @@ PROMPT;
                 $message .= "- Med dimensioner (width/height): {$io['with_dimensions']} st ({$io['dimensions_percentage']}%)\n";
                 $message .= "- Med srcset: {$io['with_srcset']} st\n";
                 $message .= "- <picture> element: {$io['picture_elements']} st\n";
-                $message .= "- Moderna format (WebP/AVIF): ".($io['modern_formats_detected'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Moderna format (WebP/AVIF): '.($io['modern_formats_detected'] ? 'Ja' : 'Nej')."\n";
             }
 
             // Accessibility
@@ -434,7 +434,7 @@ PROMPT;
                 $message .= "- Inputs: {$acc['input_count']} st\n";
                 $message .= "- Labels: {$acc['label_count']} st (ratio: {$acc['label_ratio']})\n";
                 $message .= "- H1: {$acc['headings']['h1']}, H2: {$acc['headings']['h2']}, H3: {$acc['headings']['h3']}\n";
-                $message .= "- Korrekt heading-hierarki: ".($acc['has_proper_heading_hierarchy'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Korrekt heading-hierarki: '.($acc['has_proper_heading_hierarchy'] ? 'Ja' : 'Nej')."\n";
             }
 
             // Best Practices
@@ -445,22 +445,22 @@ PROMPT;
                 $message .= "- Deprecated tags: {$bp['deprecated_tags_count']} st\n";
                 $message .= "- Max DOM-djup: {$bp['max_dom_depth']} nivåer\n";
                 $message .= "- Totalt element: {$bp['total_elements']} st\n";
-                $message .= "- Viewport meta: ".($bp['has_viewport_meta'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Doctype: ".($bp['has_doctype'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Överdrivet stort DOM: ".($bp['excessive_dom_size'] ? 'Ja (>1500 element)' : 'Nej')."\n";
-                $message .= "- Överdrivet djupt DOM: ".($bp['excessive_dom_depth'] ? 'Ja (>32 nivåer)' : 'Nej')."\n";
+                $message .= '- Viewport meta: '.($bp['has_viewport_meta'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Doctype: '.($bp['has_doctype'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Överdrivet stort DOM: '.($bp['excessive_dom_size'] ? 'Ja (>1500 element)' : 'Nej')."\n";
+                $message .= '- Överdrivet djupt DOM: '.($bp['excessive_dom_depth'] ? 'Ja (>32 nivåer)' : 'Nej')."\n";
             }
 
             // Mobile Responsiveness
             if (isset($techOpt['mobile_responsiveness'])) {
                 $mr = $techOpt['mobile_responsiveness'];
                 $message .= "\n### Mobil Responsivitet:\n";
-                $message .= "- Viewport meta: ".($mr['has_viewport'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Viewport meta: '.($mr['has_viewport'] ? 'Ja' : 'Nej')."\n";
                 $message .= "- Media queries: {$mr['media_query_count']} st\n";
-                $message .= "- Mobilmeny: ".($mr['has_mobile_menu'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Mobilmeny: '.($mr['has_mobile_menu'] ? 'Ja' : 'Nej')."\n";
                 $message .= "- Responsiva bilder: {$mr['responsive_images']} st\n";
-                $message .= "- Touch-vänliga targets: ".($mr['has_touch_targets'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Mobiloptimerad: ".($mr['mobile_optimized'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Touch-vänliga targets: '.($mr['has_touch_targets'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Mobiloptimerad: '.($mr['mobile_optimized'] ? 'Ja' : 'Nej')."\n";
             }
 
             // CTA Effectiveness
@@ -469,12 +469,12 @@ PROMPT;
                 $message .= "\n### Konverteringsoptimering (CTA):\n";
                 $message .= "- Knappar: {$cta['button_count']} st\n";
                 $message .= "- Länkar: {$cta['link_count']} st\n";
-                $message .= "- Telefonnummer synligt: ".($cta['phone_visible'] ? 'Ja' : 'Nej')." ({$cta['tel_links']} tel-länkar)\n";
-                $message .= "- Email synlig: ".($cta['email_visible'] ? 'Ja' : 'Nej')." ({$cta['mailto_links']} mailto-länkar)\n";
+                $message .= '- Telefonnummer synligt: '.($cta['phone_visible'] ? 'Ja' : 'Nej')." ({$cta['tel_links']} tel-länkar)\n";
+                $message .= '- Email synlig: '.($cta['email_visible'] ? 'Ja' : 'Nej')." ({$cta['mailto_links']} mailto-länkar)\n";
                 $message .= "- Kontaktformulär: {$cta['contact_forms']} st\n";
                 $message .= "- Formulär med email-fält: {$cta['forms_with_email_field']} st\n";
-                $message .= "- CTA i första skärmen: ".($cta['cta_in_first_screen'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Generiska knappar (dåligt): ".($cta['has_generic_button_text'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- CTA i första skärmen: '.($cta['cta_in_first_screen'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Generiska knappar (dåligt): '.($cta['has_generic_button_text'] ? 'Ja' : 'Nej')."\n";
                 $message .= "- CTA/innehåll-ratio: {$cta['cta_to_content_ratio']}\n";
             }
 
@@ -482,13 +482,13 @@ PROMPT;
             if (isset($techOpt['trust_signals'])) {
                 $ts = $techOpt['trust_signals'];
                 $message .= "\n### Förtroendesignaler:\n";
-                $message .= "- SSL (HTTPS): ".($ts['has_ssl'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Integritetspolicy: ".($ts['has_privacy_policy'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Cookie consent: ".($ts['has_cookie_consent'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Företagsinfo i footer: ".($ts['footer_has_company_info'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Org-nummer: ".($ts['has_org_number'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Adress: ".($ts['has_address'] ? 'Ja' : 'Nej')."\n";
-                $message .= "- Certifieringar synliga: ".($ts['displays_certifications'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- SSL (HTTPS): '.($ts['has_ssl'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Integritetspolicy: '.($ts['has_privacy_policy'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Cookie consent: '.($ts['has_cookie_consent'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Företagsinfo i footer: '.($ts['footer_has_company_info'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Org-nummer: '.($ts['has_org_number'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Adress: '.($ts['has_address'] ? 'Ja' : 'Nej')."\n";
+                $message .= '- Certifieringar synliga: '.($ts['displays_certifications'] ? 'Ja' : 'Nej')."\n";
                 $message .= "- Förtroende-score: {$ts['trust_score']}/100\n";
             }
         }
@@ -559,7 +559,7 @@ PROMPT;
     {
         $name = $profile?->name ?? 'ATDev';
 
-        return "Du är en DEMO-assistent som visar hur AI kan skräddarsys för företag. ".
+        return 'Du är en DEMO-assistent som visar hur AI kan skräddarsys för företag. '.
             "Du representerar {$name}s portfolio och visar potentialen med att träna AI på företagsspecifik data. ".
             "\n\n".
             'VIKTIGT - Strikt ämnesbegränsning:'.
@@ -1278,9 +1278,6 @@ PROMPT;
 
     /**
      * Analyserar en matbeskrivning för allergener med AI.
-     *
-     * @param  string  $dishDescription
-     * @return array
      */
     public function analyzeMenuAllergens(string $dishDescription): array
     {
@@ -1367,8 +1364,8 @@ PROMPT;
 
         $allergenList = '';
         foreach ($allergens as $key => $allergen) {
-            $allergenList .= "- **{$allergen['name']}** ({$allergen['icon']}): " .
-                implode(', ', array_slice($allergen['keywords'], 0, 8)) . "\n";
+            $allergenList .= "- **{$allergen['name']}** ({$allergen['icon']}): ".
+                implode(', ', array_slice($allergen['keywords'], 0, 8))."\n";
         }
 
         return <<<PROMPT

@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectRequest;
 use App\Jobs\TakeProjectScreenshot;
 use App\Models\Project;
-use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
