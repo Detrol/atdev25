@@ -237,6 +237,36 @@ class AIService
             $aiReport = $responseData['content'][0]['text'];
             Log::info('AIService: Report generated', ['report_length' => strlen($aiReport)]);
 
+            // Validera rapport mot ground truth
+            if (isset($collectedData['ground_truth'])) {
+                Log::info('AIService: Validating report against ground truth...');
+                $validation = $this->validateAIReport($aiReport, $collectedData['ground_truth']);
+
+                if (!$validation['passed']) {
+                    Log::warning('AIService: Report validation failed', [
+                        'errors' => $validation['errors'],
+                        'warnings' => $validation['warnings'],
+                    ]);
+
+                    // Prepend warning to report if there are errors
+                    if ($validation['error_count'] > 0) {
+                        $warningHeader = "⚠️ **VARNING**: Denna rapport innehåller {$validation['error_count']} avvikelser från faktiska mätningar:\n\n";
+                        foreach ($validation['errors'] as $error) {
+                            $warningHeader .= "- {$error}\n";
+                        }
+                        $warningHeader .= "\nRapporten kan innehålla felaktigheter. Använd den med försiktighet.\n\n---\n\n";
+
+                        $aiReport = $warningHeader . $aiReport;
+                    }
+                } else {
+                    Log::info('AIService: Report validation passed', [
+                        'warnings' => $validation['warning_count'],
+                    ]);
+                }
+            } else {
+                Log::warning('AIService: No ground truth data available for validation');
+            }
+
             // Extrahera scores från rapporten
             Log::info('AIService: Extracting scores from report...');
             $scores = $this->extractScoresFromReport($aiReport);
@@ -247,6 +277,7 @@ class AIService
                 'seo_score' => $scores['seo_score'],
                 'technical_score' => $scores['technical_score'],
                 'overall_score' => $scores['overall_score'],
+                'validation_passed' => isset($validation) ? $validation['passed'] : null,
             ]);
 
             return [
@@ -254,6 +285,8 @@ class AIService
                 'seo_score' => $scores['seo_score'],
                 'technical_score' => $scores['technical_score'],
                 'overall_score' => $scores['overall_score'],
+                'validation_passed' => isset($validation) ? $validation['passed'] : true,
+                'validation_errors' => isset($validation) ? $validation['errors'] : [],
             ];
         } catch (\Throwable $e) {
             Log::error('AIService: Exception in analyzeWebsite', [
@@ -275,6 +308,31 @@ class AIService
 Du är en erfaren webbutvecklare och SEO-expert som granskar webbplatser professionellt.
 
 Din uppgift är att analysera webbplatsdata och skapa en SVENSK rapport i Markdown-format.
+
+🔥 KRITISKT - GROUND TRUTH REGLER:
+====================================
+Du kommer få två typer av data:
+
+1. **GROUND TRUTH** (§§ GROUN D_TRUTH) - 100% EXAKTA MÄTNINGAR
+   - Dessa siffror är DETERMINISTISKA och FEL-FRI
+   - Du MÅSTE citera dessa EXAKT som de är
+   - ALDRIG ändra, omtolka, eller räkna om ground truth-värden
+   - Om ground truth säger "16 media queries" = använd "16"
+   - Om ground truth säger "12 inline styles" = använd "12"
+
+2. **CONTEXT** (HTML/CSS excerpts) - FÖR FÖRSTÅELSE
+   - Använd för att förstå STRUKTUR och MÖNSTER
+   - ALDRIG räkna element från HTML/CSS-excerpts
+   - Context är TRUNKERAD och kan vara OFULLSTÄNDIG
+
+EXEMPEL PÅ KORREKT ANVÄNDNING:
+✓ "Webbplatsen har 16 media queries" (citerar ground truth exakt)
+✓ "12 element har inline style-attribut" (citerar ground truth exakt)
+✗ "Inga media queries hittades" (när ground truth säger 16)
+✗ "Cirka 10-15 inline styles" (när ground truth säger exakt 12)
+
+OM DU AVVIKER FRÅN GROUND TRUTH = RAPPORTEN KOMMER AVVISAS OCH REGENERERAS
+====================================
 
 RAPPORTSTRUKTUR:
 
@@ -323,11 +381,12 @@ Prioriterad lista (1-8 förslag):
 
 VIKTIGT:
 1. Poängen MÅSTE vara exakta tal (t.ex. "72/100"), inte intervall
-2. Var konstruktiv, inte nedlåtande
-3. Ge konkreta, genomförbara råd
-4. Fokusera på affärsnytta, inte bara tekniska detaljer
-5. Skriv på svenska med professionell ton
-6. Använd Markdown för struktur (rubriker, listor, fetstil)
+2. CITERA GROUND TRUTH EXAKT - ingen omtolkning eller omräkning
+3. Var konstruktiv, inte nedlåtande
+4. Ge konkreta, genomförbara råd
+5. Fokusera på affärsnytta, inte bara tekniska detaljer
+6. Skriv på svenska med professionell ton
+7. Använd Markdown för struktur (rubriker, listor, fetstil)
 PROMPT;
     }
 
@@ -340,6 +399,74 @@ PROMPT;
 
         $message = "Analysera följande webbplats:\n\n";
         $message .= "**URL**: {$url}\n\n";
+
+        // GROUND TRUTH - 100% ACCURATE MEASUREMENTS (MUST BE CITED EXACTLY)
+        if (isset($data['ground_truth'])) {
+            $gt = $data['ground_truth'];
+            $message .= "═══════════════════════════════════════════\n";
+            $message .= "§§ GROUND_TRUTH - CITERA DESSA EXAKT §§\n";
+            $message .= "═══════════════════════════════════════════\n\n";
+
+            // DOM Structure
+            $message .= "## DOM-STRUKTUR (exakta räkningar):\n";
+            $message .= "- Total element: {$gt['dom_structure']['total_elements']}\n";
+            $message .= "- Bilder totalt: {$gt['dom_structure']['total_images']}\n";
+            $message .= "- Bilder med alt: {$gt['dom_structure']['images_with_alt']} ({$gt['percentages']['images_with_alt_percent']}%)\n";
+            $message .= "- Bilder utan alt: {$gt['dom_structure']['images_without_alt']}\n";
+            $message .= "- Bilder med srcset: {$gt['dom_structure']['images_with_srcset']} ({$gt['percentages']['images_with_srcset_percent']}%)\n";
+            $message .= "- Bilder med lazy loading: {$gt['dom_structure']['images_with_lazy_loading']} ({$gt['percentages']['images_with_lazy_percent']}%)\n";
+            $message .= "- Bilder med dimensioner: {$gt['dom_structure']['images_with_dimensions']} ({$gt['percentages']['images_with_dimensions_percent']}%)\n";
+            $message .= "- Knappar: {$gt['dom_structure']['buttons']}\n";
+            $message .= "- Länkar: {$gt['dom_structure']['links']}\n";
+            $message .= "- Formulär: {$gt['dom_structure']['forms']}\n\n";
+
+            // Headings
+            $message .= "## RUBRIKER (exakta räkningar):\n";
+            foreach ($gt['dom_structure']['headings'] as $level => $count) {
+                $message .= "- {$level}: {$count} st\n";
+            }
+            $message .= "\n";
+
+            // Meta Tags
+            $message .= "## META TAGS (exakta mätningar):\n";
+            $message .= "- Viewport meta: " . ($gt['meta_tags']['has_viewport'] ? 'Ja' : 'Nej') . "\n";
+            $message .= "- Description meta: " . ($gt['meta_tags']['has_description'] ? 'Ja' : 'Nej') . "\n";
+            $message .= "- Title tag: " . ($gt['meta_tags']['has_title'] ? 'Ja' : 'Nej') . "\n";
+            $message .= "- Canonical: " . ($gt['meta_tags']['has_canonical'] ? 'Ja' : 'Nej') . "\n";
+            $message .= "- Open Graph tags: " . ($gt['meta_tags']['has_og_tags'] ? 'Ja' : 'Nej') . "\n";
+            $message .= "- Schema markup: " . ($gt['meta_tags']['has_schema_markup'] ? 'Ja' : 'Nej') . "\n";
+            $message .= "- Title längd: {$gt['meta_tags']['title_length']} tecken\n";
+            $message .= "- Description längd: {$gt['meta_tags']['description_length']} tecken\n\n";
+
+            // CSS
+            $message .= "## CSS (exakta räkningar):\n";
+            $message .= "- Externa stylesheets: {$gt['css']['external_stylesheets']}\n";
+            $message .= "- Inline <style> tags: {$gt['css']['inline_style_tags']}\n";
+            $message .= "- Element med style-attribut: {$gt['css']['elements_with_style_attr']}\n";
+            $message .= "- Media queries (totalt från alla källor): {$gt['css']['media_queries_total']}\n";
+            $message .= "- Externa CSS-filer hämtade: {$gt['css']['external_css_fetched']}\n";
+            $message .= "- Externa CSS-filer misslyckades: {$gt['css']['external_css_failed']}\n\n";
+
+            // JavaScript
+            $message .= "## JAVASCRIPT (exakta räkningar):\n";
+            $message .= "- Externa scripts: {$gt['javascript']['external_scripts']}\n";
+            $message .= "- Inline scripts: {$gt['javascript']['inline_scripts']}\n";
+            $message .= "- Scripts med defer: {$gt['javascript']['scripts_with_defer']}\n";
+            $message .= "- Scripts med async: {$gt['javascript']['scripts_with_async']}\n\n";
+
+            // Security
+            $message .= "## SÄKERHET (exakt status):\n";
+            $message .= "- HTTPS: " . ($gt['security']['has_https'] ? 'Ja' : 'Nej') . "\n\n";
+
+            $message .= "═══════════════════════════════════════════\n";
+            $message .= "SLUT PÅ GROUND TRUTH - ANVÄND DESSA EXAKT\n";
+            $message .= "═══════════════════════════════════════════\n\n\n";
+        }
+
+        // CONTEXT - FOR UNDERSTANDING ONLY (DO NOT COUNT FROM THIS)
+        $message .= "═══════════════════════════════════════════\n";
+        $message .= "CONTEXT - FÖR FÖRSTÅELSE (RÄKNA INTE FRÅN DETTA)\n";
+        $message .= "═══════════════════════════════════════════\n\n";
 
         // Meta information
         $message .= "## META-INFORMATION\n";
@@ -550,6 +677,83 @@ PROMPT;
         }
 
         return $scores;
+    }
+
+    /**
+     * Validerar AI-rapport mot ground truth
+     * Returnerar array med validation status och eventuella fel
+     */
+    private function validateAIReport(string $report, array $groundTruth): array
+    {
+        $errors = [];
+        $warnings = [];
+
+        // Validera media queries
+        $gtMediaQueries = $groundTruth['css']['media_queries_total'] ?? 0;
+        if (preg_match('/(\d+)\s*media\s*quer(?:y|ies)/i', $report, $matches)) {
+            $reportedMediaQueries = (int) $matches[1];
+            if ($reportedMediaQueries !== $gtMediaQueries) {
+                $errors[] = "Media queries: Rapporten säger {$reportedMediaQueries}, ground truth är {$gtMediaQueries}";
+            }
+        } else {
+            // Check for contradictions like "inga media queries" when there are some
+            if ($gtMediaQueries > 0) {
+                if (preg_match('/inga\s+media\s*quer/i', $report) || preg_match('/saknar.*media\s*quer/i', $report)) {
+                    $errors[] = "Media queries: Rapporten säger 'inga', men ground truth visar {$gtMediaQueries}";
+                }
+            }
+        }
+
+        // Validera inline styles
+        $gtInlineStyles = $groundTruth['css']['elements_with_style_attr'] ?? 0;
+        if (preg_match('/(\d+)\s*(?:element|inline).*style.*attr/i', $report, $matches)) {
+            $reportedInlineStyles = (int) $matches[1];
+            if ($reportedInlineStyles !== $gtInlineStyles) {
+                $errors[] = "Inline styles: Rapporten säger {$reportedInlineStyles}, ground truth är {$gtInlineStyles}";
+            }
+        }
+
+        // Validera bilder
+        $gtTotalImages = $groundTruth['dom_structure']['total_images'] ?? 0;
+        if (preg_match('/(?:totalt|total)?\s*(\d+)\s*bilder/i', $report, $matches)) {
+            $reportedImages = (int) $matches[1];
+            if ($reportedImages !== $gtTotalImages) {
+                $warnings[] = "Bilder totalt: Rapporten säger {$reportedImages}, ground truth är {$gtTotalImages}";
+            }
+        }
+
+        // Validera bilder med alt
+        $gtImagesWithAlt = $groundTruth['dom_structure']['images_with_alt'] ?? 0;
+        if (preg_match('/(\d+)\s*bilder?\s*med\s*alt/i', $report, $matches)) {
+            $reportedImagesWithAlt = (int) $matches[1];
+            if ($reportedImagesWithAlt !== $gtImagesWithAlt) {
+                $warnings[] = "Bilder med alt: Rapporten säger {$reportedImagesWithAlt}, ground truth är {$gtImagesWithAlt}";
+            }
+        }
+
+        // Validera scripts
+        $gtExternalScripts = $groundTruth['javascript']['external_scripts'] ?? 0;
+        if (preg_match('/(\d+)\s*externa?\s*scripts?/i', $report, $matches)) {
+            $reportedScripts = (int) $matches[1];
+            if ($reportedScripts !== $gtExternalScripts) {
+                $warnings[] = "Externa scripts: Rapporten säger {$reportedScripts}, ground truth är {$gtExternalScripts}";
+            }
+        }
+
+        // Check for internal contradictions (e.g., saying both "no inline styles" and "97 inline styles")
+        if (preg_match('/inga\s+inline\s*styles/i', $report) && preg_match('/(\d+)\s*inline\s*styles?/i', $report, $matches)) {
+            $errors[] = "Intern motsägelse: Rapporten säger både 'inga inline styles' och '{$matches[1]} inline styles'";
+        }
+
+        $passed = count($errors) === 0;
+
+        return [
+            'passed' => $passed,
+            'errors' => $errors,
+            'warnings' => $warnings,
+            'error_count' => count($errors),
+            'warning_count' => count($warnings),
+        ];
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\DomCrawler\Crawler;
@@ -15,6 +17,12 @@ class WebsiteDataCollector
 
     private float $loadTime = 0;
 
+    private string $currentUrl = '';
+
+    private int $externalCssFetchedCount = 0;
+
+    private int $externalCssFailedCount = 0;
+
     /**
      * Collect all data from a website
      */
@@ -23,6 +31,9 @@ class WebsiteDataCollector
         Log::info('WebsiteDataCollector: Starting collection', ['url' => $url]);
 
         try {
+            // Store current URL for helper methods
+            $this->currentUrl = $url;
+
             // Fetch HTML and take screenshot
             Log::info('WebsiteDataCollector: Fetching HTML...');
             $startTime = microtime(true);
@@ -48,11 +59,32 @@ class WebsiteDataCollector
 
             // Collect all data
             Log::info('WebsiteDataCollector: Extracting data...');
+
+            // Collect ground truth (100% accurate, deterministic facts)
+            Log::info('WebsiteDataCollector: Collecting ground truth...');
+            $groundTruth = $this->collectGroundTruth();
+
+            // Get HTML excerpt for AI context (first 5KB of body)
+            $htmlExcerpt = $this->getHtmlExcerpt();
+
+            // Get CSS excerpts for AI context
+            Log::info('WebsiteDataCollector: Getting CSS excerpts...');
+            $cssExcerpts = $this->getCssExcerpts();
+
             $data = [
                 'url' => $url,
                 'html_length' => strlen($this->html),
                 'load_time' => round($this->loadTime, 2),
                 'screenshot_path' => $screenshotPath,
+
+                // Ground truth - 100% accurate measurements
+                'ground_truth' => $groundTruth,
+
+                // Context for AI interpretation
+                'html_excerpt' => $htmlExcerpt,
+                'css_excerpts' => $cssExcerpts,
+
+                // Legacy data (for backwards compatibility during transition)
                 'meta' => $this->extractMetaTags(),
                 'headings' => $this->extractHeadings(),
                 'images' => $this->analyzeImages(),
@@ -64,8 +96,8 @@ class WebsiteDataCollector
 
             Log::info('WebsiteDataCollector: Collection complete', [
                 'data_keys' => array_keys($data),
-                'total_images' => $data['images']['total'] ?? 0,
-                'total_links' => $data['links']['total'] ?? 0,
+                'total_images' => $groundTruth['dom_structure']['total_images'] ?? 0,
+                'media_queries' => $groundTruth['css']['media_queries_total'] ?? 0,
             ]);
 
             return $data;
@@ -78,6 +110,381 @@ class WebsiteDataCollector
 
             throw $e;
         }
+    }
+
+    /**
+     * Collect ground truth - objective, measurable facts only
+     * NO interpretation, ONLY counts and percentages
+     * This provides 100% accurate data that AI must cite exactly
+     */
+    private function collectGroundTruth(): array
+    {
+        Log::info('Collecting ground truth data...');
+
+        // DOM Structure
+        $totalElements = $this->crawler->filter('*')->count();
+        $totalImages = $this->crawler->filter('img')->count();
+        $imagesWithAlt = $this->crawler->filter('img[alt]')->count();
+        $imagesWithSrcset = $this->crawler->filter('img[srcset]')->count();
+        $imagesWithLazy = $this->crawler->filter('img[loading="lazy"]')->count();
+        $imagesWithDimensions = $this->crawler->filter('img[width][height]')->count();
+
+        $buttons = $this->crawler->filter('button, input[type="submit"], input[type="button"]')->count();
+        $links = $this->crawler->filter('a')->count();
+        $forms = $this->crawler->filter('form')->count();
+
+        // Headings
+        $headingCounts = [
+            'h1' => $this->crawler->filter('h1')->count(),
+            'h2' => $this->crawler->filter('h2')->count(),
+            'h3' => $this->crawler->filter('h3')->count(),
+            'h4' => $this->crawler->filter('h4')->count(),
+            'h5' => $this->crawler->filter('h5')->count(),
+            'h6' => $this->crawler->filter('h6')->count(),
+        ];
+
+        // Meta Tags - exact presence checks
+        $hasViewport = $this->crawler->filter('meta[name="viewport"]')->count() > 0;
+        $hasDescription = $this->crawler->filter('meta[name="description"]')->count() > 0;
+        $hasTitle = $this->crawler->filter('title')->count() > 0;
+        $hasCanonical = $this->crawler->filter('link[rel="canonical"]')->count() > 0;
+        $hasOgTags = $this->crawler->filter('meta[property^="og:"]')->count() > 0;
+        $hasSchema = $this->crawler->filter('[itemscope], script[type="application/ld+json"]')->count() > 0;
+
+        // Get lengths for character counts
+        $titleLength = 0;
+        $descriptionLength = 0;
+
+        $titleNode = $this->crawler->filter('title')->first();
+        if ($titleNode->count() > 0) {
+            $titleLength = strlen($titleNode->text());
+        }
+
+        $descNode = $this->crawler->filter('meta[name="description"]')->first();
+        if ($descNode->count() > 0) {
+            $descriptionLength = strlen($descNode->attr('content') ?? '');
+        }
+
+        // CSS - count stylesheets and inline styles
+        $externalStylesheets = $this->crawler->filter('link[rel="stylesheet"]')->count();
+        $inlineStyleTags = $this->crawler->filter('style')->count();
+
+        // Count elements with style attribute (excluding Alpine.js bindings)
+        $elementsWithStyleAttr = 0;
+        $this->crawler->filter('[style]')->each(function (Crawler $node) use (&$elementsWithStyleAttr) {
+            $styleAttr = $node->attr('style') ?? '';
+            // Only count if it's actual CSS, not Alpine.js bindings like "display: none"
+            if (!empty(trim($styleAttr))) {
+                $elementsWithStyleAttr++;
+            }
+        });
+
+        // Media queries - fetch and count from external CSS + inline
+        $mediaQueriesTotal = $this->fetchAndCountCssMediaQueries();
+
+        // JavaScript
+        $externalScripts = $this->crawler->filter('script[src]')->count();
+        $inlineScripts = $this->crawler->filter('script:not([src])')->count();
+        $scriptsWithDefer = $this->crawler->filter('script[defer]')->count();
+        $scriptsWithAsync = $this->crawler->filter('script[async]')->count();
+
+        // Security
+        $hasHttps = str_starts_with($this->currentUrl, 'https://');
+
+        // Calculate percentages
+        $imagesWithAltPercent = $this->calculatePercentage($imagesWithAlt, $totalImages);
+        $imagesWithLazyPercent = $this->calculatePercentage($imagesWithLazy, $totalImages);
+        $imagesWithSrcsetPercent = $this->calculatePercentage($imagesWithSrcset, $totalImages);
+        $imagesWithDimensionsPercent = $this->calculatePercentage($imagesWithDimensions, $totalImages);
+
+        return [
+            'dom_structure' => [
+                'total_elements' => $totalElements,
+                'total_images' => $totalImages,
+                'images_with_alt' => $imagesWithAlt,
+                'images_without_alt' => $totalImages - $imagesWithAlt,
+                'images_with_srcset' => $imagesWithSrcset,
+                'images_with_lazy_loading' => $imagesWithLazy,
+                'images_with_dimensions' => $imagesWithDimensions,
+                'buttons' => $buttons,
+                'links' => $links,
+                'forms' => $forms,
+                'headings' => $headingCounts,
+            ],
+            'meta_tags' => [
+                'has_viewport' => $hasViewport,
+                'has_description' => $hasDescription,
+                'has_title' => $hasTitle,
+                'has_canonical' => $hasCanonical,
+                'has_og_tags' => $hasOgTags,
+                'has_schema_markup' => $hasSchema,
+                'title_length' => $titleLength,
+                'description_length' => $descriptionLength,
+            ],
+            'css' => [
+                'external_stylesheets' => $externalStylesheets,
+                'inline_style_tags' => $inlineStyleTags,
+                'elements_with_style_attr' => $elementsWithStyleAttr,
+                'media_queries_total' => $mediaQueriesTotal,
+                'external_css_fetched' => $this->externalCssFetchedCount,
+                'external_css_failed' => $this->externalCssFailedCount,
+            ],
+            'javascript' => [
+                'external_scripts' => $externalScripts,
+                'inline_scripts' => $inlineScripts,
+                'scripts_with_defer' => $scriptsWithDefer,
+                'scripts_with_async' => $scriptsWithAsync,
+            ],
+            'security' => [
+                'has_https' => $hasHttps,
+            ],
+            'percentages' => [
+                'images_with_alt_percent' => $imagesWithAltPercent,
+                'images_with_lazy_percent' => $imagesWithLazyPercent,
+                'images_with_srcset_percent' => $imagesWithSrcsetPercent,
+                'images_with_dimensions_percent' => $imagesWithDimensionsPercent,
+            ],
+        ];
+    }
+
+    /**
+     * Fetch external CSS files and count media queries
+     * Returns total count of @media queries from inline + external CSS
+     */
+    private function fetchAndCountCssMediaQueries(): int
+    {
+        $totalMediaQueries = 0;
+
+        // Count media queries in inline <style> tags
+        $this->crawler->filter('style')->each(function (Crawler $node) use (&$totalMediaQueries) {
+            $cssContent = $node->text();
+            $totalMediaQueries += substr_count(strtolower($cssContent), '@media');
+        });
+
+        // Fetch and count from external stylesheets (max 10 files)
+        $stylesheets = $this->crawler->filter('link[rel="stylesheet"]');
+        $fetchedCount = 0;
+        $maxFetch = 10; // Limit to prevent excessive requests
+
+        $stylesheets->each(function (Crawler $node) use (&$totalMediaQueries, &$fetchedCount, $maxFetch) {
+            if ($fetchedCount >= $maxFetch) {
+                return; // Stop after 10 files
+            }
+
+            $href = $node->attr('href');
+            if (empty($href)) {
+                return;
+            }
+
+            // Convert relative URLs to absolute
+            $absoluteUrl = $this->makeAbsoluteUrl($href);
+
+            try {
+                // Check cache first (1 hour TTL)
+                $cacheKey = 'css_media_queries_' . md5($absoluteUrl);
+                $mediaQueryCount = Cache::remember($cacheKey, 3600, function () use ($absoluteUrl) {
+                    // Fetch CSS with 5 second timeout
+                    $response = Http::timeout(5)->get($absoluteUrl);
+
+                    if ($response->successful()) {
+                        $cssContent = $response->body();
+                        return substr_count(strtolower($cssContent), '@media');
+                    }
+
+                    return 0;
+                });
+
+                $totalMediaQueries += $mediaQueryCount;
+                $this->externalCssFetchedCount++;
+                $fetchedCount++;
+
+            } catch (\Exception $e) {
+                Log::warning('Failed to fetch CSS file', [
+                    'url' => $absoluteUrl,
+                    'error' => $e->getMessage(),
+                ]);
+                $this->externalCssFailedCount++;
+            }
+        });
+
+        return $totalMediaQueries;
+    }
+
+    /**
+     * Convert relative URL to absolute URL
+     */
+    private function makeAbsoluteUrl(string $url): string
+    {
+        // Already absolute
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+
+        // Protocol-relative URL (//example.com/style.css)
+        if (str_starts_with($url, '//')) {
+            $protocol = parse_url($this->currentUrl, PHP_URL_SCHEME);
+            return $protocol . ':' . $url;
+        }
+
+        // Parse current URL
+        $parsed = parse_url($this->currentUrl);
+        $scheme = $parsed['scheme'] ?? 'https';
+        $host = $parsed['host'] ?? '';
+
+        // Absolute path (/css/style.css)
+        if (str_starts_with($url, '/')) {
+            return $scheme . '://' . $host . $url;
+        }
+
+        // Relative path (css/style.css or ../css/style.css)
+        $path = $parsed['path'] ?? '/';
+        $directory = dirname($path);
+
+        // Normalize directory path
+        if ($directory === '.') {
+            $directory = '/';
+        }
+
+        return $scheme . '://' . $host . $directory . '/' . $url;
+    }
+
+    /**
+     * Calculate percentage safely (handles division by zero)
+     */
+    private function calculatePercentage(int $part, int $total): float
+    {
+        if ($total === 0) {
+            return 0.0;
+        }
+
+        return round(($part / $total) * 100, 1);
+    }
+
+    /**
+     * Get HTML excerpt for AI context (first 5KB of body)
+     * Provides structural context without overwhelming tokens
+     */
+    private function getHtmlExcerpt(): array
+    {
+        $bodyHtml = '';
+        $maxSize = 5120; // 5KB limit
+
+        try {
+            $bodyNode = $this->crawler->filter('body')->first();
+            if ($bodyNode->count() > 0) {
+                $bodyHtml = $bodyNode->html();
+            }
+        } catch (\Exception $e) {
+            Log::warning('Failed to extract body HTML', ['error' => $e->getMessage()]);
+            $bodyHtml = '';
+        }
+
+        $originalSize = strlen($bodyHtml);
+        $truncated = $originalSize > $maxSize;
+
+        if ($truncated) {
+            $bodyHtml = substr($bodyHtml, 0, $maxSize) . '... [truncated]';
+        }
+
+        return [
+            'content' => $bodyHtml,
+            'size' => strlen($bodyHtml),
+            'original_size' => $originalSize,
+            'truncated' => $truncated,
+        ];
+    }
+
+    /**
+     * Get CSS excerpts for AI context (first 10KB)
+     * Provides context without overwhelming tokens
+     */
+    private function getCssExcerpts(): array
+    {
+        $excerpts = [];
+        $totalSize = 0;
+        $maxSize = 10240; // 10KB limit
+
+        // Collect inline CSS first (from <style> tags)
+        $this->crawler->filter('style')->each(function (Crawler $node) use (&$excerpts, &$totalSize, $maxSize) {
+            if ($totalSize >= $maxSize) {
+                return;
+            }
+
+            $cssContent = $node->text();
+            $remainingSize = $maxSize - $totalSize;
+
+            if (strlen($cssContent) > $remainingSize) {
+                $cssContent = substr($cssContent, 0, $remainingSize) . '... [truncated]';
+            }
+
+            $excerpts[] = [
+                'type' => 'inline',
+                'content' => $cssContent,
+                'size' => strlen($cssContent),
+            ];
+
+            $totalSize += strlen($cssContent);
+        });
+
+        // Collect external CSS excerpts (already cached from fetchAndCountCssMediaQueries)
+        $stylesheets = $this->crawler->filter('link[rel="stylesheet"]');
+        $fetchedCount = 0;
+        $maxFetch = 5; // Limit to 5 files for excerpts
+
+        $stylesheets->each(function (Crawler $node) use (&$excerpts, &$totalSize, &$fetchedCount, $maxSize, $maxFetch) {
+            if ($totalSize >= $maxSize || $fetchedCount >= $maxFetch) {
+                return;
+            }
+
+            $href = $node->attr('href');
+            if (empty($href)) {
+                return;
+            }
+
+            $absoluteUrl = $this->makeAbsoluteUrl($href);
+
+            try {
+                // Check cache first (same key as media query fetch, so it's already cached)
+                $cacheKey = 'css_content_' . md5($absoluteUrl);
+                $cssContent = Cache::remember($cacheKey, 3600, function () use ($absoluteUrl) {
+                    $response = Http::timeout(5)->get($absoluteUrl);
+
+                    if ($response->successful()) {
+                        return $response->body();
+                    }
+
+                    return null;
+                });
+
+                if ($cssContent) {
+                    $remainingSize = $maxSize - $totalSize;
+
+                    if (strlen($cssContent) > $remainingSize) {
+                        $cssContent = substr($cssContent, 0, $remainingSize) . '... [truncated]';
+                    }
+
+                    $excerpts[] = [
+                        'type' => 'external',
+                        'url' => $absoluteUrl,
+                        'content' => $cssContent,
+                        'size' => strlen($cssContent),
+                    ];
+
+                    $totalSize += strlen($cssContent);
+                    $fetchedCount++;
+                }
+
+            } catch (\Exception $e) {
+                // Silently skip failed CSS files
+                Log::debug('Failed to fetch CSS excerpt', ['url' => $absoluteUrl]);
+            }
+        });
+
+        return [
+            'excerpts' => $excerpts,
+            'total_size' => $totalSize,
+            'truncated' => $totalSize >= $maxSize,
+        ];
     }
 
     /**

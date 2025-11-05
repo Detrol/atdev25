@@ -52,9 +52,10 @@ class ProcessWebsiteAudit implements ShouldQueue
             // Step 1: Collect website data
             $collectedData = $collector->collect($this->audit->url);
 
-            // Save collected data and screenshot
+            // Save collected data, ground truth, and screenshot
             $this->audit->update([
                 'collected_data' => $collectedData,
+                'ground_truth_data' => $collectedData['ground_truth'] ?? null,
                 'screenshot_path' => $collectedData['screenshot_path'] ?? null,
             ]);
 
@@ -66,12 +67,14 @@ class ProcessWebsiteAudit implements ShouldQueue
             // Step 2: Analyze with AI
             $analysis = $aiService->analyzeWebsite($collectedData);
 
-            // Save AI report and scores
+            // Save AI report, scores, and validation status
             $this->audit->update([
                 'ai_report' => $analysis['ai_report'],
                 'seo_score' => $analysis['seo_score'],
                 'technical_score' => $analysis['technical_score'],
                 'overall_score' => $analysis['overall_score'],
+                'validation_passed' => $analysis['validation_passed'] ?? true,
+                'validation_errors' => $analysis['validation_errors'] ?? [],
             ]);
 
             Log::info('AI analysis completed', [
