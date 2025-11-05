@@ -113,6 +113,59 @@ class WebsiteDataCollector
     }
 
     /**
+     * Detect frontend frameworks and libraries
+     * This helps us understand what's framework-generated vs user-defined
+     */
+    private function detectFrameworks(): array
+    {
+        $frameworks = [];
+
+        // Check for Alpine.js
+        if (str_contains($this->html, 'x-data') || str_contains($this->html, 'Alpine.')) {
+            $frameworks[] = 'Alpine.js';
+        }
+
+        // Check for React
+        if (str_contains($this->html, 'react') || str_contains($this->html, '_react') || str_contains($this->html, 'data-reactroot')) {
+            $frameworks[] = 'React';
+        }
+
+        // Check for Vue
+        if (str_contains($this->html, 'v-if') || str_contains($this->html, 'v-for') || str_contains($this->html, 'Vue.')) {
+            $frameworks[] = 'Vue.js';
+        }
+
+        // Check for Angular
+        if (str_contains($this->html, 'ng-app') || str_contains($this->html, 'ng-controller') || str_contains($this->html, 'Angular')) {
+            $frameworks[] = 'Angular';
+        }
+
+        // Check for Svelte
+        if (str_contains($this->html, 'svelte-') || str_contains($this->html, 'class="svelte')) {
+            $frameworks[] = 'Svelte';
+        }
+
+        // Check for Tailwind CSS
+        if (preg_match('/class="[^"]*(?:flex|grid|p-\d|m-\d|text-|bg-|border-)[^"]*"/', $this->html)) {
+            $frameworks[] = 'Tailwind CSS';
+        }
+
+        // Check for Bootstrap
+        if (str_contains($this->html, 'bootstrap') || preg_match('/class="[^"]*(?:container|row|col-)[^"]*"/', $this->html)) {
+            $frameworks[] = 'Bootstrap';
+        }
+
+        // Check for jQuery
+        if (str_contains($this->html, 'jquery') || str_contains($this->html, 'jQuery')) {
+            $frameworks[] = 'jQuery';
+        }
+
+        Log::info('Frameworks detected', ['frameworks' => $frameworks]);
+
+        return $frameworks;
+    }
+
+    /**
      * Collect ground truth - objective, measurable facts only
      * NO interpretation, ONLY counts and percentages
      * This provides 100% accurate data that AI must cite exactly
@@ -120,6 +173,9 @@ class WebsiteDataCollector
     private function collectGroundTruth(): array
     {
         Log::info('Collecting ground truth data...');
+
+        // Detect frameworks first (helps us understand what's acceptable)
+        $detectedFrameworks = $this->detectFrameworks();
 
         // DOM Structure
         $totalElements = $this->crawler->filter('*')->count();
@@ -169,13 +225,61 @@ class WebsiteDataCollector
         $externalStylesheets = $this->crawler->filter('link[rel="stylesheet"]')->count();
         $inlineStyleTags = $this->crawler->filter('style')->count();
 
-        // Count elements with style attribute (excluding Alpine.js bindings)
+        // Count elements with style attribute, separating framework vs user-defined
         $elementsWithStyleAttr = 0;
-        $this->crawler->filter('[style]')->each(function (Crawler $node) use (&$elementsWithStyleAttr) {
+        $frameworkGeneratedStyles = 0;
+        $userInlineStyles = 0;
+
+        $hasAlpineJs = in_array('Alpine.js', $detectedFrameworks);
+        $hasReact = in_array('React', $detectedFrameworks);
+        $hasVue = in_array('Vue.js', $detectedFrameworks);
+
+        $this->crawler->filter('[style]')->each(function (Crawler $node) use (&$elementsWithStyleAttr, &$frameworkGeneratedStyles, &$userInlineStyles, $hasAlpineJs, $hasReact, $hasVue) {
             $styleAttr = $node->attr('style') ?? '';
-            // Only count if it's actual CSS, not Alpine.js bindings like "display: none"
             if (!empty(trim($styleAttr))) {
                 $elementsWithStyleAttr++;
+
+                // Check if this is framework-generated
+                $isFrameworkGenerated = false;
+
+                // Alpine.js typically adds: display: none; opacity: 0; transform: ...; transition: ...
+                if ($hasAlpineJs) {
+                    $hasAlpineAttributes = false;
+                    foreach (['x-data', 'x-show', 'x-if', 'x-transition', 'x-cloak'] as $attr) {
+                        if ($node->attr($attr) !== null) {
+                            $hasAlpineAttributes = true;
+                            break;
+                        }
+                    }
+
+                    // If element has Alpine attributes, consider styles framework-generated
+                    if ($hasAlpineAttributes) {
+                        $isFrameworkGenerated = true;
+                    }
+
+                    // Common Alpine.js-generated patterns
+                    if (preg_match('/display:\s*none/', $styleAttr) ||
+                        preg_match('/opacity:\s*0/', $styleAttr) ||
+                        preg_match('/transform:.*translate/', $styleAttr)) {
+                        $isFrameworkGenerated = true;
+                    }
+                }
+
+                // React inline styles (typically camelCase properties or data-react attributes)
+                if ($hasReact && $node->attr('data-reactid') !== null) {
+                    $isFrameworkGenerated = true;
+                }
+
+                // Vue inline styles
+                if ($hasVue && $node->attr('data-v-') !== null) {
+                    $isFrameworkGenerated = true;
+                }
+
+                if ($isFrameworkGenerated) {
+                    $frameworkGeneratedStyles++;
+                } else {
+                    $userInlineStyles++;
+                }
             }
         });
 
@@ -225,6 +329,8 @@ class WebsiteDataCollector
                 'external_stylesheets' => $externalStylesheets,
                 'inline_style_tags' => $inlineStyleTags,
                 'elements_with_style_attr' => $elementsWithStyleAttr,
+                'framework_generated_styles' => $frameworkGeneratedStyles,
+                'user_inline_styles' => $userInlineStyles,
                 'media_queries_total' => $mediaQueriesTotal,
                 'external_css_fetched' => $this->externalCssFetchedCount,
                 'external_css_failed' => $this->externalCssFailedCount,
@@ -243,6 +349,10 @@ class WebsiteDataCollector
                 'images_with_lazy_percent' => $imagesWithLazyPercent,
                 'images_with_srcset_percent' => $imagesWithSrcsetPercent,
                 'images_with_dimensions_percent' => $imagesWithDimensionsPercent,
+            ],
+            'frameworks' => [
+                'detected' => $detectedFrameworks,
+                'count' => count($detectedFrameworks),
             ],
         ];
     }
