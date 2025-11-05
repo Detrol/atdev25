@@ -14,6 +14,10 @@ import './demos/before-after-slider.js';
 import './demos/smart-menu.js';
 import './demos/google-reviews.js';
 
+// Import modal scripts
+import { initTechStackModal } from './tech-stack-modal.js';
+import { initProjectModal } from './project-modal.js';
+
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
 Alpine.plugin(persist);
@@ -378,6 +382,14 @@ Alpine.start();
 
 // Form validation and interaction enhancements
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modals
+    initTechStackModal();
+
+    // Initialize project modal if projects data exists
+    if (window.projectModalData) {
+        initProjectModal(window.projectModalData);
+    }
+
     // Auto-hide flash messages after 5 seconds
     const flashMessages = document.querySelectorAll('[x-data]');
     

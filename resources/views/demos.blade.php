@@ -144,7 +144,7 @@
 
 @push('scripts')
 {{-- Demo scripts now loaded via app.js for proper Alpine initialization --}}
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+<script type="module" defer src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 @endpush
 
 @endsection

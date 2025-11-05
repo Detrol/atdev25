@@ -38,6 +38,8 @@
                          sizes="(max-width: 768px) 100vw, 600px"
                          src="{{ $workImageMedia['src'] }}"
                          alt="Andreas Thun arbetar - utvecklare vid sitt skrivbord"
+                         width="800"
+                         height="600"
                          loading="lazy"
                          decoding="async"
                          class="rounded-2xl shadow-2xl border border-white/10 hover:scale-105 transition-transform duration-500">
