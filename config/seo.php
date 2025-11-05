@@ -13,7 +13,7 @@ return [
 
     'default_title' => 'ATDev - AI-Driven Utveckling | 20+ Års Erfarenhet',
 
-    'default_description' => 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation för att leverera högkvalitativa webbapplikationer till en bråkdel av priset. Specialist på Laravel, React och AI-integration.',
+    'default_description' => 'AI-driven webbutveckling med 20+ års erfarenhet. Specialist på Laravel, React och AI-integration. Högkvalitativa lösningar till konkurrenskraftiga priser.',
 
     'default_keywords' => 'webbutveckling, AI-utveckling, Laravel, React, prompt engineering, AI-expert, Andreas Thun, ATDev, Stockholm, Sverige',
 
