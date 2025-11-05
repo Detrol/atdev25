@@ -21,7 +21,7 @@
 {{-- Projects Section --}}
 <x-home.projects :projects="$projects" />
 
-{{-- Interactive Demos CTA --}}
+{{-- Interaktiva Demos CTA --}}
 <x-home.demos-cta />
 
 {{-- FAQ Section --}}

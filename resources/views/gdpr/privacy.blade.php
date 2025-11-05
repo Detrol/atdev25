@@ -23,9 +23,9 @@
 
             <h3>Dataskyddsansvarig</h3>
             <p>
-                <strong>Företag:</strong> ATDev<br>
-                <strong>Kontaktperson:</strong> Andreas Thun<br>
+                <strong>Frilansare:</strong> Andreas Thun (ATDev)<br>
                 <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700">andreas@atdev.me</a><br>
+                <strong>Fakturering:</strong> Via Frilans Finans<br>
             </p>
 
             <h2>2. Vilka personuppgifter samlar vi in?</h2>
@@ -232,7 +232,8 @@
             </p>
             <p>
                 <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700">andreas@atdev.me</a><br>
-                <strong>Företag:</strong> ATDev - Andreas Thun
+                <strong>Frilansare:</strong> Andreas Thun (ATDev)<br>
+                <strong>Fakturering:</strong> Via Frilans Finans
             </p>
 
             <h2>13. Klagomål till tillsynsmyndighet</h2>

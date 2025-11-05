@@ -13,9 +13,9 @@ return [
 
     'default_title' => 'ATDev - AI-Driven Utveckling | 20+ Års Erfarenhet',
 
-    'default_description' => 'AI-driven webbutveckling med 20+ års erfarenhet. Specialist på Laravel, React och AI-integration. Högkvalitativa lösningar till konkurrenskraftiga priser.',
+    'default_description' => 'AI-driven webbutveckling med 20+ års erfarenhet. Specialist på Laravel, Vue, Alpine.js och AI-integration. Högkvalitativa lösningar till konkurrenskraftiga priser.',
 
-    'default_keywords' => 'webbutveckling, AI-utveckling, Laravel, React, prompt engineering, AI-expert, Andreas Thun, ATDev, Stockholm, Sverige',
+    'default_keywords' => 'webbutveckling, AI-utveckling, Laravel, Vue.js, Alpine.js, prompt engineering, AI-expert, Andreas Thun, ATDev, Stockholm, Sverige',
 
     'default_image' => '/images/og-default.jpg',
 
@@ -43,7 +43,7 @@ return [
         'name' => 'ATDev',
         'url' => 'https://atdev.me',
         'logo' => '/images/logo.png',
-        'description' => 'AI-driven webbutveckling med 20+ års erfarenhet. Specialist på Laravel, React och AI-integration.',
+        'description' => 'AI-driven webbutveckling med 20+ års erfarenhet. Specialist på Laravel, Vue, Alpine.js och AI-integration.',
         'founding_date' => '2004',
         'area_served' => 'SE',
         'slogan' => 'AI-Driven Utveckling för Moderna Företag',

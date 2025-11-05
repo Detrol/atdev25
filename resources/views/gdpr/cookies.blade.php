@@ -293,7 +293,8 @@
             </p>
             <p>
                 <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700">andreas@atdev.me</a><br>
-                <strong>Företag:</strong> ATDev - Andreas Thun
+                <strong>Frilansare:</strong> Andreas Thun (ATDev)<br>
+                <strong>Fakturering:</strong> Via Frilans Finans
             </p>
 
             <h2>9. Mer information om cookies</h2>

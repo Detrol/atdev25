@@ -213,4 +213,4 @@
     <x-home.project-modal :projects="$projects" />
 </section>
 
-<!-- Interactive Demos CTA Section -->
+<!-- Interaktiva Demos CTA Section -->

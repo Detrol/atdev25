@@ -74,22 +74,22 @@
                         <!-- Tech Icons - Desktop -->
                         <div class="hidden md:flex absolute -top-20 left-[12.5%] -translate-x-1/2 items-center justify-center" x-show="showHtml" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-orange-500 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="{{ asset('images/icons/html5.svg') }}" alt="HTML5" class="w-8 h-8 drop-shadow-lg">
+                                <img src="{{ asset('images/icons/html5.svg') }}" alt="HTML5" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
                         <div class="hidden md:flex absolute -top-20 left-[37.5%] -translate-x-1/2 items-center justify-center" x-show="showPhp" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-purple-600 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="{{ asset('images/icons/php.svg') }}" alt="PHP" class="w-8 h-8 drop-shadow-lg">
+                                <img src="{{ asset('images/icons/php.svg') }}" alt="PHP" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
                         <div class="hidden md:flex absolute -top-20 left-[62.5%] -translate-x-1/2 items-center justify-center" x-show="showLaravel" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-red-600 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="{{ asset('images/icons/laravel.svg') }}" alt="Laravel" class="w-8 h-8 drop-shadow-lg">
+                                <img src="{{ asset('images/icons/laravel.svg') }}" alt="Laravel" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
                         <div class="hidden md:flex absolute -top-20 left-[87.5%] -translate-x-1/2 items-center justify-center" x-show="showAi" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
                             <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-amber-600 animate-[sway_2s_ease-in-out_infinite]">
-                                <img src="{{ asset('images/icons/anthropic.svg') }}" alt="Anthropic" class="w-8 h-8 drop-shadow-lg">
+                                <img src="{{ asset('images/icons/anthropic.svg') }}" alt="Anthropic" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
 
@@ -136,7 +136,7 @@
                                 <div class="text-white/80 text-sm transition-opacity" :class="mobileCurrentStep >= {{ $milestone['step'] }} ? 'opacity-100' : 'opacity-60'">{{ $milestone['tech'] }}</div>
                                 <div class="absolute -top-3 -right-3" x-show="mobileCurrentStep >= {{ $milestone['step'] }}" x-transition:enter="transition-all ease-out duration-500" x-transition:enter-start="opacity-0 scale-0 rotate-45" x-transition:enter-end="opacity-100 scale-100 rotate-0" x-cloak>
                                     <div class="bg-white/95 backdrop-blur-sm p-2 rounded-xl shadow-2xl border-2 border-{{ $milestone['color'] }}-500 animate-[sway_1.8s_ease-in-out_infinite]">
-                                        <img src="{{ asset('images/icons/' . $milestone['icon'] . '.svg') }}" alt="{{ $milestone['tech'] }}" class="w-10 h-10 drop-shadow-lg">
+                                        <img src="{{ asset('images/icons/' . $milestone['icon'] . '.svg') }}" alt="{{ $milestone['tech'] }}" width="40" height="40" class="w-10 h-10 drop-shadow-lg">
                                     </div>
                                 </div>
                             </div>

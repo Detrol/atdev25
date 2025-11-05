@@ -17,8 +17,8 @@
     @else
         <x-seo-meta
             title="ATDev - AI-Driven Utveckling | 20+ Års Erfarenhet"
-            description="Utvecklare med 20+ års erfarenhet kombinerar AI och automation för att leverera högkvalitativa webbapplikationer till en bråkdel av priset. Specialist på Laravel, React och AI-integration."
-            keywords="webbutveckling, AI-utveckling, Laravel, React, prompt engineering, AI-expert, Andreas Thun, ATDev"
+            description="AI-driven webbutveckling med 20+ års erfarenhet. Specialist på Laravel, Vue, Alpine.js och AI-integration. Högkvalitativa lösningar till konkurrenskraftiga priser."
+            keywords="webbutveckling, AI-utveckling, Laravel, Vue.js, Alpine.js, prompt engineering, AI-expert, Andreas Thun, ATDev"
         />
     @endisset
 
