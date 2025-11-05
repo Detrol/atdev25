@@ -16,16 +16,22 @@ class WebsiteAudit extends Model
         'token',
         'status',
         'collected_data',
+        'ground_truth_data',
         'ai_report',
         'seo_score',
         'technical_score',
         'overall_score',
+        'validation_passed',
+        'validation_errors',
         'screenshot_path',
         'completed_at',
     ];
 
     protected $casts = [
         'collected_data' => 'array',
+        'ground_truth_data' => 'array',
+        'validation_passed' => 'boolean',
+        'validation_errors' => 'array',
         'completed_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
