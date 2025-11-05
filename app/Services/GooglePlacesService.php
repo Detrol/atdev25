@@ -2,16 +2,18 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Exception;
 use InvalidArgumentException;
 
 class GooglePlacesService
 {
     private string $apiKey;
+
     private string $apiBaseUrl = 'https://maps.googleapis.com/maps/api/place';
+
     private const CACHE_TTL = 86400; // 24 hours in seconds
 
     public function __construct()
@@ -26,8 +28,8 @@ class GooglePlacesService
     /**
      * Search for places by name or query
      *
-     * @param string $query Search query
-     * @param string $language Response language (default: Swedish)
+     * @param  string  $query  Search query
+     * @param  string  $language  Response language (default: Swedish)
      * @return array Search results with place_id, name, address, rating, etc.
      */
     public function searchPlaces(string $query, string $language = 'sv'): array
@@ -43,7 +45,7 @@ class GooglePlacesService
                     'key' => $this->apiKey,
                 ]);
 
-                if (!$response->successful()) {
+                if (! $response->successful()) {
                     throw new Exception('Google API request failed');
                 }
 
@@ -64,8 +66,8 @@ class GooglePlacesService
     /**
      * Get detailed place information including reviews
      *
-     * @param string $placeId Google Place ID
-     * @param string $language Response language (default: Swedish)
+     * @param  string  $placeId  Google Place ID
+     * @param  string  $language  Response language (default: Swedish)
      * @return array Place details with reviews
      */
     public function getPlaceDetails(string $placeId, string $language = 'sv'): array
@@ -83,7 +85,7 @@ class GooglePlacesService
                     'key' => $this->apiKey,
                 ]);
 
-                if (!$response->successful()) {
+                if (! $response->successful()) {
                     throw new Exception('Google API request failed');
                 }
 
@@ -104,8 +106,8 @@ class GooglePlacesService
     /**
      * Get reviews for a specific place
      *
-     * @param string $placeId Google Place ID
-     * @param string $language Response language (default: Swedish)
+     * @param  string  $placeId  Google Place ID
+     * @param  string  $language  Response language (default: Swedish)
      * @return array Formatted reviews data
      */
     public function getPlaceReviews(string $placeId, string $language = 'sv'): array
@@ -134,8 +136,7 @@ class GooglePlacesService
     /**
      * Clear cache for a specific place
      *
-     * @param string $placeId Google Place ID
-     * @return bool
+     * @param  string  $placeId  Google Place ID
      */
     public function clearPlaceCache(string $placeId): bool
     {
@@ -144,7 +145,7 @@ class GooglePlacesService
 
         foreach ($languages as $language) {
             $cacheKey = $this->getCacheKey('details', $placeId, $language);
-            if (!Cache::forget($cacheKey)) {
+            if (! Cache::forget($cacheKey)) {
                 $cleared = false;
             }
         }
@@ -155,9 +156,10 @@ class GooglePlacesService
     /**
      * Handle Google API response and check status
      *
-     * @param array $data API response data
-     * @param string $cacheKey Cache key for fallback
+     * @param  array  $data  API response data
+     * @param  string  $cacheKey  Cache key for fallback
      * @return array Processed response
+     *
      * @throws Exception
      */
     private function handleApiResponse(array $data, string $cacheKey): array
@@ -173,7 +175,6 @@ class GooglePlacesService
 
             case 'INVALID_REQUEST':
                 throw new InvalidArgumentException('Ogiltig förfrågan till Google Places API');
-
             case 'OVER_QUERY_LIMIT':
                 Log::warning('Google API quota exceeded');
 
@@ -184,14 +185,11 @@ class GooglePlacesService
                 }
 
                 throw new Exception('API-kvot överskriden. Försök igen senare.');
-
             case 'REQUEST_DENIED':
                 Log::error('Google API request denied - check API key configuration');
                 throw new Exception('API-konfigurationsfel');
-
             case 'UNKNOWN_ERROR':
                 throw new Exception('Oväntat fel från Google API. Försök igen.');
-
             default:
                 throw new Exception("Okänd API-status: {$status}");
         }
@@ -200,14 +198,12 @@ class GooglePlacesService
     /**
      * Validate Place ID format
      *
-     * @param string $placeId
-     * @return void
      * @throws InvalidArgumentException
      */
     private function validatePlaceId(string $placeId): void
     {
         // Google Place IDs typically start with "ChIJ" but can have other prefixes
-        if (strlen($placeId) < 10 || !preg_match('/^[A-Za-z0-9_-]+$/', $placeId)) {
+        if (strlen($placeId) < 10 || ! preg_match('/^[A-Za-z0-9_-]+$/', $placeId)) {
             throw new InvalidArgumentException('Ogiltigt Place ID-format');
         }
     }
@@ -215,21 +211,21 @@ class GooglePlacesService
     /**
      * Generate cache key
      *
-     * @param string $type Cache type (search, details)
-     * @param string $identifier Query or Place ID
-     * @param string $language Language code
-     * @return string
+     * @param  string  $type  Cache type (search, details)
+     * @param  string  $identifier  Query or Place ID
+     * @param  string  $language  Language code
      */
     private function getCacheKey(string $type, string $identifier, string $language = 'sv'): string
     {
         $sanitized = str_replace([' ', ',', '.'], '_', strtolower($identifier));
+
         return "google_places_{$type}:{$sanitized}:{$language}";
     }
 
     /**
      * Format reviews data for frontend consumption
      *
-     * @param array $reviews Raw reviews from API
+     * @param  array  $reviews  Raw reviews from API
      * @return array Formatted reviews
      */
     private function formatReviews(array $reviews): array

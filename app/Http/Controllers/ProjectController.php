@@ -25,19 +25,19 @@ class ProjectController extends Controller
             $seo->breadcrumbs([
                 ['name' => 'Hem', 'url' => url('/')],
                 ['name' => 'Projekt', 'url' => url('/')],
-                ['name' => $project->title, 'url' => url('/projects/' . $project->slug)],
+                ['name' => $project->title, 'url' => url('/projects/'.$project->slug)],
             ]),
         ];
 
         $structuredData = $seo->renderSchemas($schemas);
 
         // SEO meta tags
-        $seoTitle = $project->title . ' - Portfolio | ATDev';
+        $seoTitle = $project->title.' - Portfolio | ATDev';
         $seoDescription = $project->summary ?? $project->description ?? 'Ett webbutvecklingsprojekt av Andreas Thun. Specialist på Laravel, React och AI-integration.';
         $seoKeywords = implode(', ', array_merge($project->technologies ?? [], ['webbutveckling', 'portfolio', 'ATDev', 'Andreas Thun']));
         $seoImage = $project->screenshot_path
-            ? asset('storage/' . $project->screenshot_path)
-            : ($project->cover_image ? asset('storage/' . $project->cover_image) : asset('images/og-default.jpg'));
+            ? asset('storage/'.$project->screenshot_path)
+            : ($project->cover_image ? asset('storage/'.$project->cover_image) : asset('images/og-default.jpg'));
         $seoType = 'article';
 
         return view('projects.show', compact(

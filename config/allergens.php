@@ -21,7 +21,7 @@ return [
             'keywords' => [
                 'vete', 'råg', 'korn', 'havre', 'spelt', 'pasta', 'bröd', 'mjöl',
                 'krutonger', 'panko', 'seitan', 'bulgur', 'couscous', 'durumvete',
-                'vetemjöl', 'rågmjöl', 'kornmjöl', 'dinkel'
+                'vetemjöl', 'rågmjöl', 'kornmjöl', 'dinkel',
             ],
         ],
 
@@ -35,7 +35,7 @@ return [
                 'mjölk', 'grädde', 'smör', 'ost', 'yoghurt', 'kvarg', 'keso',
                 'parmesan', 'mozzarella', 'cheddar', 'gorgonzola', 'brie', 'camembert',
                 'crème fraiche', 'kesella', 'filmjölk', 'vispgrädde', 'matfettsmjölk',
-                'vassle', 'kasein', 'laktos', 'mjölkprotein'
+                'vassle', 'kasein', 'laktos', 'mjölkprotein',
             ],
         ],
 
@@ -48,7 +48,7 @@ return [
             'keywords' => [
                 'ägg', 'äggula', 'äggvita', 'majonnäs', 'aioli', 'carbonara',
                 'hollandaise', 'béarnaise', 'äggnudlar', 'omelette', 'maräng',
-                'albumin', 'lecithin', 'lysozym'
+                'albumin', 'lecithin', 'lysozym',
             ],
         ],
 
@@ -61,7 +61,7 @@ return [
             'keywords' => [
                 'fisk', 'lax', 'torsk', 'sill', 'makrill', 'tonfisk', 'ansjovis',
                 'sardiner', 'röding', 'gädda', 'abborre', 'kaviar', 'fiskbuljong',
-                'fisksås', 'worcestersås', 'colatura', 'garum'
+                'fisksås', 'worcestersås', 'colatura', 'garum',
             ],
         ],
 
@@ -73,7 +73,7 @@ return [
             'severity' => 'high',
             'keywords' => [
                 'räka', 'krabba', 'hummer', 'kräfta', 'langust', 'scampi',
-                'skaldjur', 'räksmör', 'krabbsmör', 'skaldjursbuljong'
+                'skaldjur', 'räksmör', 'krabbsmör', 'skaldjursbuljong',
             ],
         ],
 
@@ -85,7 +85,7 @@ return [
             'severity' => 'high',
             'keywords' => [
                 'ostron', 'mussla', 'blåmussla', 'snäcka', 'bläckfisk', 'tioarmad bläckfisk',
-                'åttaarmad bläckfisk', 'inkfish', 'calamares', 'pulpo', 'blötdjur'
+                'åttaarmad bläckfisk', 'inkfish', 'calamares', 'pulpo', 'blötdjur',
             ],
         ],
 
@@ -98,7 +98,7 @@ return [
             'keywords' => [
                 'mandel', 'hasselnöt', 'valnöt', 'cashewnöt', 'pekannöt', 'paranöt',
                 'pistagenöt', 'macadamianöt', 'queenslandnöt', 'nötter', 'marzipan',
-                'nougat', 'pralin', 'gianduja', 'mandelmjöl', 'nötsmör'
+                'nougat', 'pralin', 'gianduja', 'mandelmjöl', 'nötsmör',
             ],
         ],
 
@@ -110,7 +110,7 @@ return [
             'severity' => 'critical',
             'keywords' => [
                 'jordnöt', 'jordnötter', 'jordnötssmör', 'peanut', 'peanutbutter',
-                'arachis', 'satay', 'sataysås'
+                'arachis', 'satay', 'sataysås',
             ],
         ],
 
@@ -122,7 +122,7 @@ return [
             'severity' => 'medium',
             'keywords' => [
                 'soja', 'sojabönor', 'sojamjölk', 'tofu', 'tempeh', 'miso', 'tamari',
-                'sojaprotein', 'sojasås', 'edamame', 'sojaböna', 'lecithin'
+                'sojaprotein', 'sojasås', 'edamame', 'sojaböna', 'lecithin',
             ],
         ],
 
@@ -134,7 +134,7 @@ return [
             'severity' => 'medium',
             'keywords' => [
                 'selleri', 'selleristjälk', 'selleripulver', 'sellerifrö', 'rotselleri',
-                'bladselleri', 'celery'
+                'bladselleri', 'celery',
             ],
         ],
 
@@ -146,7 +146,7 @@ return [
             'severity' => 'medium',
             'keywords' => [
                 'senap', 'senapsfrö', 'dijonsenap', 'grovkornig senap', 'senapspulver',
-                'mustard', 'senapskorn'
+                'mustard', 'senapskorn',
             ],
         ],
 
@@ -158,7 +158,7 @@ return [
             'severity' => 'medium',
             'keywords' => [
                 'sesam', 'sesamfrö', 'tahini', 'sesamolja', 'halva', 'sesame',
-                'sesamkorn', 'gomashio'
+                'sesamkorn', 'gomashio',
             ],
         ],
 
@@ -170,7 +170,7 @@ return [
             'severity' => 'medium',
             'keywords' => [
                 'sulfit', 'svaveldioxid', 'vin', 'torkad frukt', 'konserveringsmedel',
-                'E220', 'E221', 'E222', 'E223', 'E224', 'E226', 'E227', 'E228'
+                'E220', 'E221', 'E222', 'E223', 'E224', 'E226', 'E227', 'E228',
             ],
         ],
 
@@ -181,7 +181,7 @@ return [
             'color' => 'pink',
             'severity' => 'low',
             'keywords' => [
-                'lupin', 'lupinfrö', 'lupinmjöl', 'lupinböna', 'lupinprotein'
+                'lupin', 'lupinfrö', 'lupinmjöl', 'lupinböna', 'lupinprotein',
             ],
         ],
     ],

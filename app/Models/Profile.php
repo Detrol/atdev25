@@ -96,6 +96,7 @@ class Profile extends Model implements HasMedia
     public function getAvatarUrlAttribute(): ?string
     {
         $media = $this->getFirstMedia('avatar');
+
         return $media ? $media->getUrl('optimized') : null;
     }
 
@@ -105,6 +106,7 @@ class Profile extends Model implements HasMedia
     public function getWorkImageUrlAttribute(): ?string
     {
         $media = $this->getFirstMedia('work_image');
+
         return $media ? $media->getUrl('optimized') : null;
     }
 
@@ -115,7 +117,7 @@ class Profile extends Model implements HasMedia
      */
     public function prepareMediaUrls(string $collection): array
     {
-        if (!$this->hasMedia($collection)) {
+        if (! $this->hasMedia($collection)) {
             return [];
         }
 
@@ -127,10 +129,10 @@ class Profile extends Model implements HasMedia
         // Always use getUrl() which handles conversion existence automatically
         // Spatie will return conversion URL if it exists, otherwise original
         $urls = [
-            'tiny' => $media->getUrl('tiny') . '?v=' . $version,
-            'small' => $media->getUrl('small') . '?v=' . $version,
-            'medium' => $media->getUrl('medium') . '?v=' . $version,
-            'optimized' => $media->getUrl('optimized') . '?v=' . $version,
+            'tiny' => $media->getUrl('tiny').'?v='.$version,
+            'small' => $media->getUrl('small').'?v='.$version,
+            'medium' => $media->getUrl('medium').'?v='.$version,
+            'optimized' => $media->getUrl('optimized').'?v='.$version,
         ];
 
         // Build srcset attribute

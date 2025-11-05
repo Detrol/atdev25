@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 class CookieConsentService
 {
     private const COOKIE_NAME = 'cookie_consent_id';
+
     private const COOKIE_LIFETIME = 60 * 24 * 365; // 1 år i minuter
 
     /**
@@ -19,7 +20,7 @@ class CookieConsentService
         // Försök hämta från cookie först
         $consentId = $request->cookie(self::COOKIE_NAME);
 
-        if (!$consentId) {
+        if (! $consentId) {
             // Skapa nytt unikt ID
             $consentId = Str::random(64);
         }
@@ -86,7 +87,7 @@ class CookieConsentService
     {
         $consentId = request()->cookie(self::COOKIE_NAME);
 
-        if (!$consentId) {
+        if (! $consentId) {
             return null;
         }
 
@@ -100,7 +101,7 @@ class CookieConsentService
     {
         $consent = $this->getConsent();
 
-        if (!$consent) {
+        if (! $consent) {
             // Ingen consent given = endast essential tillåtet
             return $category === 'essential';
         }
@@ -147,7 +148,7 @@ class CookieConsentService
     {
         $consent = $this->getConsent();
 
-        if (!$consent) {
+        if (! $consent) {
             return [
                 'essential' => true,
                 'functional' => false,

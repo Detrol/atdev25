@@ -35,7 +35,7 @@ class HomeController extends Controller
                 ->select([
                     'id', 'slug', 'title', 'summary', 'description',
                     'cover_image', 'screenshot_path', 'technologies',
-                    'client_name', 'testimonial', 'live_url', 'repo_url', 'created_at'
+                    'client_name', 'testimonial', 'live_url', 'repo_url', 'created_at',
                 ])
                 ->orderBy('sort_order')
                 ->orderBy('created_at', 'desc')
@@ -56,7 +56,7 @@ class HomeController extends Controller
         $seoTitle = 'ATDev - AI-Driven Utveckling | 20+ Års Erfarenhet | Andreas Thun';
         $seoDescription = 'Utvecklare med 20+ års erfarenhet kombinerar AI och automation för att leverera högkvalitativa webbapplikationer. Specialist på Laravel, React, AI-integration och prompt engineering. Baserad i Stockholm, Sverige.';
         $seoKeywords = 'webbutveckling, AI-utveckling, Laravel-utvecklare, React-utvecklare, prompt engineering, AI-expert, Andreas Thun, ATDev, Stockholm, Sverige, fullstack-utvecklare, AI-automation';
-        $seoImage = $profile?->hero_image ? asset('storage/' . $profile->hero_image) : asset('images/og-default.jpg');
+        $seoImage = $profile?->hero_image ? asset('storage/'.$profile->hero_image) : asset('images/og-default.jpg');
 
         // Prepare avatar media with conversion fallbacks
         $avatarMedia = $profile?->prepareMediaUrls('avatar') ?? [];

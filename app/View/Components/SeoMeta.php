@@ -9,19 +9,33 @@ use Illuminate\View\Component;
 class SeoMeta extends Component
 {
     public string $title;
+
     public string $description;
+
     public ?string $keywords;
+
     public ?string $author;
+
     public ?string $ogTitle;
+
     public ?string $ogDescription;
+
     public ?string $ogImage;
+
     public ?string $ogType;
+
     public ?string $twitterTitle;
+
     public ?string $twitterDescription;
+
     public ?string $twitterImage;
+
     public ?string $twitterCard;
+
     public string $canonical;
+
     public string $locale;
+
     public ?string $preloadImage;
 
     /**

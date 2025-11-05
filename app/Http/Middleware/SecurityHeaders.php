@@ -42,7 +42,7 @@ class SecurityHeaders
         $policy = [];
 
         foreach ($directives as $directive => $sources) {
-            $policy[] = $directive . ' ' . implode(' ', $sources);
+            $policy[] = $directive.' '.implode(' ', $sources);
         }
 
         return implode('; ', $policy);

@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\ContactMessage;
 use App\Models\Chat;
-use Illuminate\Support\Collection;
+use App\Models\ContactMessage;
 
 class GdprDataExportService
 {
@@ -92,6 +91,7 @@ class GdprDataExportService
     public function generateExportFile(string $email): string
     {
         $data = $this->exportUserData($email);
+
         return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 

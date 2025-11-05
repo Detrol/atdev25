@@ -37,7 +37,7 @@
                 </tr>
                 <tr>
                     <td style="padding: 10px; background: white; border-radius: 5px;">
-                        <strong>Performance:</strong> {{ $audit->performance_score }}/100
+                        <strong>Teknisk Optimering:</strong> {{ $audit->technical_score }}/100
                     </td>
                 </tr>
             </table>

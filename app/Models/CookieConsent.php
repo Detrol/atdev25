@@ -36,7 +36,7 @@ class CookieConsent extends Model
      */
     public function hasConsent(string $category): bool
     {
-        return match($category) {
+        return match ($category) {
             'essential' => $this->essential,
             'functional' => $this->functional,
             'analytics' => $this->analytics,
@@ -52,10 +52,18 @@ class CookieConsent extends Model
     {
         $approved = [];
 
-        if ($this->essential) $approved[] = 'essential';
-        if ($this->functional) $approved[] = 'functional';
-        if ($this->analytics) $approved[] = 'analytics';
-        if ($this->marketing) $approved[] = 'marketing';
+        if ($this->essential) {
+            $approved[] = 'essential';
+        }
+        if ($this->functional) {
+            $approved[] = 'functional';
+        }
+        if ($this->analytics) {
+            $approved[] = 'analytics';
+        }
+        if ($this->marketing) {
+            $approved[] = 'marketing';
+        }
 
         return $approved;
     }

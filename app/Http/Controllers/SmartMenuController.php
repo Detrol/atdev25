@@ -20,9 +20,6 @@ class SmartMenuController extends Controller
 
     /**
      * Analyze a dish description for allergens using AI.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
      */
     public function analyzeAllergens(Request $request): JsonResponse
     {
@@ -35,7 +32,7 @@ class SmartMenuController extends Controller
             return response()->json([
                 'success' => false,
                 'error' => 'Ogiltig matbeskrivning. Max 1000 tecken.',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
@@ -43,10 +40,10 @@ class SmartMenuController extends Controller
         $clientIp = $request->ip();
 
         // Rate limiting: 10 requests per minute per IP
-        if (!$this->checkThrottling($clientIp)) {
+        if (! $this->checkThrottling($clientIp)) {
             return response()->json([
                 'success' => false,
-                'error' => 'För många förfrågningar. Vänligen vänta en minut innan du försöker igen.'
+                'error' => 'För många förfrågningar. Vänligen vänta en minut innan du försöker igen.',
             ], 429);
         }
 
@@ -73,20 +70,17 @@ class SmartMenuController extends Controller
 
             return response()->json([
                 'success' => false,
-                'error' => 'Ett fel uppstod vid AI-analysen. Försök igen.'
+                'error' => 'Ett fel uppstod vid AI-analysen. Försök igen.',
             ], 500);
         }
     }
 
     /**
      * Check rate limiting for the client IP.
-     *
-     * @param  string  $clientIp
-     * @return bool
      */
     private function checkThrottling(string $clientIp): bool
     {
-        $key = 'smart-menu-analyze:' . $clientIp;
+        $key = 'smart-menu-analyze:'.$clientIp;
 
         return RateLimiter::attempt(
             $key,
