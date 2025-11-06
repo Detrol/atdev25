@@ -1,8 +1,8 @@
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" x-data="{ visible: false, counters: { laravel: 0, response: 0 } }" x-intersect="visible = true" x-init="$watch('visible', value => { if (value) { let interval = setInterval(() => { if (counters.laravel < 8) counters.laravel++; if (counters.response < 24) counters.response++; if (counters.laravel >= 8 && counters.response >= 24) clearInterval(interval); }, 50) } })">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <!-- Laravel Expertise -->
-            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-100" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20" data-lazy="slide-up" data-delay="100">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="relative">
                     <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
@@ -10,14 +10,16 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
                         </svg>
                     </div>
-                    <div class="text-5xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent mb-2" x-text="counters.laravel + '+'"></div>
+                    <div class="text-5xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent mb-2">
+                        <span data-lazy="counter" data-counter-target="8">0</span>+
+                    </div>
                     <div class="text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold mb-2">År med Laravel</div>
                     <p class="text-sm text-gray-500 dark:text-gray-500">Huvudramverk sedan 2017</p>
                 </div>
             </div>
 
             <!-- Response Time -->
-            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-200" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20" data-lazy="slide-up" data-delay="200">
                 <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="relative">
                     <div class="flex items-center gap-2 mb-4">
@@ -29,7 +31,7 @@
                         <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
                     </div>
                     <div class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent mb-2">
-                        &lt; <span x-text="counters.response"></span>h
+                        &lt; <span data-lazy="counter" data-counter-target="24">0</span>h
                     </div>
                     <div class="text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold mb-2">Responstid</div>
                     <p class="text-sm text-gray-500 dark:text-gray-500">Snabb kommunikation garanterad</p>
@@ -37,7 +39,7 @@
             </div>
 
             <!-- Specializations -->
-            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-pink-500 dark:hover:border-pink-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/20" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-pink-500 dark:hover:border-pink-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/20" data-lazy="slide-up" data-delay="300">
                 <div class="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="relative">
                     <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
@@ -57,7 +59,7 @@
             </div>
 
             <!-- Tech Stack -->
-            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-green-500/20" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-400" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-green-500/20" data-lazy="slide-up" data-delay="400">
                 <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="relative">
                     <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
@@ -76,7 +78,7 @@
             </div>
 
             <!-- Delivery Time -->
-            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-500" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20" data-lazy="slide-up" data-delay="500">
                 <div class="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="relative">
                     <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
@@ -91,7 +93,7 @@
             </div>
 
             <!-- AI & Automation -->
-            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+            <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/20" data-lazy="slide-up" data-delay="600">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="relative">
                     <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">

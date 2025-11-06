@@ -9,25 +9,22 @@
 
     <div class="relative max-w-7xl mx-auto px-6">
         <!-- Header -->
-        <div class="text-center mb-16" x-data="{ visible: false }" x-intersect="visible = true">
-            <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4" x-show="visible" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4" data-lazy="fade-in">
                 Vanliga Frågor
             </h2>
-            <p class="text-xl text-gray-600 dark:text-gray-400" x-show="visible" x-transition:enter="transition ease-out duration-700 delay-200" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+            <p class="text-xl text-gray-600 dark:text-gray-400" data-lazy="fade-in" data-delay="100">
                 Svar på det du kanske undrar
             </p>
         </div>
 
         <!-- FAQ Accordion -->
-        <div class="grid md:grid-cols-2 gap-4" x-data="{ openFaq: null, visible: false }" x-intersect="visible = true">
+        <div class="grid md:grid-cols-2 gap-4" x-data="{ openFaq: null }">
             @forelse($faqsWithStyling as $item)
                 <div class="group relative overflow-hidden rounded-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-2 transition-all duration-300 {{ $item['color']['hover'] }}"
                      :class="openFaq === {{ $item['number'] }} ? '{{ $item['color']['border'] }} shadow-2xl {{ $item['color']['shadow'] }}' : 'border-gray-200 dark:border-gray-700'"
-                     x-show="visible"
-                     x-transition:enter="transition ease-out duration-500"
-                     x-transition:enter-start="opacity-0 translate-y-4"
-                     x-transition:enter-end="opacity-100 translate-y-0"
-                     style="transition-delay: {{ $item['delay'] }}ms;">
+                     data-lazy="slide-up"
+                     data-delay="{{ $item['delay'] }}">
 
                     <button @click="openFaq = openFaq === {{ $item['number'] }} ? null : {{ $item['number'] }}"
                             class="w-full text-left p-6 flex items-center justify-between gap-4">
@@ -69,12 +66,8 @@
 
         <!-- CTA -->
         <div class="mt-12 text-center p-8 bg-gradient-to-r from-purple-50 via-blue-50 to-pink-50 dark:from-purple-900/20 dark:via-blue-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200 dark:border-purple-700/30"
-             x-data="{ visible: false }"
-             x-intersect="visible = true"
-             x-show="visible"
-             x-transition:enter="transition ease-out duration-700 delay-600"
-             x-transition:enter-start="opacity-0 scale-95"
-             x-transition:enter-end="opacity-100 scale-100">
+             data-lazy="fade-in"
+             data-delay="600">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Fick du inte svar på din fråga?</h3>
             <p class="text-gray-600 dark:text-gray-400 mb-6">
                 Kontakta mig så svarar jag inom 24 timmar!

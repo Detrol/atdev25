@@ -2,16 +2,16 @@
 @props(['profile', 'workImageMedia' => []])
 
 <!-- Om Mig Section -->
-<section id="om-mig" class="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+<section id="om-mig" class="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900" data-lazy>
     <div class="max-w-6xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <!-- Text -->
-            <div class="space-y-6" x-data="{ visible: false }" x-intersect="visible = true">
-                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400 bg-clip-text text-transparent" x-show="visible" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 -translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
+            <div class="space-y-6">
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400 bg-clip-text text-transparent" data-lazy="fade-in">
                     Min Resa
                 </h2>
 
-                <div class="space-y-4 text-gray-300 text-lg leading-relaxed" x-show="visible" x-transition:enter="transition ease-out duration-700 delay-200" x-transition:enter-start="opacity-0 -translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
+                <div class="space-y-4 text-gray-300 text-lg leading-relaxed" data-lazy="fade-in" data-delay="100">
                     <p>
                         Sedan jag började koda har teknologin varit min passion.
                         Genom åren har jag skapat många applikationer och sett webbutvecklingen utvecklas från enkla HTML-sidor till avancerade, AI-drivna system.
@@ -31,9 +31,9 @@
             </div>
 
             <!-- Foto -->
-            <div x-data="{ visible: false }" x-intersect="visible = true">
+            <div>
                 @if(!empty($workImageMedia))
-                <div x-show="visible" x-transition:enter="transition ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
+                <div data-lazy="fade-in" data-delay="200">
                     <img srcset="{{ $workImageMedia['srcset'] }}"
                          sizes="(max-width: 768px) 100vw, 600px"
                          src="{{ $workImageMedia['src'] }}"
@@ -45,7 +45,7 @@
                          class="rounded-2xl shadow-2xl border border-white/10 hover:scale-105 transition-transform duration-500">
                 </div>
                 @else
-                <div class="aspect-square bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-pink-500/20 rounded-2xl border border-white/10 flex items-center justify-center backdrop-blur-sm" x-show="visible" x-transition:enter="transition ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
+                <div class="aspect-square bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-pink-500/20 rounded-2xl border border-white/10 flex items-center justify-center backdrop-blur-sm" data-lazy="fade-in" data-delay="200">
                     <div class="text-center p-8">
                         <svg class="w-24 h-24 mx-auto mb-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>

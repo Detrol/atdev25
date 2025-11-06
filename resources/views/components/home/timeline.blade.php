@@ -9,49 +9,47 @@
 
     <div class="relative max-w-6xl mx-auto px-6">
         <!-- Section Header -->
-        <div class="text-center mb-16" x-data="{ visible: false }" x-intersect="visible = true">
-            <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4" x-show="visible" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4" data-lazy="fade-in">
                 Expertis & Innovation
             </h2>
-            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto" x-show="visible" x-transition:enter="transition ease-out duration-700 delay-200" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto" data-lazy="fade-in" data-delay="100">
                 Över två decennier av webbutveckling kombinerat med modern teknologi
             </p>
         </div>
 
         <!-- Timeline Card (Featured) -->
-        <div class="mb-8" x-data="{
-            visible: false,
+        <div class="mb-8"
+             data-lazy="fade-in"
+             data-delay="200"
+             x-data="{
             progress: 0,
             showHtml: false,
             showPhp: false,
             showLaravel: false,
             showAi: false,
             mobileCurrentStep: -1
-        }" x-intersect="visible = true" x-init="
-            $watch('visible', value => {
-                if (value) {
-                    setTimeout(() => {
-                        // Trigger smooth CSS animation
-                        progress = 100;
+        }" x-intersect.once="
+            setTimeout(() => {
+                // Trigger smooth CSS animation
+                progress = 100;
 
-                        // Show icons when progress bar reaches each year position (and keep them visible)
-                        setTimeout(() => { showHtml = true; }, 625);
-                        setTimeout(() => { showPhp = true; }, 1875);
-                        setTimeout(() => { showLaravel = true; }, 3125);
-                        setTimeout(() => { showAi = true; }, 4375);
+                // Show icons when progress bar reaches each year position (and keep them visible)
+                setTimeout(() => { showHtml = true; }, 625);
+                setTimeout(() => { showPhp = true; }, 1875);
+                setTimeout(() => { showLaravel = true; }, 3125);
+                setTimeout(() => { showAi = true; }, 4375);
 
-                        // Mobile animation
-                        if (window.innerWidth < 768) {
-                            setTimeout(() => { mobileCurrentStep = 0; }, 0);
-                            setTimeout(() => { mobileCurrentStep = 1; }, 1250);
-                            setTimeout(() => { mobileCurrentStep = 2; }, 2500);
-                            setTimeout(() => { mobileCurrentStep = 3; }, 3750);
-                        }
-                    }, 800);
+                // Mobile animation
+                if (window.innerWidth < 768) {
+                    setTimeout(() => { mobileCurrentStep = 0; }, 0);
+                    setTimeout(() => { mobileCurrentStep = 1; }, 1250);
+                    setTimeout(() => { mobileCurrentStep = 2; }, 2500);
+                    setTimeout(() => { mobileCurrentStep = 3; }, 3750);
                 }
-            });
+            }, 800);
         ">
-            <div class="relative group overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 shadow-2xl hover:shadow-purple-500/50 transition-all duration-500" x-show="visible" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+            <div class="relative group overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 shadow-2xl hover:shadow-purple-500/50 transition-all duration-500">
                 <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
 
                 <div class="relative z-10">
@@ -100,19 +98,19 @@
 
                         <!-- Milestones - Desktop -->
                         <div class="hidden md:grid grid-cols-4 gap-4">
-                            <div class="text-center" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                            <div class="text-center" data-lazy="slide-up" data-delay="300">
                                 <div class="text-2xl font-bold text-white mb-1">2004</div>
                                 <div class="text-white/80 text-sm">HTML & ASP</div>
                             </div>
-                            <div class="text-center" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                            <div class="text-center" data-lazy="slide-up" data-delay="500">
                                 <div class="text-2xl font-bold text-white mb-1">2010</div>
                                 <div class="text-white/80 text-sm">PHP & MySQL</div>
                             </div>
-                            <div class="text-center" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-700" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                            <div class="text-center" data-lazy="slide-up" data-delay="700">
                                 <div class="text-2xl font-bold text-white mb-1">2017</div>
                                 <div class="text-white/80 text-sm">Laravel</div>
                             </div>
-                            <div class="text-center" x-show="visible" x-transition:enter="transition ease-out duration-500 delay-900" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                            <div class="text-center" data-lazy="slide-up" data-delay="900">
                                 <div class="text-2xl font-bold text-white mb-1">2023</div>
                                 <div class="text-white/80 text-sm">AI Integration</div>
                             </div>
@@ -128,10 +126,8 @@
                             ] as $milestone)
                             <div class="relative rounded-xl p-4 transition-all duration-400"
                                  :class="mobileCurrentStep >= {{ $milestone['step'] }} ? 'bg-white/30 ring-2 ring-{{ $milestone['color'] }}-400 shadow-lg shadow-{{ $milestone['color'] }}-500/50' : 'bg-white/10'"
-                                 x-show="visible"
-                                 x-transition:enter="transition ease-out duration-500 delay-{{ 300 + ($milestone['step'] * 200) }}"
-                                 x-transition:enter-start="opacity-0 translate-y-4"
-                                 x-transition:enter-end="opacity-100 translate-y-0">
+                                 data-lazy="slide-up"
+                                 data-delay="{{ 300 + ($milestone['step'] * 200) }}">
                                 <div class="text-2xl font-bold text-white mb-1 transition-all" :class="mobileCurrentStep >= {{ $milestone['step'] }} ? 'opacity-100 scale-110' : 'opacity-80 scale-100'">{{ $milestone['year'] }}</div>
                                 <div class="text-white/80 text-sm transition-opacity" :class="mobileCurrentStep >= {{ $milestone['step'] }} ? 'opacity-100' : 'opacity-60'">{{ $milestone['tech'] }}</div>
                                 <div class="absolute -top-3 -right-3" x-show="mobileCurrentStep >= {{ $milestone['step'] }}" x-transition:enter="transition-all ease-out duration-500" x-transition:enter-start="opacity-0 scale-0 rotate-45" x-transition:enter-end="opacity-100 scale-100 rotate-0" x-cloak>

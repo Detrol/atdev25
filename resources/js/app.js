@@ -376,9 +376,163 @@ window.hasConsent = async function(category) {
     }
 };
 
+/**
+ * LazyLoadManager - Modern Intersection Observer-based lazy loading
+ * Replaces Alpine.js x-intersect for better performance and mobile support
+ */
+class LazyLoadManager {
+    constructor() {
+        this.observers = new Map();
+        this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.isMobile = window.innerWidth < 768;
+        this.isTouch = 'ontouchstart' in window;
+
+        this.init();
+    }
+
+    init() {
+        // Create observers for different animation types
+        this.createObserver('fade-in', this.handleFadeIn.bind(this));
+        this.createObserver('slide-up', this.handleSlideUp.bind(this));
+        this.createObserver('counter', this.handleCounter.bind(this));
+        this.createObserver('skeleton', this.handleSkeleton.bind(this));
+
+        // Observe all elements with data-lazy attribute
+        this.observeElements();
+    }
+
+    createObserver(type, callback) {
+        const options = {
+            root: null,
+            rootMargin: this.isMobile ? '50px' : '100px',
+            threshold: this.isMobile ? 0.1 : 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    callback(entry.target, entry);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        this.observers.set(type, observer);
+    }
+
+    observeElements() {
+        document.querySelectorAll('[data-lazy]').forEach(el => {
+            const type = el.dataset.lazy;
+            const observer = this.observers.get(type);
+
+            if (observer) {
+                // Add initial state class
+                el.classList.add('lazy-hidden');
+                observer.observe(el);
+            }
+        });
+    }
+
+    handleFadeIn(element) {
+        const duration = this.prefersReducedMotion ? 0 : (this.isMobile ? 300 : 600);
+        const delay = parseInt(element.dataset.delay || 0);
+
+        setTimeout(() => {
+            element.classList.remove('lazy-hidden');
+            element.classList.add('lazy-visible', 'animate-fade-in');
+        }, delay);
+    }
+
+    handleSlideUp(element) {
+        const duration = this.prefersReducedMotion ? 0 : (this.isMobile ? 300 : 600);
+        const delay = parseInt(element.dataset.delay || 0);
+
+        setTimeout(() => {
+            element.classList.remove('lazy-hidden');
+            element.classList.add('lazy-visible', 'animate-slide-up');
+        }, delay);
+    }
+
+    handleCounter(element) {
+        const delay = parseInt(element.dataset.delay || 0);
+
+        setTimeout(() => {
+            // Make element visible
+            element.classList.remove('lazy-hidden');
+            element.classList.add('lazy-visible');
+
+            if (this.prefersReducedMotion) {
+                // Show final value immediately
+                const finalValue = parseInt(element.dataset.counterTarget || 0);
+                element.textContent = finalValue;
+                return;
+            }
+
+            const target = parseInt(element.dataset.counterTarget || 0);
+            const duration = this.isMobile ? 1000 : 2000;
+            const steps = 50;
+            const increment = target / steps;
+            const stepDuration = duration / steps;
+
+            let current = 0;
+            const counter = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(counter);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, stepDuration);
+        }, delay);
+    }
+
+    handleSkeleton(element) {
+        const duration = this.prefersReducedMotion ? 0 : 300;
+
+        // Find skeleton placeholder
+        const skeleton = element.querySelector('.skeleton-placeholder');
+        const content = element.querySelector('.skeleton-content');
+
+        if (skeleton && content) {
+            setTimeout(() => {
+                skeleton.style.opacity = '0';
+                setTimeout(() => {
+                    skeleton.style.display = 'none';
+                    content.style.display = 'block';
+                    setTimeout(() => {
+                        content.style.opacity = '1';
+                    }, 10);
+                }, duration);
+            }, 100);
+        }
+    }
+
+    // Public method to manually trigger observation (for dynamic content)
+    observe(element, type) {
+        const observer = this.observers.get(type);
+        if (observer) {
+            element.dataset.lazy = type;
+            element.classList.add('lazy-hidden');
+            observer.observe(element);
+        }
+    }
+
+    // Cleanup method
+    destroy() {
+        this.observers.forEach(observer => observer.disconnect());
+        this.observers.clear();
+    }
+}
+
 // Start Alpine.js
 window.Alpine = Alpine;
 Alpine.start();
+
+// Initialize LazyLoadManager after Alpine starts
+document.addEventListener('DOMContentLoaded', () => {
+    window.lazyLoadManager = new LazyLoadManager();
+});
 
 // Form validation and interaction enhancements
 document.addEventListener('DOMContentLoaded', function() {
@@ -422,32 +576,7 @@ document.addEventListener('DOMContentLoaded', function() {
         requestAnimationFrame(animation);
     }
 
-    // Pre-render all x-intersect sections to fix lazy loading scroll issues
-    function preRenderIntersectSections(callback) {
-        // Check if Alpine is loaded
-        if (typeof Alpine === 'undefined') {
-            callback();
-            return;
-        }
-
-        // Find all elements with x-intersect
-        const intersectElements = document.querySelectorAll('[x-intersect]');
-
-        // Trigger all x-intersect sections by setting visible = true
-        intersectElements.forEach(el => {
-            try {
-                const alpineData = Alpine.$data(el);
-                if (alpineData && 'visible' in alpineData) {
-                    alpineData.visible = true;
-                }
-            } catch (e) {
-                // Element might not have Alpine data yet, skip
-            }
-        });
-
-        // Wait for DOM updates (50ms should be enough for Alpine to react)
-        setTimeout(callback, 50);
-    }
+    // Removed: preRenderIntersectSections() - replaced by LazyLoadManager
 
     // Smooth scroll to anchors without hash in URL
     // Handles both #section and /#section links
@@ -471,31 +600,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 const target = document.querySelector(hash);
                 if (target) {
-                    // Pre-render all x-intersect sections before calculating position
-                    // This ensures accurate scroll position even with lazy-loaded content
-                    preRenderIntersectSections(() => {
-                        // Calculate position with small offset
-                        const targetPosition = target.offsetTop - 20;
+                    // Calculate position with small offset
+                    const targetPosition = target.offsetTop - 20;
 
-                        // Use custom smooth scroll
-                        smoothScrollTo(targetPosition, 800);
+                    // Use custom smooth scroll
+                    smoothScrollTo(targetPosition, 800);
 
-                        // Show navigation after scroll completes (800ms duration + small buffer)
-                        setTimeout(() => {
-                            const nav = document.querySelector('nav');
-                            if (nav && typeof Alpine !== 'undefined') {
-                                const alpineData = Alpine.$data(nav);
-                                if (alpineData && 'showNav' in alpineData) {
-                                    alpineData.showNav = true;
-                                }
+                    // Show navigation after scroll completes (800ms duration + small buffer)
+                    setTimeout(() => {
+                        const nav = document.querySelector('nav');
+                        if (nav && typeof Alpine !== 'undefined') {
+                            const alpineData = Alpine.$data(nav);
+                            if (alpineData && 'showNav' in alpineData) {
+                                alpineData.showNav = true;
                             }
-                        }, 850);
+                        }
+                    }, 850);
 
-                        // Remove hash from URL without adding to browser history
-                        setTimeout(() => {
-                            history.replaceState(null, '', window.location.pathname);
-                        }, 10);
-                    });
+                    // Remove hash from URL without adding to browser history
+                    setTimeout(() => {
+                        history.replaceState(null, '', window.location.pathname);
+                    }, 10);
                 }
             }
             // If different page, let browser navigate normally (will load page then scroll to hash)
@@ -508,29 +633,27 @@ document.addEventListener('DOMContentLoaded', function() {
             const hash = window.location.hash;
             const target = document.querySelector(hash);
             if (target) {
-                // Small delay to ensure page is fully rendered, then pre-render sections
+                // Small delay to ensure page is fully rendered and LazyLoadManager is initialized
                 setTimeout(() => {
-                    preRenderIntersectSections(() => {
-                        // Calculate position with small offset
-                        const targetPosition = target.offsetTop - 20;
-                        smoothScrollTo(targetPosition, 800);
+                    // Calculate position with small offset
+                    const targetPosition = target.offsetTop - 20;
+                    smoothScrollTo(targetPosition, 800);
 
-                        // Show navigation after scroll completes
-                        setTimeout(() => {
-                            const nav = document.querySelector('nav');
-                            if (nav && typeof Alpine !== 'undefined') {
-                                const alpineData = Alpine.$data(nav);
-                                if (alpineData && 'showNav' in alpineData) {
-                                    alpineData.showNav = true;
-                                }
+                    // Show navigation after scroll completes
+                    setTimeout(() => {
+                        const nav = document.querySelector('nav');
+                        if (nav && typeof Alpine !== 'undefined') {
+                            const alpineData = Alpine.$data(nav);
+                            if (alpineData && 'showNav' in alpineData) {
+                                alpineData.showNav = true;
                             }
-                        }, 850);
+                        }
+                    }, 850);
 
-                        // Remove hash from URL
-                        setTimeout(() => {
-                            history.replaceState(null, '', window.location.pathname);
-                        }, 10);
-                    });
+                    // Remove hash from URL
+                    setTimeout(() => {
+                        history.replaceState(null, '', window.location.pathname);
+                    }, 10);
                 }, 100);
             }
         }
