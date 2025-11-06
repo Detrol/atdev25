@@ -44,6 +44,7 @@ test('price calculator returns consistent ranges for same description (5 runs)',
         ]);
 
         $response = $this->postJson('/api/price-estimate', [
+            'service_category' => 'web_development',
             'description' => $description,
         ]);
 
@@ -105,6 +106,7 @@ test('price calculator handles complexity variation within same bracket consiste
     });
 
     $response1 = $this->postJson('/api/price-estimate', [
+        'service_category' => 'web_development',
         'description' => 'En enkel portfolio-webbplats med galleri och kontaktformulär.',
     ]);
 
@@ -112,6 +114,7 @@ test('price calculator handles complexity variation within same bracket consiste
     $result1 = $response1->json('estimation');
 
     $response2 = $this->postJson('/api/price-estimate', [
+        'service_category' => 'web_development',
         'description' => 'En enkel portfolio-webbplats med galleri och kontaktformulär.',
     ]);
 
@@ -158,6 +161,7 @@ test('price calculator gives different ranges for different complexity brackets'
     });
 
     $response1 = $this->postJson('/api/price-estimate', [
+        'service_category' => 'web_development',
         'description' => 'En väldigt enkel statisk sida med bara kontaktformulär.',
     ]);
 
@@ -165,6 +169,7 @@ test('price calculator gives different ranges for different complexity brackets'
     $result1 = $response1->json('estimation');
 
     $response2 = $this->postJson('/api/price-estimate', [
+        'service_category' => 'web_development',
         'description' => 'En avancerad sida med autentisering, admin-panel och databas.',
     ]);
 
