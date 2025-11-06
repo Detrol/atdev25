@@ -52,7 +52,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4 fade-in-delay-500">
-                <a href="#projects" class="px-8 py-4 bg-white text-purple-600 rounded-full font-semibold hover:bg-white/90 transition-all hover:scale-105 shadow-2xl">Utforska Mina AI-Lösningar</a>
+                <a href="#projects" class="px-8 py-4 bg-white text-purple-600 rounded-full font-semibold hover:bg-white/90 transition-all hover:scale-105 shadow-2xl">Utforska Mina Projekt</a>
                 <a href="#contact" class="px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-full font-semibold hover:bg-white/20 transition-all border border-white/20">Kontakta Mig</a>
                 <a href="#price-calculator" class="px-8 py-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-md text-white rounded-full font-semibold hover:from-purple-500/30 hover:to-blue-500/30 transition-all border border-purple-400/30 hover:scale-105">Beräkna Pris ⚡</a>
             </div>
