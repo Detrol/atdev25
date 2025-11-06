@@ -82,11 +82,6 @@
                             </div>
                             @endif
 
-                            <!-- Date -->
-                            <p class="text-white/60 text-xs mb-3">
-                                {{ \Carbon\Carbon::parse($project->created_at)->locale('sv')->isoFormat('MMMM YYYY') }}
-                            </p>
-
                             <!-- CTA Button - Always visible -->
                             <button
                                 class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 border border-white/30 text-white rounded-full font-medium transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:scale-105"
