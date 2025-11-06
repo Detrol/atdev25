@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\PriceEstimationController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
@@ -79,4 +80,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('audits', [AdminAuditController::class, 'index'])->name('audits.index');
     Route::get('audits/{audit}', [AdminAuditController::class, 'show'])->name('audits.show');
     Route::delete('audits/{audit}', [AdminAuditController::class, 'destroy'])->name('audits.destroy');
+
+    // Price Estimations
+    Route::get('estimations', [PriceEstimationController::class, 'index'])->name('estimations.index');
+    Route::get('estimations/{estimation}', [PriceEstimationController::class, 'show'])->name('estimations.show');
+    Route::delete('estimations/{estimation}', [PriceEstimationController::class, 'destroy'])->name('estimations.destroy');
 });
