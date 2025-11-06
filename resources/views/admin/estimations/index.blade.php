@@ -55,7 +55,9 @@
                           @submit="return confirm(`Är du säker på att du vill radera ${selectedIds.length} ${selectedIds.length === 1 ? 'prisestimering' : 'prisertimeringar'}?`);">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" name="ids" :value="JSON.stringify(selectedIds)">
+                        <template x-for="id in selectedIds" :key="id">
+                            <input type="hidden" name="ids[]" :value="id">
+                        </template>
                         <button type="submit"
                                 class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
                             Radera valda
