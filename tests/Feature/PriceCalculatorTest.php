@@ -65,6 +65,7 @@ test('price calculator returns successful estimation with ranges', function () {
     $description = 'Jag behöver en modern portfolio-webbplats med ett projektgalleri, kontaktformulär och admin-panel för att hantera innehåll.';
 
     $response = $this->postJson('/api/price-estimate', [
+        'service_category' => 'web_development',
         'description' => $description,
     ]);
 
@@ -131,6 +132,7 @@ test('price calculator returns key features', function () {
     $description = 'Jag behöver en e-handelsplattform med användarautentisering och betalintegration.';
 
     $response = $this->postJson('/api/price-estimate', [
+        'service_category' => 'web_development',
         'description' => $description,
     ]);
 
@@ -152,6 +154,7 @@ test('price calculator respects rate limiting', function () {
     // Make 5 successful requests
     for ($i = 0; $i < 5; $i++) {
         $response = $this->postJson('/api/price-estimate', [
+            'service_category' => 'web_development',
             'description' => $description,
         ]);
         $response->assertStatus(200);
@@ -159,6 +162,7 @@ test('price calculator respects rate limiting', function () {
 
     // 6th request should be rate limited by middleware
     $response = $this->postJson('/api/price-estimate', [
+        'service_category' => 'web_development',
         'description' => $description,
     ]);
 

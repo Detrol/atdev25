@@ -16,7 +16,7 @@
                 Smart Priskalkylator
             </h2>
             <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto" x-show="visible" x-transition>
-                Beskriv ditt projekt – AI analyserar och räknar ut exakt pris & leveranstid
+                Beskriv ditt projekt – AI analyserar och räknar ut pris & leveranstid
             </p>
         </div>
 
@@ -91,7 +91,7 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
-                            <span>Analysera & Beräkna Pris med AI</span>
+                            <span>Analysera & Beräkna Pris</span>
                         </div>
                     </template>
                     <template x-if="loading">
@@ -203,7 +203,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
-                            <h4 class="font-bold">AI-Driven (ATDev)</h4>
+                            <h4 class="font-bold">ATDev</h4>
                         </div>
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
