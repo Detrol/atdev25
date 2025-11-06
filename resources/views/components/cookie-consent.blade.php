@@ -7,7 +7,7 @@
      x-transition:leave="transform transition ease-in duration-200"
      x-transition:leave-start="translate-x-0"
      x-transition:leave-end="translate-x-full"
-     class="fixed right-0 top-1/2 -translate-y-1/2 z-50 max-w-md w-full mx-4 md:mx-0 md:mr-6"
+     class="fixed z-50 max-w-md w-full bottom-4 left-4 right-4 md:right-0 md:left-auto md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:mr-6 md:mx-0"
      style="display: none;">
 
     {{-- Glassmorphism Container (matchar AI chatbot) --}}
@@ -33,7 +33,7 @@
         </div>
 
         {{-- Content --}}
-        <div class="px-6 py-5 max-h-[70vh] overflow-y-auto">
+        <div class="px-6 py-5 max-h-[60vh] md:max-h-[70vh] overflow-y-auto">
             <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
                 Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka kategorier av cookies du vill tillåta.
             </p>
@@ -128,11 +128,11 @@
         <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
             <div class="grid grid-cols-2 gap-3">
                 <button @click="saveChoices()"
-                        class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                        class="px-4 py-3 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
                     Spara val
                 </button>
                 <button @click="acceptAll()"
-                        class="px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors">
+                        class="px-4 py-3 md:py-2.5 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors">
                     Acceptera alla
                 </button>
             </div>
