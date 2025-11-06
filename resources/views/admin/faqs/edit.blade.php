@@ -1,9 +1,19 @@
 @extends('layouts.admin')
 
 @section('head')
-<!-- Trix Editor -->
-<link rel="stylesheet" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
-<script src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+<style>
+    .code-editor {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        tab-size: 4;
+    }
+    .preview-content {
+        min-height: 200px;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -29,11 +39,54 @@
                 @enderror
             </div>
 
-            <!-- Answer (Trix Editor) -->
-            <div>
-                <label for="answer" class="block text-sm font-medium leading-6 text-gray-900">Svar *</label>
-                <input id="answer" type="hidden" name="answer" value="{{ old('answer', $faq->answer) }}">
-                <trix-editor input="answer" class="mt-2 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></trix-editor>
+            <!-- Answer (HTML Editor with Preview) -->
+            <div x-data="{ activeTab: 'edit' }">
+                <label for="answer" class="block text-sm font-medium leading-6 text-gray-900 mb-2">Svar *</label>
+
+                <!-- Tabs -->
+                <div class="border-b border-gray-200 mb-4">
+                    <nav class="-mb-px flex space-x-8">
+                        <button
+                            type="button"
+                            @click="activeTab = 'edit'"
+                            :class="activeTab === 'edit' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
+                            class="whitespace-nowrap border-b-2 py-2 px-1 text-sm font-medium">
+                            Redigera HTML
+                        </button>
+                        <button
+                            type="button"
+                            @click="activeTab = 'preview'"
+                            :class="activeTab === 'preview' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'"
+                            class="whitespace-nowrap border-b-2 py-2 px-1 text-sm font-medium">
+                            Förhandsgranska
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Edit Tab -->
+                <div x-show="activeTab === 'edit'">
+                    <textarea
+                        name="answer"
+                        id="answer"
+                        rows="20"
+                        required
+                        class="code-editor mt-2 block w-full rounded-md border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        placeholder="<div>HTML-innehåll här...</div>">{{ old('answer', $faq->answer) }}</textarea>
+                    <p class="mt-2 text-sm text-gray-500">
+                        <strong>Tips:</strong> Redigera HTML direkt inklusive SVG-ikoner, Tailwind-klasser och alla andra element.
+                    </p>
+                </div>
+
+                <!-- Preview Tab -->
+                <div x-show="activeTab === 'preview'" x-cloak>
+                    <div class="preview-content rounded-md border border-gray-300 bg-white p-6 shadow-sm">
+                        <div x-html="document.getElementById('answer').value"></div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">
+                        <strong>OBS:</strong> Detta är en förhandsgranskning. Klicka på "Redigera HTML" för att göra ändringar.
+                    </p>
+                </div>
+
                 @error('answer')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
