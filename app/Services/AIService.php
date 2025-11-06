@@ -22,10 +22,12 @@ class AIService
     {
         $profile = Profile::current();
         $projects = Project::published()->featured()->get();
+        $faqs = \App\Models\Faq::forAiChat()->orderBy('sort_order')->get();
 
         $prompt = $this->getAssistantIdentity($profile);
         $prompt .= "\n\n".$this->formatProfileInfo($profile);
         $prompt .= "\n\n".$this->formatProjectsInfo($projects);
+        $prompt .= "\n\n".$this->formatFaqsInfo($faqs);
         $prompt .= "\n\n".$this->getGeneralGuidelines();
 
         return $prompt;
@@ -887,6 +889,34 @@ PROMPT;
     }
 
     /**
+     * Formaterar FAQ-information för AI-kontext
+     */
+    private function formatFaqsInfo($faqs): string
+    {
+        if ($faqs->isEmpty()) {
+            return "Vanliga Frågor och Svar:\nInga FAQs tillgängliga än.";
+        }
+
+        $info = "Vanliga Frågor och Svar:\n\n";
+        $info .= "Du har tillgång till följande FAQ-kunskap. Använd denna information naturligt när användare ställer relevanta frågor.\n\n";
+
+        foreach ($faqs as $faq) {
+            $info .= "Q: {$faq->question}\n";
+            // Strippa HTML-taggar för att få ren text i AI-prompten
+            $answerText = strip_tags($faq->answer);
+            $answerText = preg_replace('/\s+/', ' ', $answerText); // Ersätt multipla whitespace med ett mellanslag
+            $answerText = trim($answerText);
+            $info .= "A: {$answerText}\n\n";
+
+            if ($faq->tags && ! empty($faq->tags)) {
+                $info .= 'Nyckelord: '.implode(', ', $faq->tags)."\n\n";
+            }
+        }
+
+        return $info;
+    }
+
+    /**
      * Riktlinjer för demo-assistenten
      */
     private function getGeneralGuidelines(): string
@@ -1032,7 +1062,7 @@ HTML;
      */
     private function createPriceEstimationPrompt(): string
     {
-        return <<<'PROMPT'
+        $basePrompt = <<<'PROMPT'
 Du är en erfaren webbutvecklare som analyserar projekt professionellt.
 
 Din uppgift är att MATCHA projektbeskrivningen mot KONKRETA EXEMPEL nedan och välja rätt komplexitet.
@@ -1475,6 +1505,16 @@ Använd denna information för att bättre förstå vad kunden behöver och väl
 8. **KEY FEATURES**: Identifiera 4-8 huvudfunktioner från beskrivningen, var specifik och konkret
 
 PROMPT;
+
+        // Hämta FAQs för priskalkylatorn
+        $faqs = \App\Models\Faq::forPriceCalculator()->orderBy('sort_order')->get();
+
+        // Lägg till FAQ-kunskap om tillgänglig
+        if ($faqs->isNotEmpty()) {
+            $basePrompt .= "\n\n".$this->formatFaqsInfo($faqs);
+        }
+
+        return $basePrompt;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
@@ -59,6 +60,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     // Services
     Route::resource('services', AdminServiceController::class);
+
+    // FAQs
+    Route::resource('faqs', FaqController::class);
 
     // Profile
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
