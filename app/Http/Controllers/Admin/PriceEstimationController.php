@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PriceEstimation;
+use Illuminate\Http\Request;
 
 class PriceEstimationController extends Controller
 {
@@ -44,5 +45,25 @@ class PriceEstimationController extends Controller
 
         return redirect()->route('admin.estimations.index')
             ->with('success', 'Prisestimering raderad!');
+    }
+
+    /**
+     * Delete multiple price estimations.
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'exists:price_estimations,id',
+        ]);
+
+        $count = PriceEstimation::whereIn('id', $request->ids)->delete();
+
+        $message = $count === 1
+            ? '1 prisestimering raderad!'
+            : "{$count} prisertimeringar raderade!";
+
+        return redirect()->route('admin.estimations.index')
+            ->with('success', $message);
     }
 }

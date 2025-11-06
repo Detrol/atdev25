@@ -83,6 +83,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     // Price Estimations
     Route::get('estimations', [PriceEstimationController::class, 'index'])->name('estimations.index');
+    Route::delete('estimations/bulk-destroy', [PriceEstimationController::class, 'bulkDestroy'])->name('estimations.bulk-destroy');
     Route::get('estimations/{estimation}', [PriceEstimationController::class, 'show'])->name('estimations.show');
     Route::delete('estimations/{estimation}', [PriceEstimationController::class, 'destroy'])->name('estimations.destroy');
 });
