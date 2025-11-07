@@ -65,12 +65,12 @@ class CustomerReplyNotification extends Mailable
 
             // Sätt Message-ID för detta nya meddelande
             if ($this->customerReply->email_message_id) {
-                $headers->addTextHeader('Message-ID', $this->customerReply->email_message_id);
+                $headers->addIdHeader('Message-ID', $this->customerReply->email_message_id);
             }
 
             // Sätt In-Reply-To till det ursprungliga meddelandet
             if ($this->originalMessage->email_message_id) {
-                $headers->addTextHeader('In-Reply-To', $this->originalMessage->email_message_id);
+                $headers->addIdHeader('In-Reply-To', $this->originalMessage->email_message_id);
             }
 
             // Sätt References till hela tråden
@@ -79,10 +79,10 @@ class CustomerReplyNotification extends Mailable
             $references = $conversation
                 ->filter(fn($msg) => $msg->email_message_id)
                 ->pluck('email_message_id')
-                ->implode(' ');
+                ->toArray();
 
-            if ($references) {
-                $headers->addTextHeader('References', $references);
+            if (!empty($references)) {
+                $headers->addIdHeader('References', $references);
             }
         });
     }
