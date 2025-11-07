@@ -55,7 +55,7 @@
 
         <div class="relative bg-white dark:bg-gray-800 rounded-3xl p-8 md:p-12 border-2 border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden" x-data="{ submitting: false }">
             <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-blue-500/5 to-pink-500/5 -z-10"></div>
-            <form method="POST" action="{{ route('contact.store') }}" @submit="submitting = true" class="space-y-8" x-data="{
+            <form method="POST" action="{{ route('contact.store') }}" @submit="submitting = true; if (window.GA4) GA4.trackContactFormSubmit('contact')" class="space-y-8" x-data="{
                 nameFocused: false,
                 emailFocused: false,
                 messageFocused: false,

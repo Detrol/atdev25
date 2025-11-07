@@ -18,6 +18,10 @@ import './demos/google-reviews.js';
 import { initTechStackModal } from './tech-stack-modal.js';
 import { initProjectModal } from './project-modal.js';
 
+// Import Google Analytics 4 helper
+import { GA4 } from './analytics.js';
+window.GA4 = GA4;
+
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
 Alpine.plugin(persist);
@@ -292,6 +296,11 @@ Alpine.data('chatWidget', () => ({
             content: userMessage
         });
 
+        // Track chatbot conversation start (first message)
+        if (this.messages.length === 1 && window.GA4) {
+            GA4.trackChatbotStart(this.sessionId);
+        }
+
         this.scrollToBottom();
         this.isLoading = true;
 
@@ -319,6 +328,12 @@ Alpine.data('chatWidget', () => ({
                 role: 'assistant',
                 content: data.response
             });
+
+            // Track chatbot interaction
+            if (window.GA4) {
+                const messageCount = Math.ceil(this.messages.length / 2);
+                GA4.trackChatbotMessage(this.sessionId, messageCount);
+            }
 
             this.scrollToBottom();
 
