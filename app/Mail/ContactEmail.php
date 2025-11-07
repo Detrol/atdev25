@@ -45,4 +45,19 @@ class ContactEmail extends Mailable
             ],
         );
     }
+
+    /**
+     * Set email headers for proper threading.
+     */
+    public function build()
+    {
+        return $this->withSymfonyMessage(function ($message) {
+            $headers = $message->getHeaders();
+
+            // Sätt Message-ID för detta nya meddelande (första i tråden)
+            if ($this->message->email_message_id) {
+                $headers->addTextHeader('Message-ID', $this->message->email_message_id);
+            }
+        });
+    }
 }

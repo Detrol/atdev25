@@ -18,6 +18,7 @@ class ContactMessage extends Model
         'user_agent',
         'read',
         'reply_token',
+        'email_message_id',
         'parent_id',
         'status',
         'is_admin_reply',
@@ -32,7 +33,7 @@ class ContactMessage extends Model
     ];
 
     /**
-     * Boot the model - generate unique reply token.
+     * Boot the model - generate unique reply token and email message ID.
      */
     protected static function boot()
     {
@@ -41,6 +42,15 @@ class ContactMessage extends Model
         static::creating(function ($message) {
             if (empty($message->reply_token)) {
                 $message->reply_token = Str::random(32);
+            }
+
+            if (empty($message->email_message_id)) {
+                // Generate RFC 2822 compliant Message-ID
+                // Format: <unique-id.timestamp@domain>
+                $domain = config('services.mailgun.domain', 'atdev.me');
+                $uniqueId = $message->reply_token ?: Str::random(32);
+                $timestamp = time();
+                $message->email_message_id = "<{$uniqueId}.{$timestamp}@{$domain}>";
             }
         });
     }
