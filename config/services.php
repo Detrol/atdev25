@@ -50,6 +50,7 @@ return [
     'google' => [
         'places_api_key' => env('GOOGLE_PLACES_API_KEY'),
         'default_place_id' => env('GOOGLE_PLACES_DEFAULT_PLACE_ID'),
+        'analytics_measurement_id' => env('GA4_MEASUREMENT_ID'),
     ],
 
 ];
