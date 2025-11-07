@@ -35,19 +35,34 @@
         {{-- Content --}}
         <div class="px-6 py-5 max-h-[60vh] md:max-h-[70vh] overflow-y-auto">
             <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka kategorier av cookies du vill tillåta.
+                Vi använder cookies för att förbättra din upplevelse.
             </p>
 
-            {{-- Showcase Notice --}}
-            <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded">
-                <p class="text-xs text-blue-900 dark:text-blue-300">
-                    <strong>💡 Showcase:</strong> Denna GDPR-lösning kan jag skapa för din webbplats också!
-                    Komplett cookie-hantering, integritetspolicies och GDPR-compliance.
-                </p>
-            </div>
+            {{-- Toggle Details Button --}}
+            <button @click="showDetails = !showDetails"
+                    class="flex items-center justify-between w-full px-4 py-3 mb-4 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <span x-text="showDetails ? 'Dölj detaljer' : 'Visa detaljer och anpassa'"></span>
+                <svg class="w-5 h-5 transition-transform duration-200"
+                     :class="{ 'rotate-180': showDetails }"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
 
-            {{-- Cookie Categories --}}
-            <div class="space-y-3">
+            {{-- Expandable Details Section --}}
+            <div x-show="showDetails" x-collapse>
+                {{-- Showcase Notice --}}
+                <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded">
+                    <p class="text-xs text-blue-900 dark:text-blue-300">
+                        <strong>💡 Showcase:</strong> Denna GDPR-lösning kan jag skapa för din webbplats också!
+                        Komplett cookie-hantering, integritetspolicies och GDPR-compliance.
+                    </p>
+                </div>
+
+                {{-- Cookie Categories --}}
+                <div class="space-y-3">
                 {{-- Essential Cookies (Always On) --}}
                 <label class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
                     <input type="checkbox"
@@ -112,34 +127,41 @@
                 </label>
             </div>
 
-            {{-- Links --}}
-            <div class="mt-4 flex items-center justify-center space-x-4 text-xs text-gray-600 dark:text-gray-400">
-                <a href="{{ route('gdpr.privacy') }}" class="hover:text-blue-600 dark:hover:text-blue-400 underline">
-                    Integritetspolicy
-                </a>
-                <span>•</span>
-                <a href="{{ route('gdpr.cookies') }}" class="hover:text-blue-600 dark:hover:text-blue-400 underline">
-                    Cookie-policy
-                </a>
+                {{-- Links --}}
+                <div class="mt-4 flex items-center justify-center space-x-4 text-xs text-gray-600 dark:text-gray-400">
+                    <a href="{{ route('gdpr.privacy') }}" class="hover:text-blue-600 dark:hover:text-blue-400 underline">
+                        Integritetspolicy
+                    </a>
+                    <span>•</span>
+                    <a href="{{ route('gdpr.cookies') }}" class="hover:text-blue-600 dark:hover:text-blue-400 underline">
+                        Cookie-policy
+                    </a>
+                </div>
             </div>
+            {{-- End Expandable Details Section --}}
         </div>
 
         {{-- Footer Actions --}}
         <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
-            <div class="grid grid-cols-2 gap-3">
+            {{-- Show "Spara val" button only when details are expanded --}}
+            <div x-show="showDetails" x-collapse>
                 <button @click="saveChoices()"
-                        class="px-4 py-3 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                        class="w-full mb-3 px-4 py-3 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
                     Spara val
                 </button>
+            </div>
+
+            {{-- Always visible buttons --}}
+            <div class="grid grid-cols-2 gap-3">
                 <button @click="acceptAll()"
                         class="px-4 py-3 md:py-2.5 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors">
                     Acceptera alla
                 </button>
+                <button @click="rejectAll()"
+                        class="px-4 py-3 md:py-2.5 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors">
+                    Endast nödvändiga
+                </button>
             </div>
-            <button @click="rejectAll()"
-                    class="w-full mt-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors">
-                Endast nödvändiga
-            </button>
         </div>
     </div>
 </div>
