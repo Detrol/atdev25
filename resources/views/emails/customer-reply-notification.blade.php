@@ -58,7 +58,6 @@
         <h2 style="margin: 0; color: #1F2937;">Nytt svar från {{ $originalMessage->name }}</h2>
     </div>
 
-    <p>Hej,</p>
     <p>{{ $originalMessage->name }} har svarat på konversationen:</p>
 
     <div class="reply-box">{{ $customerReply->message }}</div>

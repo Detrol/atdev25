@@ -41,10 +41,6 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2 style="margin: 0; color: #1F2937;">Hej {{ $originalMessage->name }},</h2>
-    </div>
-
     <div class="reply-message">{{ $replyMessage->message }}</div>
 
     <div class="original-message">
