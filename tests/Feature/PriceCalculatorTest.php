@@ -2,9 +2,15 @@
 
 use App\Services\AIService;
 use App\Services\PriceEstimateMapper;
+use App\Services\TurnstileService;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
+    // Mock Turnstile service to always return true in tests
+    $this->mock(TurnstileService::class, function ($mock) {
+        $mock->shouldReceive('verify')->andReturn(true);
+    });
+
     // Mock the Anthropic API response (simplified - no hours/weeks)
     Http::fake([
         'api.anthropic.com/*' => Http::response([
@@ -35,7 +41,9 @@ beforeEach(function () {
 });
 
 test('price calculator endpoint requires description', function () {
-    $response = $this->postJson('/api/price-estimate', []);
+    $response = $this->postJson('/api/price-estimate', [
+        'cf-turnstile-response' => 'test-token',
+    ]);
 
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['description']);
@@ -43,6 +51,7 @@ test('price calculator endpoint requires description', function () {
 
 test('price calculator validates minimum description length', function () {
     $response = $this->postJson('/api/price-estimate', [
+        'cf-turnstile-response' => 'test-token',
         'description' => 'Too short',
     ]);
 
@@ -54,6 +63,7 @@ test('price calculator validates maximum description length', function () {
     $description = str_repeat('A', 2001);
 
     $response = $this->postJson('/api/price-estimate', [
+        'cf-turnstile-response' => 'test-token',
         'description' => $description,
     ]);
 
@@ -65,6 +75,7 @@ test('price calculator returns successful estimation with ranges', function () {
     $description = 'Jag behöver en modern portfolio-webbplats med ett projektgalleri, kontaktformulär och admin-panel för att hantera innehåll.';
 
     $response = $this->postJson('/api/price-estimate', [
+        'cf-turnstile-response' => 'test-token',
         'service_category' => 'web_development',
         'description' => $description,
     ]);
@@ -132,6 +143,7 @@ test('price calculator returns key features', function () {
     $description = 'Jag behöver en e-handelsplattform med användarautentisering och betalintegration.';
 
     $response = $this->postJson('/api/price-estimate', [
+        'cf-turnstile-response' => 'test-token',
         'service_category' => 'web_development',
         'description' => $description,
     ]);
@@ -154,6 +166,7 @@ test('price calculator respects rate limiting', function () {
     // Make 5 successful requests
     for ($i = 0; $i < 5; $i++) {
         $response = $this->postJson('/api/price-estimate', [
+            'cf-turnstile-response' => 'test-token',
             'service_category' => 'web_development',
             'description' => $description,
         ]);
@@ -162,6 +175,7 @@ test('price calculator respects rate limiting', function () {
 
     // 6th request should be rate limited by middleware
     $response = $this->postJson('/api/price-estimate', [
+        'cf-turnstile-response' => 'test-token',
         'service_category' => 'web_development',
         'description' => $description,
     ]);
