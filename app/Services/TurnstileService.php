@@ -16,6 +16,11 @@ class TurnstileService
      */
     public function verify(string $token, string $ip): bool
     {
+        // Skip verification in testing environment
+        if (app()->environment('testing')) {
+            return true;
+        }
+
         // Skip verification if Turnstile is disabled (local development)
         if (! config('turnstile.enabled')) {
             Log::info('Turnstile disabled - skipping verification');
