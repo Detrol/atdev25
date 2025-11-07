@@ -30,8 +30,8 @@ class CustomerReplyNotification extends Mailable
     {
         return new Envelope(
             subject: "Nytt svar från {$this->originalMessage->name}",
-            // Reply-To till kundens email så admin kan svara direkt
-            replyTo: [$this->originalMessage->email],
+            // Reply-To till reply-token addressen för att fånga svar via webhook
+            replyTo: [$this->originalMessage->getReplyAddress()],
         );
     }
 
