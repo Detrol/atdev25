@@ -98,6 +98,9 @@
                     </div>
                 </div>
 
+                <!-- Turnstile Security Verification (Invisible) -->
+                <x-turnstile theme="light" />
+
                 <button
                     @click="estimate()"
                     :disabled="loading || !serviceCategory || description.length < 20 || description.length > 2000"
@@ -419,6 +422,13 @@ function priceCalculator() {
                 return;
             }
 
+            // Get Turnstile token
+            const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+            if (!turnstileToken) {
+                this.error = 'Vänligen slutför säkerhetsverifieringen.';
+                return;
+            }
+
             // Track calculator submit
             if (window.GA4) {
                 window.GA4.trackCalculatorSubmit({
@@ -443,7 +453,8 @@ function priceCalculator() {
                     body: JSON.stringify({
                         description: this.description,
                         service_category: this.serviceCategory,
-                        website_url: this.websiteUrl || null
+                        website_url: this.websiteUrl || null,
+                        'cf-turnstile-response': turnstileToken
                     })
                 });
 
