@@ -10,8 +10,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class BrightDataScraper
 {
-    protected Client $client;
-    protected string $apiKey;
+    protected ?Client $client = null;
+    protected ?string $apiKey;
     protected string $apiEndpoint = 'https://api.brightdata.com/request';
     protected string $zone = 'web_unlocker1';
 
@@ -19,18 +19,16 @@ class BrightDataScraper
     {
         $this->apiKey = config('services.brightdata.api_key');
 
-        if (empty($this->apiKey)) {
-            throw new \RuntimeException('BrightData API key not configured');
+        // Only initialize client if API key is present
+        if (!empty($this->apiKey)) {
+            $this->client = new Client([
+                'timeout' => 30,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->apiKey,
+                ],
+            ]);
         }
-
-        // Initialize Guzzle for API requests
-        $this->client = new Client([
-            'timeout' => 30,
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->apiKey,
-            ],
-        ]);
     }
 
     /**
@@ -40,6 +38,11 @@ class BrightDataScraper
      */
     public function scrape(string $url): array
     {
+        // Check if API key is configured
+        if (empty($this->apiKey) || $this->client === null) {
+            throw new \RuntimeException('BrightData API key not configured');
+        }
+
         // Cache key based on URL
         $cacheKey = 'brightdata_scrape_' . md5($url);
 

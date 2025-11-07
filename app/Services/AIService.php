@@ -997,8 +997,8 @@ HTML;
 
         $systemPrompt = $this->createPriceEstimationPrompt();
 
-        // Inkludera tjänstekategori i user message för bättre context
-        $userMessage = "Tjänstekategori: {$serviceCategory}\n\nBeskrivning: {$description}";
+        // Bygg user message med kategori-specifik kontext
+        $userMessage = $this->buildContextualUserMessage($serviceCategory, $description);
 
         $data = [
             'model' => 'claude-3-7-sonnet-20250219',
@@ -1524,6 +1524,39 @@ PROMPT;
         }
 
         return $basePrompt;
+    }
+
+    /**
+     * Bygger user message med kategori-specifik kontext och instruktioner
+     */
+    private function buildContextualUserMessage(string $serviceCategory, string $description): string
+    {
+        $categoryInstructions = [
+            'web_development' => 'Fokus: Nyutveckling eller redesign av webbplats. Om befintlig webbplats finns: analysera och ge förslag på moderna alternativ.',
+            'mobile_app' => 'Fokus: Mobilapplikation för iOS/Android. Beskriv lämpliga teknologier (React Native, Flutter, Native) och arkitektur.',
+            'bug_fixes' => 'Fokus: Felsökning och buggfixar. Om befintlig webbplats finns: identifiera potentiella problemområden baserat på teknologier. Ge konkret approach för felsökning.',
+            'performance' => 'Fokus: Prestandaoptimering. Om befintlig webbplats finns: identifiera flaskhalsar (DB, caching, frontend). Ge konkreta optimeringsförslag.',
+            'api_integration' => 'Fokus: API-utveckling eller integration. Beskriv lämplig arkitektur, autentisering, och API-design best practices.',
+            'security' => 'Fokus: Säkerhetsanalys och compliance. Om befintlig webbplats finns: ge preliminär bedömning av säkerhetsrisker. Beskriv konkreta säkerhetsåtgärder.',
+            'maintenance' => 'Fokus: Underhåll och support. Om befintlig webbplats finns: bedöm teknologier och underhållsbehov. Ge konkret underhållsplan.',
+            'modernization' => 'Fokus: Modernisering av befintlig webbplats. Om befintlig webbplats finns: ANALYSERA NUVARANDE TEKNOLOGIER och ge KONKRETA moderniseringsförslag med nya teknologier. Beskriv migrations-approach.',
+        ];
+
+        $instruction = $categoryInstructions[$serviceCategory] ?? 'Analysera projektet och ge konkreta tekniska rekommendationer.';
+
+        // Kontrollera om beskrivningen innehåller scrapad data (startar med "Befintlig webbplats:")
+        $hasScrapedData = str_starts_with($description, 'Befintlig webbplats:');
+
+        $message = "Tjänstekategori: {$serviceCategory}\n\n";
+        $message .= "INSTRUKTION: {$instruction}\n\n";
+
+        if ($hasScrapedData) {
+            $message .= "⚠️ VIKTIGT: Scrapad webbplats-data inkluderad nedan. Använd denna information för att ge SPECIFIKA och KONKRETA tekniska förslag i solution_approach.\n\n";
+        }
+
+        $message .= "Beskrivning: {$description}";
+
+        return $message;
     }
 
     /**
