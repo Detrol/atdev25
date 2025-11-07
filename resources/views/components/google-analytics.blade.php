@@ -44,7 +44,6 @@
     // Ladda Google Analytics 4
     function loadGoogleAnalytics(preferences) {
         if (window.gtag) {
-            console.debug('GA4 already loaded');
             return;
         }
 
@@ -79,9 +78,6 @@
             'ad_personalization': preferences.marketing ? 'granted' : 'denied',
             'analytics_storage': 'granted'
         });
-
-        console.log('✓ Google Analytics 4 loaded and initialized');
-        console.log('  Google Signals:', allowGoogleSignals ? 'ENABLED' : 'DISABLED (requires marketing consent)');
     }
 
     // Uppdatera Google Signals consent när användaren ändrar marketing preferences
@@ -96,8 +92,6 @@
             'ad_personalization': preferences.marketing ? 'granted' : 'denied',
             'analytics_storage': preferences.analytics ? 'granted' : 'denied'
         });
-
-        console.log('Google Signals consent updated:', allowGoogleSignals ? 'ENABLED' : 'DISABLED');
     }
 
     // Kolla consent när sidan laddas
