@@ -47,13 +47,12 @@
                     </select>
                 </div>
 
-                <div class="mb-6">
+                <!-- Website URL (shown for relevant categories) -->
+                <div x-show="shouldShowWebsiteField()" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="mb-6">
                     <label for="website-url" class="block text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                        Har du en befintlig webbplats? (Valfritt)
+                        <span x-text="websiteFieldLabel()"></span> <span class="text-gray-500 text-base font-normal">(Valfritt)</span>
                     </label>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                        Klistra in URL:en så analyserar AI:n din webbplats för en mer exakt estimering
-                    </p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3" x-text="websiteFieldDescription()"></p>
                     <input
                         type="text"
                         id="website-url"
@@ -362,6 +361,51 @@ function priceCalculator() {
             } else {
                 this.placeholder = 'Välj en tjänstekategori ovan för att få relevanta exempel...';
             }
+
+            // Clear website URL if switching to category that doesn't need it
+            if (!this.shouldShowWebsiteField()) {
+                this.websiteUrl = '';
+            }
+        },
+
+        shouldShowWebsiteField() {
+            // Show website field for categories that typically work with existing websites
+            const categoriesNeedingWebsite = [
+                'modernization',    // Modernizing existing site
+                'maintenance',      // Maintaining existing site
+                'performance',      // Optimizing existing site
+                'bug_fixes',        // Fixing existing site
+                'security',         // Auditing existing site
+                'web_development'   // Can be rebuild/redesign
+            ];
+
+            return categoriesNeedingWebsite.includes(this.serviceCategory);
+        },
+
+        websiteFieldLabel() {
+            const labels = {
+                'modernization': 'Befintlig webbplats att modernisera',
+                'maintenance': 'Webbplats att underhålla',
+                'performance': 'Webbplats att optimera',
+                'bug_fixes': 'Webbplats att fixa',
+                'security': 'Webbplats att analysera',
+                'web_development': 'Har du en befintlig webbplats?'
+            };
+
+            return labels[this.serviceCategory] || 'Befintlig webbplats';
+        },
+
+        websiteFieldDescription() {
+            const descriptions = {
+                'modernization': 'Ange URL:en så analyserar AI:n nuvarande teknologier och ger konkreta moderniseringsförslag',
+                'maintenance': 'Ange URL:en så kan AI:n analysera webbplatsen och ge bättre underhållsuppskattning',
+                'performance': 'Ange URL:en så kan AI:n identifiera prestandaflaskhalsar och optimeringsmöjligheter',
+                'bug_fixes': 'Ange URL:en där felet uppstår för bättre felsökningsanalys',
+                'security': 'Ange URL:en så kan AI:n göra en preliminär säkerhetsanalys',
+                'web_development': 'Om du vill bygga om/designa en befintlig webbplats, klistra in URL:en här'
+            };
+
+            return descriptions[this.serviceCategory] || 'Klistra in URL:en så analyserar AI:n din webbplats för en mer exakt estimering';
         },
 
         async estimate() {
