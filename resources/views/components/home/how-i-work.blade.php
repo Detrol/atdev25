@@ -324,8 +324,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
                         </svg>
                     </div>
-                    <h4 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">VPS Hosting</h4>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">Snabb och säker VPS-hosting med full kontroll och root-access. Perfekt för Laravel-applikationer.</p>
+                    <h4 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Managed Hosting</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Snabb och säker hosting på min optimerade plattform. Perfekt för Laravel-applikationer med allt förinstallerat.</p>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                         <li class="flex items-center gap-2">
                             <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

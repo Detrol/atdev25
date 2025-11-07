@@ -48,6 +48,23 @@
                 </div>
 
                 <div class="mb-6">
+                    <label for="website-url" class="block text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        Har du en befintlig webbplats? (Valfritt)
+                    </label>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                        Klistra in URL:en så analyserar AI:n din webbplats för en mer exakt estimering
+                    </p>
+                    <input
+                        type="text"
+                        id="website-url"
+                        x-model="websiteUrl"
+                        @input="error = null"
+                        placeholder="exempel.se eller https://exempel.se"
+                        class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 transition-all text-gray-900 dark:text-white placeholder-gray-400"
+                    />
+                </div>
+
+                <div class="mb-6">
                     <label for="project-description" class="block text-lg font-semibold text-gray-900 dark:text-white mb-2">
                         Beskriv ditt projekt:
                     </label>
@@ -101,7 +118,8 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <span>AI analyserar ditt projekt...</span>
+                            <span x-show="websiteUrl">AI analyserar webbplats & projekt...</span>
+                            <span x-show="!websiteUrl">AI analyserar ditt projekt...</span>
                         </div>
                     </template>
                 </button>
@@ -160,6 +178,17 @@
                                 </li>
                             </template>
                         </ul>
+                    </div>
+
+                    <!-- Recommended Solution Approach -->
+                    <div x-show="result?.solution_approach" class="mt-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 border-2 border-green-200 dark:border-green-800">
+                        <div class="flex items-center gap-3 mb-3">
+                            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            <p class="text-base font-bold text-green-800 dark:text-green-300">Rekommenderad Teknisk Lösning</p>
+                        </div>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line" x-text="result?.solution_approach"></p>
                     </div>
                 </div>
 
@@ -309,6 +338,7 @@ function priceCalculator() {
     return {
         description: '',
         serviceCategory: '',
+        websiteUrl: '',
         loading: false,
         result: null,
         error: null,
@@ -368,7 +398,8 @@ function priceCalculator() {
                     },
                     body: JSON.stringify({
                         description: this.description,
-                        service_category: this.serviceCategory
+                        service_category: this.serviceCategory,
+                        website_url: this.websiteUrl || null
                     })
                 });
 

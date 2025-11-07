@@ -1077,6 +1077,7 @@ Returnera ENDAST valid JSON med denna exakta struktur:
   "complexity": 1-10,
   "complexity_label": "Kort svensk förklaring av komplexiteten (1-2 meningar)",
   "key_features": ["Feature 1", "Feature 2", "Feature 3"],
+  "solution_approach": "Konkret teknisk lösning med 2-4 punkter om arkitektur, teknologier och best practices",
   "confidence": "high|medium|low",
   "notes": "Eventuella viktiga anteckningar på svenska"
 }
@@ -1503,6 +1504,14 @@ Använd denna information för att bättre förstå vad kunden behöver och väl
 6. **Alla texter på svenska**
 7. **confidence = high** om det matchar exempel, **medium** om tveksam, **low** om vag beskrivning
 8. **KEY FEATURES**: Identifiera 4-8 huvudfunktioner från beskrivningen, var specifik och konkret
+9. **SOLUTION APPROACH**: Ge konkreta tekniska lösningsförslag (2-4 punkter) baserat på:
+   - Projektets komplexitet och typ
+   - Om befintlig webbplats finns (identifierade teknologier från scrapad data)
+   - Moderna best practices och lämpliga teknologier
+   - Format: Stycke med 2-4 konkreta punkter, t.ex:
+     * "Rekommenderad approach: Laravel 12 backend med Vue.js SPA för frontend. Stripe för betalningar och Redis för caching. API-first design för framtida skalbarhet."
+     * "Modernisering: Migrera från WordPress till headless CMS (Strapi/Contentful) + Next.js frontend. Behåll befintligt content via migration. Resultat: Bättre prestanda och SEO."
+   - Fokusera på VÄRDE och KONKRETA TEKNOLOGIER, inte vaga beskrivningar
 
 PROMPT;
 

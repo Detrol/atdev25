@@ -10,11 +10,17 @@ class PriceEstimation extends Model
     protected $fillable = [
         'description',
         'service_category',
+        'website_url',
+        'scraped_content',
+        'scraped_metadata',
+        'scrape_successful',
+        'scrape_error',
         'project_type',
         'complexity',
         'project_type_label',
         'complexity_label',
         'key_features',
+        'solution_approach',
         'hours_traditional_min',
         'hours_traditional_max',
         'hours_ai_min',
@@ -49,6 +55,8 @@ class PriceEstimation extends Model
 
     protected $casts = [
         'key_features' => 'array',
+        'scraped_metadata' => 'array',
+        'scrape_successful' => 'boolean',
         'complexity' => 'integer',
         'hours_traditional_min' => 'integer',
         'hours_traditional_max' => 'integer',

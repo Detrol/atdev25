@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PriceEstimateRequest;
 use App\Models\PriceEstimation;
 use App\Services\AIService;
+use App\Services\BrightDataScraper;
 use App\Services\PriceEstimateMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,10 +15,12 @@ use Illuminate\Support\Facades\RateLimiter;
 class PriceCalculatorController extends Controller
 {
     protected AIService $aiService;
+    protected BrightDataScraper $scraper;
 
-    public function __construct(AIService $aiService)
+    public function __construct(AIService $aiService, BrightDataScraper $scraper)
     {
         $this->aiService = $aiService;
+        $this->scraper = $scraper;
     }
 
     /**
@@ -28,6 +31,7 @@ class PriceCalculatorController extends Controller
         $validated = $request->validated();
         $description = $validated['description'];
         $serviceCategory = $validated['service_category'];
+        $websiteUrl = $validated['website_url'] ?? null;
 
         // Rate limiting (5 requests per 10 minutes per IP) - Exempt for authenticated admins
         // Check if user is authenticated by checking session cookie
@@ -44,6 +48,36 @@ class PriceCalculatorController extends Controller
         }
 
         try {
+            // Scrape website if URL provided
+            $scrapedData = null;
+            $scrapedContent = null;
+            $scrapeSuccessful = false;
+            $scrapeError = null;
+
+            if ($websiteUrl) {
+                try {
+                    Log::info('Scraping website for price estimation', ['url' => $websiteUrl]);
+                    $scrapedData = $this->scraper->scrape($websiteUrl);
+                    $scrapedContent = $this->scraper->generateSummary($scrapedData);
+                    $scrapeSuccessful = true;
+
+                    // Prepend scraped content to description for AI
+                    $description = $scrapedContent . "\n\n" . $description;
+
+                    Log::info('Website scraped successfully', [
+                        'url' => $websiteUrl,
+                        'technologies' => $scrapedData['technologies'] ?? [],
+                    ]);
+                } catch (\Exception $e) {
+                    // Continue with estimation even if scraping fails
+                    $scrapeError = $e->getMessage();
+                    Log::warning('Website scraping failed, continuing with user description only', [
+                        'url' => $websiteUrl,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+
             // Get AI analysis (project type, complexity, tech, features)
             $aiAnalysis = $this->aiService->estimateProjectPrice($description, $serviceCategory);
 
@@ -58,13 +92,19 @@ class PriceCalculatorController extends Controller
 
             // Save estimation to database
             $priceEstimationRecord = PriceEstimation::create([
-                'description' => $description,
+                'description' => $validated['description'], // Use original description, not modified one
                 'service_category' => $serviceCategory,
+                'website_url' => $websiteUrl,
+                'scraped_content' => $scrapedContent,
+                'scraped_metadata' => $scrapedData,
+                'scrape_successful' => $scrapeSuccessful,
+                'scrape_error' => $scrapeError,
                 'project_type' => $estimation['project_type'],
                 'complexity' => $estimation['complexity'],
                 'project_type_label' => $estimation['project_type_label'],
                 'complexity_label' => $estimation['complexity_label'],
                 'key_features' => $estimation['key_features'],
+                'solution_approach' => $estimation['solution_approach'] ?? null,
                 'hours_traditional_min' => $estimation['hours_range_traditional'][0],
                 'hours_traditional_max' => $estimation['hours_range_traditional'][1],
                 'hours_ai_min' => $estimation['hours_range_ai'][0],
