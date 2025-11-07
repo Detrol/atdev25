@@ -34,7 +34,7 @@ Alpine.data('cookieConsent', () => ({
     preferences: {
         essential: true,
         functional: false,
-        analytics: false,
+        analytics: true, // Berättigat Intresse (GDPR Art. 6.1.f)
         marketing: false
     },
 
@@ -43,6 +43,11 @@ Alpine.data('cookieConsent', () => ({
         window.addEventListener('open-cookie-banner', () => {
             this.showBanner = true;
         });
+
+        // Track cookie banner view
+        if (window.GA4) {
+            GA4.trackCookieBanner('banner_view');
+        }
     },
 
     async checkConsentStatus() {
@@ -79,6 +84,11 @@ Alpine.data('cookieConsent', () => ({
                 this.showSuccessMessage('Cookie-inställningar sparade!');
                 this.showBanner = false;
                 this.applyConsent();
+
+                // Track custom cookie choices
+                if (window.GA4) {
+                    GA4.trackCookieBanner('customize', this.preferences);
+                }
             }
         } catch (error) {
             console.error('Failed to save consent:', error);
@@ -103,6 +113,11 @@ Alpine.data('cookieConsent', () => ({
                 this.showSuccessMessage('Alla cookies accepterade!');
                 this.showBanner = false;
                 this.applyConsent();
+
+                // Track accept all
+                if (window.GA4) {
+                    GA4.trackCookieBanner('accept_all', data.preferences);
+                }
             }
         } catch (error) {
             console.error('Failed to accept all:', error);
@@ -127,6 +142,11 @@ Alpine.data('cookieConsent', () => ({
                 this.showSuccessMessage('Endast nödvändiga cookies aktiverade');
                 this.showBanner = false;
                 this.applyConsent();
+
+                // Track reject all
+                if (window.GA4) {
+                    GA4.trackCookieBanner('reject_all', data.preferences);
+                }
             }
         } catch (error) {
             console.error('Failed to reject cookies:', error);
@@ -545,9 +565,14 @@ class LazyLoadManager {
 window.Alpine = Alpine;
 Alpine.start();
 
-// Initialize LazyLoadManager after Alpine starts
+// Initialize LazyLoadManager and GA4 tracking after Alpine starts
 document.addEventListener('DOMContentLoaded', () => {
     window.lazyLoadManager = new LazyLoadManager();
+
+    // Initialize GA4 tracking (scroll depth, time on page)
+    if (window.GA4) {
+        GA4.init();
+    }
 });
 
 // Form validation and interaction enhancements

@@ -102,8 +102,8 @@ class CookieConsentService
         $consent = $this->getConsent();
 
         if (! $consent) {
-            // Ingen consent given = endast essential tillåtet
-            return $category === 'essential';
+            // Ingen consent given = essential + analytics tillåtet (Berättigat Intresse, GDPR Art. 6.1.f)
+            return $category === 'essential' || $category === 'analytics';
         }
 
         return $consent->hasConsent($category);
@@ -149,10 +149,11 @@ class CookieConsentService
         $consent = $this->getConsent();
 
         if (! $consent) {
+            // Berättigat Intresse (GDPR Art. 6.1.f): Analytics är aktiverat som standard
             return [
                 'essential' => true,
                 'functional' => false,
-                'analytics' => false,
+                'analytics' => true,
                 'marketing' => false,
             ];
         }

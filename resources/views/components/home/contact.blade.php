@@ -1,6 +1,6 @@
 {{-- Contact Section Component --}}
 
-<section id="contact" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
+<section id="contact" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden" x-data="{ viewed: false }" x-intersect="viewed = true; if(window.GA4) GA4.trackContactView()">
     <div class="relative max-w-4xl mx-auto px-6">
         <div class="relative text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">
@@ -19,7 +19,7 @@
         @endif
 
         @if($errors->any())
-        <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/20 rounded-2xl border-l-4 border-red-500" x-data="{ show: true }" x-show="show" x-transition>
+        <div class="mb-8 p-4 bg-red-50 dark:bg-red-900/20 rounded-2xl border-l-4 border-red-500" x-data="{ show: true }" x-show="show" x-transition x-init="if(window.GA4) GA4.trackContactError(@js($errors->all()))">
             <div class="flex items-start gap-3 text-red-600 dark:text-red-400">
                 <svg class="w-6 h-6 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <div>
@@ -67,6 +67,11 @@
                         this.estimationId = event.detail.id;
                         this.estimation = event.detail.data;
                         console.log('Estimation received:', this.estimation);
+
+                        // Track calculator-to-contact transition
+                        if (window.GA4) {
+                            window.GA4.trackContactFromCalculator(this.estimationId);
+                        }
                     });
                 }
             }">
@@ -84,7 +89,7 @@
                         value="{{ old('name') }}"
                         required
                         maxlength="255"
-                        @focus="nameFocused = true"
+                        @focus="nameFocused = true; if(window.GA4) GA4.trackContactInput()"
                         @blur="nameFocused = ($event.target.value !== '')"
                         x-init="nameFocused = ('{{ old('name') }}' !== '')"
                         class="peer w-full px-4 py-4 pt-6 bg-gray-50 dark:bg-gray-900 rounded-2xl text-gray-900 dark:text-white
@@ -118,7 +123,7 @@
                         value="{{ old('email') }}"
                         required
                         maxlength="255"
-                        @focus="emailFocused = true"
+                        @focus="emailFocused = true; if(window.GA4) GA4.trackContactInput()"
                         @blur="emailFocused = ($event.target.value !== '')"
                         x-init="emailFocused = ('{{ old('email') }}' !== '')"
                         class="peer w-full px-4 py-4 pt-6 bg-gray-50 dark:bg-gray-900 rounded-2xl text-gray-900 dark:text-white
@@ -220,7 +225,7 @@
                         minlength="10"
                         maxlength="5000"
                         rows="6"
-                        @focus="messageFocused = true"
+                        @focus="messageFocused = true; if(window.GA4) GA4.trackContactInput()"
                         @blur="messageFocused = ($event.target.value !== '')"
                         x-init="messageFocused = ('{{ old('message') }}' !== '')"
                         class="peer w-full px-4 py-4 pt-6 bg-gray-50 dark:bg-gray-900 rounded-2xl text-gray-900 dark:text-white
@@ -281,7 +286,7 @@
                 <div class="pt-6 border-t border-purple-200 dark:border-purple-700">
                     <p class="text-center text-gray-700 dark:text-gray-300 mb-3">Eller kontakta mig direkt via e-post:</p>
                     <div class="flex justify-center">
-                        <a href="mailto:andreas@atdev.me" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                        <a href="mailto:andreas@atdev.me" onclick="if(window.GA4) GA4.trackEmailClick('andreas@atdev.me')" class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105">
                             <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                             <span class="font-semibold text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors">andreas@atdev.me</span>
                         </a>

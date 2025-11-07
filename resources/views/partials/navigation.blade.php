@@ -28,19 +28,19 @@
                      x-transition:enter-end="opacity-100 translate-y-0"
                      class="absolute top-full left-0 mt-2 py-2 w-48 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-200/20 dark:border-gray-700/20"
                      x-cloak>
-                    <a href="/#om-mig" @click="aboutDropdownOpen = false" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Om Mig</a>
-                    <a href="/#hur-jag-jobbar" @click="aboutDropdownOpen = false" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Hur Jag Jobbar</a>
-                    <a href="/#expertis" @click="aboutDropdownOpen = false" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Expertis</a>
+                    <a href="/#om-mig" @click="aboutDropdownOpen = false; if(window.GA4) GA4.trackNavigation('om-mig')" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Om Mig</a>
+                    <a href="/#hur-jag-jobbar" @click="aboutDropdownOpen = false; if(window.GA4) GA4.trackNavigation('hur-jag-jobbar')" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Hur Jag Jobbar</a>
+                    <a href="/#expertis" @click="aboutDropdownOpen = false; if(window.GA4) GA4.trackNavigation('expertis')" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Expertis</a>
                 </div>
             </div>
 
-            <a href="/#services" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Tjänster</a>
-            <a href="/#projects" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Projekt</a>
-            <a href="/#faq" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">FAQ</a>
-            <a href="/demos" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? '{{ $currentPage === 'demos' ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' }}' : '{{ $currentPage === 'demos' ? 'text-white font-semibold' : 'text-white/80 hover:text-white' }}'">Demos</a>
-            <a href="/#contact" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Kontakt</a>
+            <a href="/#services" onclick="if(window.GA4) GA4.trackNavigation('services')" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Tjänster</a>
+            <a href="/#projects" onclick="if(window.GA4) GA4.trackNavigation('projects')" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Projekt</a>
+            <a href="/#faq" onclick="if(window.GA4) GA4.trackNavigation('faq')" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">FAQ</a>
+            <a href="/demos" onclick="if(window.GA4) GA4.trackNavigation('demos')" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? '{{ $currentPage === 'demos' ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' }}' : '{{ $currentPage === 'demos' ? 'text-white font-semibold' : 'text-white/80 hover:text-white' }}'">Demos</a>
+            <a href="/#contact" onclick="if(window.GA4) GA4.trackNavigation('contact')" class="transition-all font-medium whitespace-nowrap" :class="(scrolled && showNav) ? 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' : 'text-white/80 hover:text-white'">Kontakt</a>
 
-            <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); document.documentElement.classList.toggle('dark', darkMode)" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" x-init="document.documentElement.classList.toggle('dark', darkMode)" class="p-2 rounded-lg transition-all" :class="(scrolled && showNav) ? 'hover:bg-gray-100 dark:hover:bg-gray-800' : 'hover:bg-white/10'" aria-label="Toggla dark mode">
+            <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); document.documentElement.classList.toggle('dark', darkMode); if(window.GA4) GA4.trackDarkMode(darkMode)" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" x-init="document.documentElement.classList.toggle('dark', darkMode)" class="p-2 rounded-lg transition-all" :class="(scrolled && showNav) ? 'hover:bg-gray-100 dark:hover:bg-gray-800' : 'hover:bg-white/10'" aria-label="Toggla dark mode">
                 <svg x-show="!darkMode" class="w-5 h-5" :class="(scrolled && showNav) ? 'text-gray-600' : 'text-white/80'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                 <svg x-show="darkMode" class="w-5 h-5" :class="(scrolled && showNav) ? 'text-gray-600' : 'text-white/80'" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-cloak><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </button>
@@ -50,7 +50,7 @@
             @endauth
         </div>
 
-        <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg transition-all" :class="(scrolled && showNav) ? 'hover:bg-gray-100' : 'hover:bg-white/10'" aria-label="Toggle menu">
+        <button @click="mobileMenuOpen = !mobileMenuOpen; if(window.GA4) GA4.trackMobileMenu(mobileMenuOpen ? 'close' : 'open')" class="md:hidden p-2 rounded-lg transition-all" :class="(scrolled && showNav) ? 'hover:bg-gray-100' : 'hover:bg-white/10'" aria-label="Toggle menu">
             <svg class="w-6 h-6" :class="(scrolled && showNav) ? 'text-gray-900 dark:text-white' : 'text-white'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path><path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" x-cloak></path></svg>
         </button>
     </div>
@@ -68,17 +68,17 @@
                     </svg>
                 </button>
                 <div x-show="mobileAboutOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="pl-4 space-y-2 mt-2" x-cloak>
-                    <a href="/#om-mig" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 font-medium transition-colors">Om Mig</a>
-                    <a href="/#hur-jag-jobbar" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 font-medium transition-colors">Hur Jag Jobbar</a>
-                    <a href="/#expertis" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 font-medium transition-colors">Expertis</a>
+                    <a href="/#om-mig" onclick="if(window.GA4) GA4.trackNavigation('om-mig')" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 font-medium transition-colors">Om Mig</a>
+                    <a href="/#hur-jag-jobbar" onclick="if(window.GA4) GA4.trackNavigation('hur-jag-jobbar')" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 font-medium transition-colors">Hur Jag Jobbar</a>
+                    <a href="/#expertis" onclick="if(window.GA4) GA4.trackNavigation('expertis')" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 font-medium transition-colors">Expertis</a>
                 </div>
             </div>
 
-            <a href="/#services" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Tjänster</a>
-            <a href="/#projects" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Projekt</a>
-            <a href="/#faq" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">FAQ</a>
-            <a href="/demos" class="block py-2 font-medium transition-colors {{ $currentPage === 'demos' ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-900 dark:text-white hover:text-purple-600' }}">Demos</a>
-            <a href="/#contact" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Kontakt</a>
+            <a href="/#services" onclick="if(window.GA4) GA4.trackNavigation('services')" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Tjänster</a>
+            <a href="/#projects" onclick="if(window.GA4) GA4.trackNavigation('projects')" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Projekt</a>
+            <a href="/#faq" onclick="if(window.GA4) GA4.trackNavigation('faq')" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">FAQ</a>
+            <a href="/demos" onclick="if(window.GA4) GA4.trackNavigation('demos')" class="block py-2 font-medium transition-colors {{ $currentPage === 'demos' ? 'text-purple-600 dark:text-purple-400 font-semibold' : 'text-gray-900 dark:text-white hover:text-purple-600' }}">Demos</a>
+            <a href="/#contact" onclick="if(window.GA4) GA4.trackNavigation('contact')" class="block py-2 text-gray-900 dark:text-white hover:text-purple-600 font-medium transition-colors">Kontakt</a>
 
             @auth
             <a href="/admin" class="block py-2 px-6 bg-purple-600 text-white rounded-full text-center hover:bg-purple-700 font-medium transition-colors">Admin</a>

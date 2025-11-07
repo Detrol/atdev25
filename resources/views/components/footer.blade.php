@@ -15,6 +15,7 @@
                 <div class="flex items-center gap-3 mt-4">
                     @if($profile->github)
                     <a href="{{ $profile->github }}" target="_blank" rel="noopener noreferrer"
+                       onclick="if(window.GA4) GA4.trackExternalLink('{{ $profile->github }}', 'social')"
                        class="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center transition-colors group"
                        aria-label="GitHub">
                         <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -25,6 +26,7 @@
 
                     @if($profile->linkedin)
                     <a href="{{ $profile->linkedin }}" target="_blank" rel="noopener noreferrer"
+                       onclick="if(window.GA4) GA4.trackExternalLink('{{ $profile->linkedin }}', 'social')"
                        class="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center transition-colors group"
                        aria-label="LinkedIn">
                         <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -35,6 +37,7 @@
 
                     @if($profile->twitter)
                     <a href="{{ $profile->twitter }}" target="_blank" rel="noopener noreferrer"
+                       onclick="if(window.GA4) GA4.trackExternalLink('{{ $profile->twitter }}', 'social')"
                        class="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-lg flex items-center justify-center transition-colors group"
                        aria-label="Twitter/X">
                         <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -51,22 +54,22 @@
                 <h3 class="text-lg font-semibold text-white mb-4">Snabblänkar</h3>
                 <ul class="space-y-2 text-sm">
                     <li>
-                        <a href="/#projects" class="text-gray-400 hover:text-blue-400 transition-colors">
+                        <a href="/#projects" onclick="if(window.GA4) GA4.trackFooterLink('projects')" class="text-gray-400 hover:text-blue-400 transition-colors">
                             Projekt
                         </a>
                     </li>
                     <li>
-                        <a href="/#services" class="text-gray-400 hover:text-blue-400 transition-colors">
+                        <a href="/#services" onclick="if(window.GA4) GA4.trackFooterLink('services')" class="text-gray-400 hover:text-blue-400 transition-colors">
                             Tjänster
                         </a>
                     </li>
                     <li>
-                        <a href="/#contact" class="text-gray-400 hover:text-blue-400 transition-colors">
+                        <a href="/#contact" onclick="if(window.GA4) GA4.trackFooterLink('contact')" class="text-gray-400 hover:text-blue-400 transition-colors">
                             Kontakt
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('gdpr.showcase') }}" class="text-gray-400 hover:text-blue-400 transition-colors">
+                        <a href="{{ route('gdpr.showcase') }}" onclick="if(window.GA4) GA4.trackFooterLink('gdpr-showcase')" class="text-gray-400 hover:text-blue-400 transition-colors">
                             GDPR Showcase
                         </a>
                     </li>
@@ -78,17 +81,17 @@
                 <h3 class="text-lg font-semibold text-white mb-4">Juridiskt & Integritet</h3>
                 <ul class="space-y-2 text-sm">
                     <li>
-                        <a href="{{ route('gdpr.privacy') }}" class="text-gray-400 hover:text-blue-400 transition-colors">
+                        <a href="{{ route('gdpr.privacy') }}" onclick="if(window.GA4) GA4.trackFooterLink('privacy-policy')" class="text-gray-400 hover:text-blue-400 transition-colors">
                             Integritetspolicy
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('gdpr.cookies') }}" class="text-gray-400 hover:text-blue-400 transition-colors">
+                        <a href="{{ route('gdpr.cookies') }}" onclick="if(window.GA4) GA4.trackFooterLink('cookie-policy')" class="text-gray-400 hover:text-blue-400 transition-colors">
                             Cookie-policy
                         </a>
                     </li>
                     <li>
-                        <button @click="window.dispatchEvent(new CustomEvent('open-cookie-banner'))"
+                        <button @click="window.dispatchEvent(new CustomEvent('open-cookie-banner')); if(window.GA4) GA4.trackFooterLink('cookie-settings')"
                                 class="text-gray-400 hover:text-blue-400 transition-colors text-left">
                             Cookie-inställningar
                         </button>

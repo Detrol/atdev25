@@ -48,6 +48,11 @@ window.productViewerData = function(productsData) {
             this.modelLoading = true;
             this.modelError = false;
 
+            // Track product selection
+            if (window.GA4) {
+                window.GA4.trackDemoInteraction('product-viewer', 'product-select', this.products[index]?.name);
+            }
+
             // Reset camera when switching products
             this.$nextTick(() => {
                 const modelViewer = this.$refs.modelViewer;
@@ -101,6 +106,11 @@ window.productViewerData = function(productsData) {
             modelViewer.addEventListener('ar-status', (event) => {
                 if (event.detail.status === 'session-started') {
                     console.log('AR session started');
+
+                    // Track AR start
+                    if (window.GA4) {
+                        window.GA4.trackARStart(this.selectedProduct?.name);
+                    }
                 }
             });
         },
@@ -110,6 +120,11 @@ window.productViewerData = function(productsData) {
             const modelViewer = this.$refs.modelViewer;
             if (modelViewer) {
                 modelViewer.autoRotate = this.autoRotate;
+            }
+
+            // Track rotation toggle
+            if (window.GA4) {
+                window.GA4.trackProductRotation(this.autoRotate ? 'enabled' : 'disabled');
             }
         },
 
@@ -121,10 +136,21 @@ window.productViewerData = function(productsData) {
                     modelViewer.fieldOfView = '45deg'; // Reset FOV
                 }
             }
+
+            // Track camera reset
+            if (window.GA4) {
+                window.GA4.trackDemoInteraction('product-viewer', 'camera-reset');
+            }
         },
 
         shareProduct() {
             const product = this.selectedProduct;
+
+            // Track share action
+            if (window.GA4) {
+                window.GA4.trackDemoInteraction('product-viewer', 'share', product?.name);
+            }
+
             if (navigator.share) {
                 navigator.share({
                     title: product.name,

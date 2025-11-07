@@ -64,19 +64,46 @@
 
             <h3>3.1 Samtycke (Artikel 6.1.a)</h3>
             <p>
-                När du godkänner vår cookie-banner ger du ditt samtycke till att lagra funktionella,
-                analytics och marketing cookies. Du kan när som helst återkalla ditt samtycke genom
-                att ändra dina cookie-inställningar.
+                Vissa cookies kräver ditt uttryckliga samtycke innan de aktiveras:
+            </p>
+            <ul>
+                <li><strong>Funktionella cookies:</strong> Sparar dina preferenser (mörkt läge, chat-historik)</li>
+                <li><strong>Marknadsföringscookies:</strong> Används för riktad marknadsföring och annonsering</li>
+            </ul>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                <em>Observera: Analytics-cookies aktiveras baserat på berättigat intresse (se 3.2), inte samtycke.
+                Du kan när som helst återkalla samtycke eller inaktivera analytics genom att ändra dina cookie-inställningar.</em>
             </p>
 
             <h3>3.2 Berättigat intresse (Artikel 6.1.f)</h3>
             <p>
-                Vi har ett berättigat intresse av att:
+                Vi behandlar vissa personuppgifter baserat på berättigat intresse när vårt legitima intresse
+                väger tyngre än ditt intresse av integritet, och behandlingen inte är oproportionerlig eller oväntad.
+            </p>
+
+            <h4 class="text-lg font-semibold mt-4">Analytics och webbplatsanalys</h4>
+            <p>
+                <strong>Analytics-cookies är aktiverade som standard</strong> baserat på berättigat intresse.
+                Vi har ett legitimt affärsintresse av att förstå hur besökare använder webbplatsen för att:
             </p>
             <ul>
-                <li>Förhindra spam och missbruk av kontaktformuläret</li>
-                <li>Förbättra användarupplevelsen på webbplatsen</li>
-                <li>Analysera webbplatstrafik och användarbeteende</li>
+                <li><strong>Förbättra användarupplevelsen</strong> genom att identifiera populära funktioner och vanliga problem</li>
+                <li><strong>Optimera innehåll</strong> baserat på faktisk användning och beteende</li>
+                <li><strong>Teknisk underhåll</strong> genom att upptäcka buggar och prestandaproblem</li>
+                <li><strong>Affärsutveckling</strong> för att mäta effektiviteten av portfolion och tjänsteerbjudanden</li>
+            </ul>
+
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 bg-blue-50 dark:bg-blue-900/20 p-3 rounded">
+                <strong>💡 Viktigt:</strong> Du kan när som helst inaktivera analytics-cookies genom att ändra dina
+                cookie-inställningar. Vi använder endast anonymiserad IP-adressering och sparar ingen personligt
+                identifierbar information i analytics-systemet.
+            </p>
+
+            <h4 class="text-lg font-semibold mt-4">Övriga berättigade intressen</h4>
+            <ul>
+                <li><strong>Spam-skydd:</strong> Förhindra missbruk av kontaktformuläret genom IP-loggning</li>
+                <li><strong>Säkerhet:</strong> Upptäcka och förhindra säkerhetsincidenter</li>
+                <li><strong>Systemunderhåll:</strong> Felsökning och teknisk support</li>
             </ul>
 
             <h3>3.3 Fullgörande av avtal (Artikel 6.1.b)</h3>

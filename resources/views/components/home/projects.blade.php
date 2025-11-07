@@ -12,7 +12,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($projects as $project)
             <div class="group relative transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer"
-                 onclick="openProjectModal('{{ $project->slug }}')">
+                 onclick="if(window.GA4) GA4.trackProjectCard('{{ $project->slug }}'); openProjectModal('{{ $project->slug }}')">
                 <div class="relative w-full h-80 rounded-3xl overflow-hidden">
                     <!-- Gradient border on hover -->
                     <div class="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -112,7 +112,7 @@
         <div class="mt-16 text-center" id="tech-stack-section">
             <div class="relative inline-block">
                 <div class="absolute inset-0 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
-                <button onclick="openTechStackModal()" class="relative px-10 py-5 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 text-white rounded-3xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-105 active:scale-95 flex items-center gap-3">
+                <button onclick="if(window.GA4) GA4.trackTechStackModal('open'); openTechStackModal()" class="relative px-10 py-5 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 text-white rounded-3xl font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-105 active:scale-95 flex items-center gap-3">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                     </svg>
@@ -132,7 +132,7 @@
                                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Tech Stack Visualizer</h2>
                                 <p class="text-gray-600 dark:text-gray-400 mt-1">Interaktiv graf över teknologier och deras relationer</p>
                             </div>
-                            <button onclick="closeTechStackModal()" class="p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors" aria-label="Stäng Tech Stack Visualizer">
+                            <button onclick="if(window.GA4) GA4.trackTechStackModal('close'); closeTechStackModal()" class="p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors" aria-label="Stäng Tech Stack Visualizer">
                                 <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>

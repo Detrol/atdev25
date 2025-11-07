@@ -111,6 +111,11 @@ window.googleReviewsDemo = function() {
                 if (data.success) {
                     this.searchResults = data.data.results || [];
 
+                    // Track search action
+                    if (window.GA4) {
+                        window.GA4.trackReviews('search', this.searchQuery);
+                    }
+
                     if (this.searchResults.length === 0) {
                         this.error = 'Inga resultat hittades. Försök med ett annat sökord.';
                     } else if (this.searchResults.length === 1) {
@@ -150,6 +155,11 @@ window.googleReviewsDemo = function() {
                     this.cacheInfo = data.data.meta.cached_at;
                     this.currentPage = 1;
                     this.ratingFilter = null;
+
+                    // Track place selection
+                    if (window.GA4) {
+                        window.GA4.trackDemoInteraction('google-reviews', 'place-select', this.currentPlace.name);
+                    }
                 } else {
                     this.error = data.error || 'Kunde inte hämta platsdata';
                 }
@@ -165,6 +175,11 @@ window.googleReviewsDemo = function() {
         filterByRating(rating) {
             this.ratingFilter = rating;
             this.currentPage = 1; // Reset to first page when filtering
+
+            // Track filter action
+            if (window.GA4) {
+                window.GA4.trackReviews('filter', rating);
+            }
         },
 
         // Pagination
