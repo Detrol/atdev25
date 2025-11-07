@@ -47,6 +47,11 @@ window.smartMenuData = function(dishesData) {
             this.analysisResult = null;
             this.error = null;
 
+            // Track dish selection
+            if (window.GA4) {
+                window.GA4.trackSmartMenu('dish-select', this.selectedDish.name);
+            }
+
             console.log('Selected dish:', this.selectedDish.name);
         },
 
@@ -84,6 +89,12 @@ window.smartMenuData = function(dishesData) {
 
                 if (data.success) {
                     this.analysisResult = data.analysis;
+
+                    // Track successful allergen analysis
+                    if (window.GA4) {
+                        window.GA4.trackSmartMenu('allergen-analyze', this.selectedDish.name);
+                    }
+
                     console.log('Analysis complete:', this.analysisResult);
                 } else {
                     throw new Error(data.error || 'Analysen misslyckades');
@@ -103,6 +114,11 @@ window.smartMenuData = function(dishesData) {
         resetAnalysis() {
             this.analysisResult = null;
             this.error = null;
+
+            // Track reset action
+            if (window.GA4) {
+                window.GA4.trackDemoInteraction('smart-menu', 'reset');
+            }
         },
 
         /**

@@ -47,6 +47,11 @@ window.beforeAfterSliderData = function(examplesData) {
             this.selectedExampleIndex = index;
             this.sliderPosition = 50; // Reset to center
 
+            // Track example selection
+            if (window.GA4) {
+                window.GA4.trackDemoInteraction('before-after', 'select', this.selectedExample.title);
+            }
+
             console.log('Selected example:', this.selectedExample.title);
         },
 
@@ -99,6 +104,12 @@ window.beforeAfterSliderData = function(examplesData) {
             if (!this.isDragging) return;
 
             this.isDragging = false;
+
+            // Track slider drag interaction
+            if (window.GA4) {
+                window.GA4.trackBeforeAfter('drag', Math.round(this.sliderPosition));
+            }
+
             console.log('Drag stopped at', Math.round(this.sliderPosition) + '%');
         },
 
@@ -127,6 +138,12 @@ window.beforeAfterSliderData = function(examplesData) {
 
         resetPosition() {
             this.sliderPosition = 50;
+
+            // Track reset action
+            if (window.GA4) {
+                window.GA4.trackDemoInteraction('before-after', 'reset');
+            }
+
             console.log('Slider position reset to center');
         },
 

@@ -146,10 +146,21 @@ function renderTechGraph(techData) {
                 .html('<strong>' + d.name + '</strong><br/>' + d.count + ' projekt')
                 .style('left', (event.pageX + 10) + 'px')
                 .style('top', (event.pageY - 10) + 'px');
+
+            // Track hover
+            if (window.GA4) {
+                window.GA4.trackTechNode(d.name, 'hover');
+            }
         })
         .on('mouseout', function(event, d) {
             window.d3.select(this).transition().duration(200).attr('r', Math.sqrt(d.count) * 10 + 8);
             tooltip.style('opacity', 0);
+        })
+        .on('click', function(event, d) {
+            // Track click
+            if (window.GA4) {
+                window.GA4.trackTechNode(d.name, 'click');
+            }
         });
 
     // Labels

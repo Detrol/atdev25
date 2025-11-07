@@ -17,6 +17,11 @@ export function openProjectModal(projectSlug) {
 
     renderProjectContent();
 
+    // Track project modal open
+    if (window.GA4) {
+        window.GA4.trackProjectModal(projectSlug, 'open');
+    }
+
     // Update URL with hash
     history.replaceState(null, '', '#project-' + projectModalProjects[currentProjectIndex].slug);
 }
@@ -26,6 +31,11 @@ export function closeProjectModal() {
     const modal = document.getElementById('project-modal');
     modal.classList.add('hidden');
     document.body.style.overflow = '';
+
+    // Track project modal close
+    if (window.GA4 && projectModalProjects[currentProjectIndex]) {
+        window.GA4.trackProjectModal(projectModalProjects[currentProjectIndex].slug, 'close');
+    }
 
     // Remove hash from URL
     history.replaceState(null, '', window.location.pathname);
@@ -99,6 +109,7 @@ function renderProjectContent() {
     if (project.live_url) {
         linksHtml += `
             <a href="${project.live_url}" target="_blank" rel="noopener noreferrer"
+               onclick="if(window.GA4) window.GA4.trackProjectLiveClick('${project.slug}', '${project.live_url}')"
                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-full font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

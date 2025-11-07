@@ -7,14 +7,14 @@
      x-transition:leave="transform transition ease-in duration-200"
      x-transition:leave-start="translate-x-0"
      x-transition:leave-end="translate-x-full"
-     class="fixed z-50 max-w-md w-full bottom-4 left-4 right-4 md:right-0 md:left-auto md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:mr-6 md:mx-0"
+     class="fixed z-50 inset-x-4 bottom-4 md:max-w-md md:inset-x-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:bottom-auto"
      style="display: none;">
 
     {{-- Glassmorphism Container (matchar AI chatbot) --}}
     <div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
 
         {{-- Header --}}
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,10 +33,18 @@
         </div>
 
         {{-- Content --}}
-        <div class="px-6 py-5 max-h-[60vh] md:max-h-[70vh] overflow-y-auto">
+        <div class="px-5 py-5 max-h-[60vh] md:max-h-[70vh] overflow-y-auto">
             <p class="text-sm text-gray-700 dark:text-gray-300 mb-4">
                 Vi använder cookies för att förbättra din upplevelse.
             </p>
+
+            {{-- Showcase Notice (always visible) --}}
+            <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded">
+                <p class="text-xs text-blue-900 dark:text-blue-300">
+                    <strong>💡 Showcase:</strong> Denna GDPR-lösning kan jag skapa för din webbplats också!
+                    Komplett cookie-hantering, integritetspolicies och GDPR-compliance.
+                </p>
+            </div>
 
             {{-- Toggle Details Button --}}
             <button @click="showDetails = !showDetails"
@@ -51,15 +59,18 @@
                 </svg>
             </button>
 
+            {{-- Active cookies summary (always visible, under toggle button) --}}
+            <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <p class="text-xs text-gray-700 dark:text-gray-300">
+                    <strong>Aktivt:</strong> Nödvändiga cookies + Analytics cookies (Berättigat intresse)
+                </p>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1" x-show="!showDetails">
+                    Expandera för att anpassa eller inaktivera analytics.
+                </p>
+            </div>
+
             {{-- Expandable Details Section --}}
             <div x-show="showDetails" x-collapse>
-                {{-- Showcase Notice --}}
-                <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded">
-                    <p class="text-xs text-blue-900 dark:text-blue-300">
-                        <strong>💡 Showcase:</strong> Denna GDPR-lösning kan jag skapa för din webbplats också!
-                        Komplett cookie-hantering, integritetspolicies och GDPR-compliance.
-                    </p>
-                </div>
 
                 {{-- Cookie Categories --}}
                 <div class="space-y-3">
@@ -98,16 +109,21 @@
                     </div>
                 </label>
 
-                {{-- Analytics Cookies --}}
+                {{-- Analytics Cookies (Berättigat Intresse) --}}
                 <label class="flex items-start space-x-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
                     <input type="checkbox"
                            id="cookie-analytics"
                            x-model="preferences.analytics"
                            class="mt-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                     <div class="flex-1">
-                        <span class="text-sm font-medium text-gray-900 dark:text-gray-100">Analys</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm font-medium text-gray-900 dark:text-gray-100">Analys</span>
+                            <span class="text-xs px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 rounded-full">
+                                Berättigat intresse
+                            </span>
+                        </div>
                         <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                            Hjälper oss förstå hur du använder webbplatsen
+                            Aktiverat som standard baserat på berättigat intresse (GDPR Art. 6.1.f). Hjälper oss förbättra webbplatsen. Du kan inaktivera när som helst.
                         </p>
                     </div>
                 </label>
@@ -142,24 +158,16 @@
         </div>
 
         {{-- Footer Actions --}}
-        <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
-            {{-- Show "Spara val" button only when details are expanded --}}
-            <div x-show="showDetails" x-collapse>
-                <button @click="saveChoices()"
-                        class="w-full mb-3 px-4 py-3 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
-                    Spara val
-                </button>
-            </div>
-
-            {{-- Always visible buttons --}}
+        <div class="px-5 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
+            {{-- Buttons - Samma både när dolda och expanderade --}}
             <div class="grid grid-cols-2 gap-3">
+                <button @click="saveChoices()"
+                        class="px-4 py-3 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                    Acceptera valda
+                </button>
                 <button @click="acceptAll()"
                         class="px-4 py-3 md:py-2.5 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors">
                     Acceptera alla
-                </button>
-                <button @click="rejectAll()"
-                        class="px-4 py-3 md:py-2.5 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors">
-                    Endast nödvändiga
                 </button>
             </div>
         </div>

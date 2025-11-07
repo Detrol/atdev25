@@ -7,7 +7,7 @@
 
     <div class="relative max-w-4xl mx-auto px-6">
         <!-- Header -->
-        <div class="text-center mb-12" x-data="{ visible: false }" x-intersect="visible = true">
+        <div class="text-center mb-12" x-data="{ visible: false }" x-intersect="visible = true; if(window.GA4) GA4.trackCalculatorView()">
             <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg mb-4" x-show="visible" x-transition>
                 <span class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
                 <span class="text-sm font-semibold text-purple-600 dark:text-purple-400">AI-Driven Prisestimering</span>
@@ -32,7 +32,7 @@
                     <select
                         id="service-category"
                         x-model="serviceCategory"
-                        @change="updatePlaceholder()"
+                        @change="updatePlaceholder(); if(window.GA4) GA4.trackCalculatorService(serviceCategory)"
                         class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 transition-all text-gray-900 dark:text-white mb-4"
                     >
                         <option value="">-- Välj en tjänst --</option>
@@ -58,6 +58,7 @@
                         id="project-description"
                         x-model="description"
                         @input="error = null"
+                        @focus="if(window.GA4) GA4.trackCalculatorInput()"
                         rows="6"
                         :placeholder="placeholder"
                         class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 transition-all resize-none text-gray-900 dark:text-white placeholder-gray-400"
@@ -240,7 +241,7 @@
 
                 <!-- AI Explanation (Expandable) -->
                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-200 dark:border-blue-800" x-data="{ open: false }">
-                    <button @click="open = !open" class="w-full px-6 py-4 flex items-center justify-between text-left">
+                    <button @click="open = !open; if(window.GA4) GA4.trackCalculatorAIExpand()" class="w-full px-6 py-4 flex items-center justify-between text-left">
                         <div class="flex items-center gap-3">
                             <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -344,6 +345,14 @@ function priceCalculator() {
                 return;
             }
 
+            // Track calculator submit
+            if (window.GA4) {
+                window.GA4.trackCalculatorSubmit({
+                    service_category: this.serviceCategory,
+                    description_length: this.description.length
+                });
+            }
+
             this.loading = true;
             this.error = null;
             this.result = null;
@@ -368,6 +377,12 @@ function priceCalculator() {
                 if (response.ok && data.success) {
                     this.result = data.estimation;
                     this.estimationId = data.estimation_id;
+
+                    // Track calculator result
+                    if (window.GA4 && this.result) {
+                        window.GA4.trackCalculatorResult(this.result.estimated_price);
+                    }
+
                     // Scroll to results section
                     setTimeout(() => {
                         const resultsSection = document.querySelector('#price-results');
@@ -391,6 +406,11 @@ function priceCalculator() {
         },
 
         bookConsultation() {
+            // Track CTA click
+            if (window.GA4) {
+                window.GA4.trackCalculatorCTA('contact');
+            }
+
             // Dispatch custom event with estimation data
             if (this.estimationId && this.result) {
                 window.dispatchEvent(new CustomEvent('estimation-ready', {

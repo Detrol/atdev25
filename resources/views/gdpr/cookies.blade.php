@@ -118,15 +118,20 @@
 
             {{-- Analytics Cookies --}}
             <h3 class="mt-8 text-xl font-semibold text-gray-900 dark:text-white flex items-center">
-                <span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-2"></span>
+                <span class="inline-block w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
                 3.3 Analytics cookies
-                <span class="ml-2 text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 rounded-full">
-                    Kan stängas av
+                <span class="ml-2 text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 rounded-full">
+                    Berättigat intresse
                 </span>
             </h3>
             <p>
+                <strong>Analytics-cookies är aktiverade som standard</strong> baserat på berättigat intresse (GDPR Artikel 6.1.f).
                 Dessa cookies hjälper oss att förstå hur besökare interagerar med webbplatsen genom att
                 samla in och rapportera information anonymt.
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Vi använder anonymiserad IP-adressering och sparar ingen personligt identifierbar information.
+                Du kan när som helst inaktivera analytics-cookies genom att ändra dina cookie-inställningar.
             </p>
 
             <div class="overflow-x-auto mt-4">
@@ -156,9 +161,11 @@
                 </table>
             </div>
 
-            <p class="mt-4 text-sm bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4">
-                <strong>Status:</strong> Vi använder för närvarande inte Google Analytics eller andra analytics-tjänster.
-                Dessa cookies laddas endast om du godkänner analytics-kategorin och vi aktiverar tjänsten i framtiden.
+            <p class="mt-4 text-sm bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4">
+                <strong>✓ Aktiv tjänst:</strong> Vi använder Google Analytics 4 (GA4) för webbplatsanalys.
+                Tjänsten är aktiverad som standard baserat på berättigat intresse, med anonymiserad IP-adressering
+                och ingen personligt identifierbar information. Du kan inaktivera analytics när som helst via
+                cookie-inställningarna.
             </p>
 
             {{-- Marketing Cookies --}}
