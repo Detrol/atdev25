@@ -192,11 +192,11 @@ Alpine.data('cookieConsent', () => ({
     },
 
     loadAnalytics() {
-        console.log('Analytics enabled');
+        // Analytics loaded
     },
 
     loadMarketingScripts() {
-        console.log('Marketing scripts enabled');
+        // Marketing scripts loaded
     },
 
     showSuccessMessage(message) {
@@ -228,7 +228,6 @@ Alpine.data('chatWidget', () => ({
 
     async init() {
         this.sessionId = await this.getOrCreateSessionId();
-        console.log('Chat widget initialized with session:', this.sessionId);
     },
 
     async getOrCreateSessionId() {
