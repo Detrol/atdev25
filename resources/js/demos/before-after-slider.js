@@ -24,8 +24,6 @@ window.beforeAfterSliderData = function(examplesData) {
 
         // Methods
         init() {
-            console.log('Before/After Slider initialized with', this.examples.length, 'examples');
-
             // Set up window listeners
             window.addEventListener('mousemove', this.onDrag.bind(this));
             window.addEventListener('mouseup', this.stopDrag.bind(this));
@@ -51,8 +49,6 @@ window.beforeAfterSliderData = function(examplesData) {
             if (window.GA4) {
                 window.GA4.trackDemoInteraction('before-after', 'select', this.selectedExample.title);
             }
-
-            console.log('Selected example:', this.selectedExample.title);
         },
 
         updateContainerRect() {
@@ -71,8 +67,6 @@ window.beforeAfterSliderData = function(examplesData) {
 
             // Set initial position
             this.onDrag(event);
-
-            console.log('Drag started');
         },
 
         onDrag(event) {
@@ -109,8 +103,6 @@ window.beforeAfterSliderData = function(examplesData) {
             if (window.GA4) {
                 window.GA4.trackBeforeAfter('drag', Math.round(this.sliderPosition));
             }
-
-            console.log('Drag stopped at', Math.round(this.sliderPosition) + '%');
         },
 
         handleKeyboard(event) {
@@ -143,8 +135,6 @@ window.beforeAfterSliderData = function(examplesData) {
             if (window.GA4) {
                 window.GA4.trackDemoInteraction('before-after', 'reset');
             }
-
-            console.log('Slider position reset to center');
         },
 
         destroy() {
@@ -160,5 +150,5 @@ window.beforeAfterSliderData = function(examplesData) {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Before/After Slider script loaded');
+    // Script loaded
 });

@@ -31,8 +31,6 @@ window.smartMenuData = function(dishesData) {
          * Initialize component
          */
         init() {
-            console.log('Smart Menu initialized with', this.dishes.length, 'dishes');
-
             // Auto-analyze first dish on load (demo mode)
             // setTimeout(() => this.analyzeDish(), 500);
         },
@@ -51,8 +49,6 @@ window.smartMenuData = function(dishesData) {
             if (window.GA4) {
                 window.GA4.trackSmartMenu('dish-select', this.selectedDish.name);
             }
-
-            console.log('Selected dish:', this.selectedDish.name);
         },
 
         /**
@@ -65,8 +61,6 @@ window.smartMenuData = function(dishesData) {
             this.error = null;
 
             const dishDescription = `${this.selectedDish.name} - ${this.selectedDish.description}`;
-
-            console.log('Analyzing dish:', dishDescription);
 
             try {
                 const response = await fetch('/api/menu/analyze-allergens', {
@@ -94,8 +88,6 @@ window.smartMenuData = function(dishesData) {
                     if (window.GA4) {
                         window.GA4.trackSmartMenu('allergen-analyze', this.selectedDish.name);
                     }
-
-                    console.log('Analysis complete:', this.analysisResult);
                 } else {
                     throw new Error(data.error || 'Analysen misslyckades');
                 }
@@ -206,7 +198,7 @@ window.smartMenuData = function(dishesData) {
          * Cleanup on component destroy
          */
         destroy() {
-            console.log('Smart Menu destroyed');
+            // Cleanup logic if needed
         }
     };
 };
