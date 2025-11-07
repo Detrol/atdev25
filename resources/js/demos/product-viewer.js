@@ -36,8 +36,6 @@ window.productViewerData = function(productsData) {
                     this.setupModelViewerEvents(modelViewer);
                 }
             });
-
-            console.log('Product Viewer initialized');
         },
 
         selectProduct(index) {
@@ -85,13 +83,12 @@ window.productViewerData = function(productsData) {
                 this.modelLoaded = true;
                 this.modelLoading = false;
                 this.modelError = false;
-                console.log('Model loaded:', this.selectedProduct.name);
             });
 
             // Model loading progress
             modelViewer.addEventListener('progress', (event) => {
                 const progress = event.detail.totalProgress;
-                console.log('Loading progress:', Math.round(progress * 100) + '%');
+                // Track loading progress if needed
             });
 
             // Model error
@@ -105,8 +102,6 @@ window.productViewerData = function(productsData) {
             // AR session started
             modelViewer.addEventListener('ar-status', (event) => {
                 if (event.detail.status === 'session-started') {
-                    console.log('AR session started');
-
                     // Track AR start
                     if (window.GA4) {
                         window.GA4.trackARStart(this.selectedProduct?.name);
@@ -156,7 +151,9 @@ window.productViewerData = function(productsData) {
                     title: product.name,
                     text: product.description,
                     url: window.location.href
-                }).catch(err => console.log('Share failed:', err));
+                }).catch(err => {
+                    // Share failed
+                });
             } else {
                 // Fallback: copy URL
                 navigator.clipboard.writeText(window.location.href);
@@ -168,5 +165,5 @@ window.productViewerData = function(productsData) {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Product Viewer script loaded');
+    // Script loaded
 });

@@ -8,6 +8,8 @@
  * och gtag är laddat.
  */
 
+const isDev = import.meta.env.MODE === 'development';
+
 export const GA4 = {
     /**
      * Kontrollera om GA4 är tillgängligt
@@ -21,12 +23,12 @@ export const GA4 = {
      */
     event(eventName, params = {}) {
         if (!this.isAvailable()) {
-            console.debug('GA4 not available, skipping event:', eventName);
+            if (isDev) console.debug('GA4 not available, skipping event:', eventName);
             return;
         }
 
         window.gtag('event', eventName, params);
-        console.log('GA4 event →', eventName, params);
+        if (isDev) console.log('GA4 event →', eventName, params);
     },
 
     // =========================================================================
