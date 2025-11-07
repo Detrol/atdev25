@@ -80,7 +80,7 @@ return [
             'style-src' => ["'self'", "'unsafe-inline'"],
             'img-src' => ["'self'", 'data:', 'https:', 'blob:'],
             'font-src' => ["'self'", 'data:'],
-            'connect-src' => ["'self'", 'blob:', 'https://www.google-analytics.com'],
+            'connect-src' => ["'self'", 'blob:', 'https://*.google-analytics.com'],
             'frame-ancestors' => ["'none'"],
             'base-uri' => ["'self'"],
             'form-action' => ["'self'"],
