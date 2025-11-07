@@ -26,6 +26,7 @@ Alpine.plugin(collapse);
 // Register Cookie Consent component
 Alpine.data('cookieConsent', () => ({
     showBanner: false,
+    showDetails: false,
     preferences: {
         essential: true,
         functional: false,
