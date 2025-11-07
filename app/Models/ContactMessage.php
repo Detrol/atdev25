@@ -46,11 +46,11 @@ class ContactMessage extends Model
 
             if (empty($message->email_message_id)) {
                 // Generate RFC 2822 compliant Message-ID
-                // Format: <unique-id.timestamp@domain>
+                // Format: unique-id.timestamp@domain (without angle brackets - Symfony adds them)
                 $domain = config('services.mailgun.domain', 'atdev.me');
                 $uniqueId = $message->reply_token ?: Str::random(32);
                 $timestamp = time();
-                $message->email_message_id = "<{$uniqueId}.{$timestamp}@{$domain}>";
+                $message->email_message_id = "{$uniqueId}.{$timestamp}@{$domain}";
             }
         });
     }
