@@ -53,4 +53,10 @@ return [
         'analytics_measurement_id' => env('GA4_MEASUREMENT_ID'),
     ],
 
+    'brightdata' => [
+        'api_key' => env('BRIGHTDATA_API_KEY'),
+        'proxy_host' => env('BRIGHTDATA_PROXY_HOST', 'brd.superproxy.io'),
+        'proxy_port' => env('BRIGHTDATA_PROXY_PORT', 22225),
+    ],
+
 ];
