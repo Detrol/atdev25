@@ -56,7 +56,7 @@ class ContactEmail extends Mailable
 
             // Sätt Message-ID för detta nya meddelande (första i tråden)
             if ($this->message->email_message_id) {
-                $headers->addTextHeader('Message-ID', $this->message->email_message_id);
+                $headers->addIdHeader('Message-ID', $this->message->email_message_id);
             }
         });
     }
