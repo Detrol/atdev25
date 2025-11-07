@@ -1,8 +1,8 @@
 {{-- Google Analytics 4 - GDPR-compliant (endast med cookie consent) --}}
-@if(env('GA4_MEASUREMENT_ID'))
+@if(config('services.google.analytics_measurement_id'))
 <script>
     // GA4 Measurement ID
-    const GA4_ID = '{{ env('GA4_MEASUREMENT_ID') }}';
+    const GA4_ID = '{{ config('services.google.analytics_measurement_id') }}';
 
     // Vänta på consent-uppdatering från cookie-systemet
     window.addEventListener('consent-updated', (event) => {
