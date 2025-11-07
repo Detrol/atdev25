@@ -177,3 +177,24 @@
     </section>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Track project view on page load
+    if (window.GA4) {
+        GA4.trackProjectView('{{ $project->slug }}', '{{ addslashes($project->title) }}');
+    }
+
+    // Track live link clicks
+    @if($project->live_url)
+    document.addEventListener('DOMContentLoaded', () => {
+        const liveLink = document.querySelector('a[href="{{ $project->live_url }}"]');
+        if (liveLink && window.GA4) {
+            liveLink.addEventListener('click', () => {
+                GA4.trackProjectLiveClick('{{ $project->slug }}', '{{ $project->live_url }}');
+            });
+        }
+    });
+    @endif
+</script>
+@endpush

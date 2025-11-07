@@ -27,6 +27,9 @@
 
     @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js'])
 
+    <!-- Google Analytics 4 (GDPR-compliant) -->
+    <x-google-analytics />
+
     <!-- Structured Data (JSON-LD) -->
     @isset($structuredData)
         {!! $structuredData !!}
