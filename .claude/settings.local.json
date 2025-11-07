@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(npm run build:*)",
+      "Bash(grep:*)",
+      "Bash(php artisan make:model:*)",
+      "Bash(php artisan:*)",
+      "Bash(composer show:*)",
+      "WebSearch",
+      "Bash(php -r:*)",
+      "mcp__zen__thinkdeep",
+      "mcp__sequential-thinking__sequentialthinking",
+      "WebFetch(domain:poly.pizza)",
+      "mcp__puppeteer__puppeteer_navigate",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(mv:*)",
+      "mcp__zen__planner",
+      "Bash(npm install:*)",
+      "mcp__fetch__imageFetch",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "mcp__puppeteer__puppeteer_evaluate",
+      "mcp__puppeteer__puppeteer_click",
+      "mcp__zen__challenge",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "mcp__zen__chat"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -119,6 +119,9 @@
                 <!-- Honeypot (Hidden) -->
                 <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
 
+                <!-- Turnstile Security Verification (Invisible) -->
+                <x-turnstile theme="light" />
+
                 <!-- Submit Button -->
                 <button type="submit"
                         class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-purple-500/50 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3">
