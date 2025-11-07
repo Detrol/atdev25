@@ -59,26 +59,63 @@ class WebhookController extends Controller
             // Använd stripped-text om tillgängligt, annars body-plain
             $messageBody = ! empty($strippedText) ? $strippedText : $bodyPlain;
 
-            // Skapa reply från användaren
-            $customerReply = ContactMessage::create([
-                'parent_id' => $originalMessage->parent_id ?: $originalMessage->id,
-                'name' => $originalMessage->name,
-                'email' => $originalMessage->email,
-                'message' => trim($messageBody),
-                'ip_address' => $request->ip(),
-                'user_agent' => 'Mailgun Webhook',
-                'is_admin_reply' => false,
-                'status' => 'pending',
-                'read' => false,
-            ]);
+            // Extrahera email-adress från sender/from
+            // Format kan vara: "Name <email@domain.com>" eller bara "email@domain.com"
+            preg_match('/<(.+?)>|(.+)/', $sender ?: $from, $emailMatches);
+            $senderEmail = $emailMatches[1] ?? $emailMatches[2] ?? $sender;
+            $senderEmail = strtolower(trim($senderEmail));
 
-            // Skicka notifikation till admin
-            SendCustomerReplyNotification::dispatch($originalMessage, $customerReply);
+            // Detektera om detta är ett svar från admin
+            $adminEmail = strtolower(config('mail.from.address'));
+            $isAdminReply = ($senderEmail === $adminEmail);
 
-            Log::info('Mailgun webhook: Svar mottaget', [
-                'original_message_id' => $originalMessage->id,
-                'from' => $from,
-            ]);
+            if ($isAdminReply) {
+                // Admin svarar från email-klient
+                $reply = ContactMessage::create([
+                    'parent_id' => $originalMessage->parent_id ?: $originalMessage->id,
+                    'name' => config('mail.from.name', 'ATDev'),
+                    'email' => $adminEmail,
+                    'message' => trim($messageBody),
+                    'ip_address' => $request->ip(),
+                    'user_agent' => 'Mailgun Webhook (Admin)',
+                    'is_admin_reply' => true,
+                    'status' => 'pending',
+                    'read' => true, // Admin har redan läst (skrev det själv)
+                ]);
+
+                // Skicka svaret till kunden
+                \App\Jobs\SendReplyEmail::dispatch($originalMessage, $reply);
+
+                // Uppdatera original meddelande som besvarad
+                $parent = $originalMessage->parent_id ? $originalMessage->parent : $originalMessage;
+                $parent->update(['status' => 'replied']);
+
+                Log::info('Mailgun webhook: Admin-svar mottaget', [
+                    'original_message_id' => $originalMessage->id,
+                    'from' => $from,
+                ]);
+            } else {
+                // Kund svarar
+                $customerReply = ContactMessage::create([
+                    'parent_id' => $originalMessage->parent_id ?: $originalMessage->id,
+                    'name' => $originalMessage->name,
+                    'email' => $originalMessage->email,
+                    'message' => trim($messageBody),
+                    'ip_address' => $request->ip(),
+                    'user_agent' => 'Mailgun Webhook',
+                    'is_admin_reply' => false,
+                    'status' => 'pending',
+                    'read' => false,
+                ]);
+
+                // Skicka notifikation till admin
+                SendCustomerReplyNotification::dispatch($originalMessage, $customerReply);
+
+                Log::info('Mailgun webhook: Kundsvar mottaget', [
+                    'original_message_id' => $originalMessage->id,
+                    'from' => $from,
+                ]);
+            }
 
             return response()->json(['message' => 'Reply received'], 200);
         } catch (\Exception $e) {
