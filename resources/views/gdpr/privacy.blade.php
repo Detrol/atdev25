@@ -18,13 +18,13 @@
             <p>
                 Välkommen till ATDev. Vi värnar om din integritet och är engagerade i att skydda dina personuppgifter.
                 Denna integritetspolicy förklarar hur vi samlar in, använder, lagrar och skyddar dina personuppgifter
-                när du besöker vår webbplats <a href="{{ url('/') }}" class="text-blue-600 hover:text-blue-700">{{ url('/') }}</a>.
+                när du besöker vår webbplats <a href="{{ url('/') }}" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">{{ url('/') }}</a>.
             </p>
 
             <h3>Dataskyddsansvarig</h3>
             <p>
                 <strong>Frilansare:</strong> Andreas Thun (ATDev)<br>
-                <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700">andreas@atdev.me</a><br>
+                <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">andreas@atdev.me</a><br>
                 <strong>Fakturering:</strong> Via Frilans Finans<br>
             </p>
 
@@ -187,7 +187,7 @@
 
             <h3>Hur utövar jag mina rättigheter?</h3>
             <p>
-                Kontakta oss på <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700">andreas@atdev.me</a> för att utöva dina rättigheter.
+                Kontakta oss på <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">andreas@atdev.me</a> för att utöva dina rättigheter.
                 Vi svarar på din begäran inom 30 dagar.
             </p>
 
@@ -206,7 +206,7 @@
                 Vi använder Mailgun för att skicka och ta emot e-post. Mailgun behandlar e-postadresser och meddelanden enligt deras integritetspolicy.
             </p>
             <p>
-                <a href="https://www.mailgun.com/privacy-policy" target="_blank" class="text-blue-600 hover:text-blue-700">
+                <a href="https://www.mailgun.com/privacy-policy" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                     Mailgun Privacy Policy →
                 </a>
             </p>
@@ -217,7 +217,7 @@
                 Anthropic sparar inte konversationsdata längre än nödvändigt för att tillhandahålla tjänsten.
             </p>
             <p>
-                <a href="https://www.anthropic.com/privacy" target="_blank" class="text-blue-600 hover:text-blue-700">
+                <a href="https://www.anthropic.com/privacy" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                     Anthropic Privacy Policy →
                 </a>
             </p>
@@ -258,7 +258,7 @@
                 kontakta oss:
             </p>
             <p>
-                <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700">andreas@atdev.me</a><br>
+                <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">andreas@atdev.me</a><br>
                 <strong>Frilansare:</strong> Andreas Thun (ATDev)<br>
                 <strong>Fakturering:</strong> Via Frilans Finans
             </p>
@@ -273,8 +273,8 @@
                 Box 8114<br>
                 104 20 Stockholm<br>
                 Telefon: 08-657 61 00<br>
-                E-post: <a href="mailto:imy@imy.se" class="text-blue-600 hover:text-blue-700">imy@imy.se</a><br>
-                Webb: <a href="https://www.imy.se" target="_blank" class="text-blue-600 hover:text-blue-700">www.imy.se</a>
+                E-post: <a href="mailto:imy@imy.se" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">imy@imy.se</a><br>
+                Webb: <a href="https://www.imy.se" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">www.imy.se</a>
             </p>
         </div>
 

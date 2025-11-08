@@ -22,10 +22,16 @@ import { initProjectModal } from './project-modal.js';
 import { GA4 } from './analytics.js';
 window.GA4 = GA4;
 
+// Import darkmode store
+import darkModeStore from './darkmode-store.js';
+
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
 Alpine.plugin(persist);
 Alpine.plugin(collapse);
+
+// Register darkmode store
+Alpine.store('darkMode', darkModeStore());
 
 // Register Cookie Consent component
 Alpine.data('cookieConsent', () => ({
@@ -567,6 +573,11 @@ Alpine.start();
 // Initialize LazyLoadManager and GA4 tracking after Alpine starts
 document.addEventListener('DOMContentLoaded', () => {
     window.lazyLoadManager = new LazyLoadManager();
+
+    // Initialize darkmode store
+    if (Alpine.store('darkMode')) {
+        Alpine.store('darkMode').init();
+    }
 
     // Initialize GA4 tracking (scroll depth, time on page)
     if (window.GA4) {

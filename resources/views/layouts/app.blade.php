@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Darkmode FOIT Fix - Must run before any CSS loads -->
+    <script>
+        (function() {
+            const mode = localStorage.getItem('darkMode') || 'system';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = (mode === 'dark') || (mode === 'system' && prefersDark);
+
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     <!-- SEO Meta Tags -->
     @isset($seoTitle, $seoDescription)
         <x-seo-meta

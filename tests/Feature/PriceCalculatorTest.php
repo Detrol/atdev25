@@ -116,8 +116,10 @@ test('price calculator returns successful estimation with ranges', function () {
 
     $estimation = $response->json('estimation');
 
-    // Verify 80% AI savings (AI takes 20% of traditional time)
-    expect($estimation['savings_percent'])->toBe(80);
+    // Verify dynamic AI savings (50-80% based on project hours)
+    expect($estimation['savings_percent'])->toBeInt();
+    expect($estimation['savings_percent'])->toBeGreaterThanOrEqual(50);
+    expect($estimation['savings_percent'])->toBeLessThanOrEqual(80);
 
     // Verify ranges are arrays
     expect($estimation['hours_range_traditional'])->toBeArray();
@@ -131,12 +133,19 @@ test('price calculator returns successful estimation with ranges', function () {
     expect($estimation['price_traditional'])->toBeString();
     expect($estimation['price_ai'])->toBeString();
 
-    // Verify AI hours are 20% of traditional (80% savings)
+    // Verify AI hours are less than traditional (dynamic efficiency based on hours)
     [$hoursMinTraditional, $hoursMaxTraditional] = $estimation['hours_range_traditional'];
     [$hoursMinAi, $hoursMaxAi] = $estimation['hours_range_ai'];
 
-    expect($hoursMinAi)->toBe((int) round($hoursMinTraditional * 0.2));
-    expect($hoursMaxAi)->toBe((int) round($hoursMaxTraditional * 0.2));
+    expect($hoursMinAi)->toBeLessThan($hoursMinTraditional);
+    expect($hoursMaxAi)->toBeLessThan($hoursMaxTraditional);
+
+    // AI efficiency should be between 0.2 and 0.5 (80% to 50% discount)
+    $avgTraditional = ($hoursMinTraditional + $hoursMaxTraditional) / 2;
+    $avgAi = ($hoursMinAi + $hoursMaxAi) / 2;
+    $efficiency = $avgAi / $avgTraditional;
+    expect($efficiency)->toBeGreaterThanOrEqual(0.2);
+    expect($efficiency)->toBeLessThanOrEqual(0.5);
 });
 
 test('price calculator returns key features', function () {
@@ -210,16 +219,29 @@ test('PriceEstimateMapper handles complexity levels correctly', function () {
     expect($hoursMax4)->toBeGreaterThan($hoursMax1);
 });
 
-test('PriceEstimateMapper enforces 80% AI savings', function () {
-    $result = PriceEstimateMapper::map('webapp', 5);
+test('PriceEstimateMapper calculates dynamic discount based on hours', function () {
+    // Test simple project (8-10 hours) should get ~80% discount
+    $simpleResult = PriceEstimateMapper::map('simple', 1);
+    expect($simpleResult['savings_percent'])->toBe(80);
 
-    [$hoursMinTraditional, $hoursMaxTraditional] = $result['hours_range_traditional'];
-    [$hoursMinAi, $hoursMaxAi] = $result['hours_range_ai'];
+    // Test medium project (~30-40 hours) should get ~65-70% discount
+    $mediumResult = PriceEstimateMapper::map('simple', 5);
+    expect($mediumResult['savings_percent'])->toBeGreaterThanOrEqual(65);
+    expect($mediumResult['savings_percent'])->toBeLessThanOrEqual(70);
 
-    // AI should be exactly 20% of traditional (80% savings)
-    expect($hoursMinAi)->toEqual(round($hoursMinTraditional * 0.2));
-    expect($hoursMaxAi)->toEqual(round($hoursMaxTraditional * 0.2));
-    expect($result['savings_percent'])->toBe(80);
+    // Test complex project (≥80 hours) should get 50% discount
+    $complexResult = PriceEstimateMapper::map('webapp', 5); // 95-115 hours
+    expect($complexResult['savings_percent'])->toBe(50);
+
+    // Verify AI hours match the discount percentage
+    foreach ([$simpleResult, $mediumResult, $complexResult] as $result) {
+        [$hoursMinTrad, $hoursMaxTrad] = $result['hours_range_traditional'];
+        [$hoursMinAi, $hoursMaxAi] = $result['hours_range_ai'];
+
+        $expectedEfficiency = 1 - ($result['savings_percent'] / 100);
+        expect($hoursMinAi)->toEqual(round($hoursMinTrad * $expectedEfficiency));
+        expect($hoursMaxAi)->toEqual(round($hoursMaxTrad * $expectedEfficiency));
+    }
 });
 
 test('PriceEstimateMapper calculates prices at 700 kr per hour', function () {

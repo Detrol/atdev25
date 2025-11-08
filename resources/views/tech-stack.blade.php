@@ -3,62 +3,62 @@
 @section('title', 'Tech Stack Visualizer')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                 Tech Stack Visualizer
             </h1>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Interaktiv visualisering av teknologier och hur de används tillsammans i mina projekt.
                 Storleken på noderna visar hur ofta teknologin används.
             </p>
         </div>
 
         <!-- Visualization Container -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-8">
             <div id="tech-graph" class="w-full" style="height: 600px;"></div>
 
             <!-- Legend -->
             <div class="mt-6 flex flex-wrap justify-center gap-6 text-sm">
                 <div class="flex items-center gap-2">
                     <div class="w-4 h-4 rounded-full bg-blue-500"></div>
-                    <span class="text-gray-700">Frontend</span>
+                    <span class="text-gray-700 dark:text-gray-300">Frontend</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="w-4 h-4 rounded-full bg-green-500"></div>
-                    <span class="text-gray-700">Backend</span>
+                    <span class="text-gray-700 dark:text-gray-300">Backend</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="w-4 h-4 rounded-full bg-purple-500"></div>
-                    <span class="text-gray-700">Database</span>
+                    <span class="text-gray-700 dark:text-gray-300">Database</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="w-4 h-4 rounded-full bg-orange-500"></div>
-                    <span class="text-gray-700">DevOps</span>
+                    <span class="text-gray-700 dark:text-gray-300">DevOps</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="w-4 h-4 rounded-full bg-gray-500"></div>
-                    <span class="text-gray-700">Övrigt</span>
+                    <span class="text-gray-700 dark:text-gray-300">Övrigt</span>
                 </div>
             </div>
         </div>
 
         <!-- Technology Statistics -->
-        <div class="bg-white rounded-2xl shadow-xl p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Teknologistatistik</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Teknologistatistik</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($techData['technologies'] as $tech)
-                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md dark:hover:shadow-gray-900/50 transition-shadow">
                         <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">{{ $tech['name'] }}</h3>
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $tech['name'] }}</h3>
+                            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded">
                                 {{ $tech['count'] }} {{ $tech['count'] === 1 ? 'projekt' : 'projekt' }}
                             </span>
                         </div>
-                        <div class="text-sm text-gray-600">
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
                             <p class="font-medium mb-1">Används i:</p>
                             <ul class="list-disc list-inside space-y-1">
                                 @foreach($tech['projects'] as $project)
@@ -73,7 +73,7 @@
 
         <!-- Back to Home -->
         <div class="mt-8 text-center">
-            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium">
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
