@@ -182,7 +182,7 @@
                     <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-4">
                         <div class="flex justify-between items-center mb-3">
                             <p class="text-xs font-semibold opacity-90">Estimerat Pris</p>
-                            <span class="px-2 py-1 bg-white/20 rounded-full text-xs font-bold">-80%</span>
+                            <span class="px-2 py-1 bg-white/20 rounded-full text-xs font-bold" x-text="'-' + (estimation?.savings_percent || 80) + '%'"></span>
                         </div>
                         <div class="space-y-2">
                             <div class="flex justify-between items-baseline">
@@ -196,7 +196,7 @@
                         </div>
                         <div class="mt-3 pt-3 border-t border-white/30">
                             <div class="flex justify-between items-center">
-                                <span class="text-xs opacity-90">Din besparing (80%):</span>
+                                <span class="text-xs opacity-90" x-text="'Din besparing (' + (estimation?.savings_percent || 80) + '%):'"></span>
                                 <span class="font-bold" x-text="estimation?.savings_vat"></span>
                             </div>
                         </div>

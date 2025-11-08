@@ -100,7 +100,7 @@
                     <tbody>
                         <tr>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2"><code>darkMode</code> (localStorage)</td>
-                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Sparar din preferens för mörkt/ljust läge</td>
+                            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Sparar din preferens för färgschema: ljust, mörkt eller system. När "system" väljs följer webbplatsen din enhets inställning för mörkt/ljust läge (prefers-color-scheme).</td>
                             <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Permanent</td>
                         </tr>
                         <tr>
@@ -250,25 +250,25 @@
             <ul>
                 <li>
                     <strong>Chrome:</strong>
-                    <a href="https://support.google.com/chrome/answer/95647" target="_blank" class="text-blue-600 hover:text-blue-700">
+                    <a href="https://support.google.com/chrome/answer/95647" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         Hantera cookies i Chrome
                     </a>
                 </li>
                 <li>
                     <strong>Firefox:</strong>
-                    <a href="https://support.mozilla.org/sv/kb/kakor-information-webbplatser-lagrar-pa-din-dator" target="_blank" class="text-blue-600 hover:text-blue-700">
+                    <a href="https://support.mozilla.org/sv/kb/kakor-information-webbplatser-lagrar-pa-din-dator" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         Hantera cookies i Firefox
                     </a>
                 </li>
                 <li>
                     <strong>Safari:</strong>
-                    <a href="https://support.apple.com/sv-se/guide/safari/sfri11471/mac" target="_blank" class="text-blue-600 hover:text-blue-700">
+                    <a href="https://support.apple.com/sv-se/guide/safari/sfri11471/mac" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         Hantera cookies i Safari
                     </a>
                 </li>
                 <li>
                     <strong>Edge:</strong>
-                    <a href="https://support.microsoft.com/sv-se/microsoft-edge/ta-bort-cookies-i-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" class="text-blue-600 hover:text-blue-700">
+                    <a href="https://support.microsoft.com/sv-se/microsoft-edge/ta-bort-cookies-i-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         Hantera cookies i Edge
                     </a>
                 </li>
@@ -299,7 +299,7 @@
                 Om du har frågor om vår användning av cookies, kontakta oss:
             </p>
             <p>
-                <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700">andreas@atdev.me</a><br>
+                <strong>E-post:</strong> <a href="mailto:andreas@atdev.me" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">andreas@atdev.me</a><br>
                 <strong>Frilansare:</strong> Andreas Thun (ATDev)<br>
                 <strong>Fakturering:</strong> Via Frilans Finans
             </p>
@@ -310,12 +310,12 @@
             </p>
             <ul>
                 <li>
-                    <a href="https://www.allaboutcookies.org/" target="_blank" class="text-blue-600 hover:text-blue-700">
+                    <a href="https://www.allaboutcookies.org/" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         All About Cookies
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.imy.se/privatperson/dataskydd/introduktion-till-gdpr/vad-sager-lagen/" target="_blank" class="text-blue-600 hover:text-blue-700">
+                    <a href="https://www.imy.se/privatperson/dataskydd/introduktion-till-gdpr/vad-sager-lagen/" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                         Integritetsskyddsmyndigheten (IMY)
                     </a>
                 </li>

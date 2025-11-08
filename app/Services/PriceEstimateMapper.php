@@ -10,8 +10,6 @@ class PriceEstimateMapper
 {
     private const HOURLY_RATE = 700;
 
-    private const AI_EFFICIENCY = 0.2; // 80% time savings with AI (AI takes only 20% of traditional time)
-
     /**
      * Predefined time brackets based on project type and complexity
      * Format: ['complexity_range' => '1-2', 'hours' => [min, max]]
@@ -82,9 +80,14 @@ class PriceEstimateMapper
         $hoursMin = $timeRange[0];
         $hoursMax = $timeRange[1];
 
-        // AI-driven is 50% of traditional
-        $hoursMinAi = round($hoursMin * self::AI_EFFICIENCY);
-        $hoursMaxAi = round($hoursMax * self::AI_EFFICIENCY);
+        // Calculate dynamic discount based on project hours
+        $discountData = self::calculateDynamicDiscount($hoursMin, $hoursMax);
+        $aiEfficiency = $discountData['ai_efficiency'];
+        $discountPercent = $discountData['discount_percent'];
+
+        // AI-driven hours based on dynamic efficiency
+        $hoursMinAi = round($hoursMin * $aiEfficiency);
+        $hoursMaxAi = round($hoursMax * $aiEfficiency);
 
         // Calculate price ranges
         $priceMinTraditional = $hoursMin * self::HOURLY_RATE;
@@ -140,7 +143,7 @@ class PriceEstimateMapper
             'savings_range_vat' => [$savingsMinVat, $savingsMaxVat],
             'savings' => self::formatPriceRange($savingsMin, $savingsMax),
             'savings_vat' => self::formatPriceRange($savingsMinVat, $savingsMaxVat),
-            'savings_percent' => 80,
+            'savings_percent' => $discountPercent,
 
             // Delivery time
             'delivery_weeks_traditional' => self::formatDeliveryTime($daysMinTraditional, $daysMaxTraditional),
@@ -170,6 +173,48 @@ class PriceEstimateMapper
         $lastBracket = end($brackets);
 
         return $lastBracket['hours'];
+    }
+
+    /**
+     * Calculate dynamic discount percentage based on project hours
+     *
+     * Simple projects (≤8 hours) get 80% discount
+     * Complex projects (≥80 hours) get 50% discount
+     * Linear interpolation between 8-80 hours
+     *
+     * @param  int  $hoursMin  Minimum traditional hours
+     * @param  int  $hoursMax  Maximum traditional hours
+     * @return array ['discount_percent' => int, 'ai_efficiency' => float]
+     */
+    private static function calculateDynamicDiscount(int $hoursMin, int $hoursMax): array
+    {
+        $avgHours = ($hoursMin + $hoursMax) / 2;
+
+        // Discount range configuration: 8-80 hours → 80-50% discount
+        $minHours = 8;
+        $maxHours = 80;
+        $minDiscount = 80;  // Simple projects get higher discount
+        $maxDiscount = 50;  // Complex projects get lower discount
+
+        if ($avgHours <= $minHours) {
+            $discountPercent = $minDiscount;
+        } elseif ($avgHours >= $maxHours) {
+            $discountPercent = $maxDiscount;
+        } else {
+            // Linear interpolation between min and max
+            $discountPercent = $minDiscount - (($avgHours - $minHours) / ($maxHours - $minHours)) * ($minDiscount - $maxDiscount);
+            $discountPercent = round($discountPercent);
+        }
+
+        // AI efficiency is the inverse of discount
+        // 80% discount means AI takes 20% of time (0.2 efficiency)
+        // 50% discount means AI takes 50% of time (0.5 efficiency)
+        $aiEfficiency = 1 - ($discountPercent / 100);
+
+        return [
+            'discount_percent' => (int) $discountPercent,
+            'ai_efficiency' => $aiEfficiency,
+        ];
     }
 
     /**
