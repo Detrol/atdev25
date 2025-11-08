@@ -229,7 +229,7 @@
                     <!-- AI-Driven Development -->
                     <div class="relative bg-gradient-to-br from-purple-600 via-blue-600 to-pink-600 text-white rounded-3xl p-6 shadow-2xl border-2 border-purple-400">
                         <div class="absolute top-4 right-4">
-                            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold" x-text="'-' + result?.estimation?.savings_percent + '%'"></span>
+                            <span class="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold" x-text="'-' + (result.savings_percent || 80) + '%'"></span>
                         </div>
                         <div class="flex items-center gap-2 mb-4">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,8 +262,8 @@
                         <div class="mt-4 pt-4 border-t border-white/30">
                             <p class="text-sm text-white/90 mb-2">Din besparing:</p>
                             <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-bold" x-text="result?.savings"></span>
-                                <span class="text-white/80" x-text="'(' + result?.estimation?.savings_percent + '%)'"></span>
+                                <span class="text-3xl font-bold" x-text="result.savings"></span>
+                                <span class="text-white/80" x-text="'(' + (result.savings_percent || 80) + '%)'"></span>
                             </div>
                             <p class="text-xs text-white/70 mt-1">Tack vare AI & automation</p>
                         </div>

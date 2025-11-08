@@ -9,8 +9,8 @@
                 <a href="{{ route('admin.messages.index') }}" class="text-sm text-indigo-600 hover:text-indigo-500 mb-2 inline-block">
                     ← Tillbaka till meddelanden
                 </a>
-                <h1 class="text-2xl font-bold text-gray-900">Konversation med {{ $message->name }}</h1>
-                <p class="mt-1 text-sm text-gray-500">{{ $message->email }}</p>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Konversation med {{ $message->name }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $message->email }}</p>
             </div>
             <div class="flex items-center space-x-2">
                 {{-- Status badge --}}
@@ -38,25 +38,25 @@
             <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
             </svg>
-            <h2 class="text-lg font-bold text-gray-900">Kopplad Prisestimering</h2>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Kopplad Prisestimering</h2>
         </div>
 
         <div class="grid md:grid-cols-4 gap-4 mb-4">
             <div class="bg-white rounded-lg p-4 shadow-sm">
                 <p class="text-xs font-semibold text-purple-600 mb-1">Projekttyp</p>
-                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->project_type_label }}</p>
+                <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->project_type_label }}</p>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-sm">
                 <p class="text-xs font-semibold text-blue-600 mb-1">Komplexitet</p>
-                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->complexity }}/10</p>
+                <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->complexity }}/10</p>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-sm">
                 <p class="text-xs font-semibold text-gray-600 mb-1">Arbetstid (AI)</p>
-                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->hours_ai }}</p>
+                <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->hours_ai }}</p>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-sm">
                 <p class="text-xs font-semibold text-gray-600 mb-1">Leverans</p>
-                <p class="text-sm font-bold text-gray-900">{{ $message->priceEstimation->delivery_weeks_ai }}</p>
+                <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->delivery_weeks_ai }}</p>
             </div>
         </div>
 
@@ -74,7 +74,7 @@
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">Inkl. moms:</span>
-                        <span class="font-bold text-gray-900">{{ $message->priceEstimation->price_traditional_vat }}</span>
+                        <span class="font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->price_traditional_vat }}</span>
                     </div>
                 </div>
             </div>
@@ -116,7 +116,7 @@
         @endif
 
         <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <p class="text-xs text-gray-700"><strong>Original beskrivning:</strong></p>
+            <p class="text-xs text-gray-700 dark:text-gray-300"><strong>Original beskrivning:</strong></p>
             <p class="text-sm text-gray-600 mt-1">{{ $message->priceEstimation->description }}</p>
         </div>
     </div>
@@ -125,7 +125,7 @@
     {{-- Conversation Thread --}}
     <div class="space-y-4 mb-8">
         @foreach($conversation as $msg)
-            <div class="bg-white shadow rounded-lg p-6 {{ $msg->is_admin_reply ? 'border-l-4 border-indigo-500 bg-indigo-50' : '' }}">
+            <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 {{ $msg->is_admin_reply ? 'border-l-4 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : '' }}">
                 <div class="flex items-start justify-between mb-3">
                     <div class="flex items-center space-x-3">
                         {{-- Avatar --}}
@@ -142,10 +142,10 @@
                         </div>
 
                         <div>
-                            <h3 class="text-sm font-medium text-gray-900">
+                            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
                                 {{ $msg->is_admin_reply ? 'ATDev Admin' : $msg->name }}
                             </h3>
-                            <p class="text-xs text-gray-500">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ $msg->created_at->format('Y-m-d H:i') }}
                                 @if($msg->is_admin_reply && $msg->adminReplier)
                                     · Av {{ $msg->adminReplier->name }}
@@ -167,7 +167,7 @@
     </div>
 
     {{-- Reply Form --}}
-    <div class="bg-white shadow rounded-lg p-6">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <h2 class="text-lg font-medium text-gray-900 mb-4">Svara på meddelande</h2>
 
         <form action="{{ route('admin.messages.reply', $message) }}" method="POST" x-data="{ message: '' }">
@@ -196,7 +196,7 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <p class="text-sm text-gray-500">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
                     Svaret skickas via email till {{ $message->email }}
                 </p>
                 <button
