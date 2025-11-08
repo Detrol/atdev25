@@ -18,11 +18,11 @@
 
 @section('content')
 <div class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900">Redigera FAQ</h1>
-    <p class="mt-2 text-sm text-gray-700">Uppdatera frågan och svaret</p>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Redigera FAQ</h1>
+    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Uppdatera frågan och svaret</p>
 </div>
 
-<form action="{{ route('admin.faqs.update', $faq) }}" method="POST" class="space-y-8 bg-white shadow sm:rounded-lg">
+<form action="{{ route('admin.faqs.update', $faq) }}" method="POST" class="space-y-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
     @csrf
     @method('PUT')
 
@@ -30,7 +30,7 @@
         <div class="grid grid-cols-1 gap-6">
             <!-- Question -->
             <div>
-                <label for="question" class="block text-sm font-medium leading-6 text-gray-900">Fråga *</label>
+                <label for="question" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Fråga *</label>
                 <input type="text" name="question" id="question" value="{{ old('question', $faq->question) }}" required
                     class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
                     placeholder="Vad kostar det att bygga en webbplats?">
@@ -72,7 +72,7 @@
                         required
                         class="code-editor mt-2 block w-full rounded-md border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         placeholder="<div>HTML-innehåll här...</div>">{{ old('answer', $faq->answer) }}</textarea>
-                    <p class="mt-2 text-sm text-gray-500">
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                         <strong>Tips:</strong> Redigera HTML direkt inklusive SVG-ikoner, Tailwind-klasser och alla andra element.
                     </p>
                 </div>
@@ -82,7 +82,7 @@
                     <div class="preview-content rounded-md border border-gray-300 bg-white p-6 shadow-sm">
                         <div x-html="document.getElementById('answer').value"></div>
                     </div>
-                    <p class="mt-2 text-sm text-gray-500">
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                         <strong>OBS:</strong> Detta är en förhandsgranskning. Klicka på "Redigera HTML" för att göra ändringar.
                     </p>
                 </div>
@@ -94,11 +94,11 @@
 
             <!-- Tags -->
             <div>
-                <label for="tags" class="block text-sm font-medium leading-6 text-gray-900">Taggar</label>
+                <label for="tags" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Taggar</label>
                 <input type="text" name="tags" id="tags" value="{{ old('tags', $tagsString) }}"
                     class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
                     placeholder="wordpress, priser, support">
-                <p class="mt-2 text-sm text-gray-500">Separera med kommatecken (valfritt)</p>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Separera med kommatecken (valfritt)</p>
                 @error('tags')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -106,10 +106,10 @@
 
             <!-- Sort Order -->
             <div>
-                <label for="sort_order" class="block text-sm font-medium leading-6 text-gray-900">Sorteringsordning</label>
+                <label for="sort_order" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Sorteringsordning</label>
                 <input type="number" name="sort_order" id="sort_order" value="{{ old('sort_order', $faq->sort_order) }}" min="0"
                     class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
-                <p class="mt-2 text-sm text-gray-500">Lägre nummer visas först</p>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Lägre nummer visas först</p>
                 @error('sort_order')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -117,14 +117,14 @@
 
             <!-- Checkboxes for visibility -->
             <div class="space-y-4">
-                <h3 class="text-sm font-medium text-gray-900">Synlighet</h3>
+                <h3 class="text-sm font-medium text-gray-900 dark:text-white">Synlighet</h3>
 
                 <!-- Active -->
                 <div class="flex items-center">
                     <input type="checkbox" name="active" id="active" value="1"
                         {{ old('active', $faq->active) ? 'checked' : '' }}
                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                    <label for="active" class="ml-2 block text-sm text-gray-900">
+                    <label for="active" class="ml-2 block text-sm text-gray-900 dark:text-white">
                         Aktiv (visar FAQ om aktiverad)
                     </label>
                 </div>
@@ -134,7 +134,7 @@
                     <input type="checkbox" name="show_in_public_faq" id="show_in_public_faq" value="1"
                         {{ old('show_in_public_faq', $faq->show_in_public_faq) ? 'checked' : '' }}
                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                    <label for="show_in_public_faq" class="ml-2 block text-sm text-gray-900">
+                    <label for="show_in_public_faq" class="ml-2 block text-sm text-gray-900 dark:text-white">
                         Visa på FAQ-sidan
                     </label>
                 </div>
@@ -144,7 +144,7 @@
                     <input type="checkbox" name="show_in_ai_chat" id="show_in_ai_chat" value="1"
                         {{ old('show_in_ai_chat', $faq->show_in_ai_chat) ? 'checked' : '' }}
                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                    <label for="show_in_ai_chat" class="ml-2 block text-sm text-gray-900">
+                    <label for="show_in_ai_chat" class="ml-2 block text-sm text-gray-900 dark:text-white">
                         Mata till AI Chat (assistenten får denna kunskap)
                     </label>
                 </div>
@@ -154,7 +154,7 @@
                     <input type="checkbox" name="show_in_price_calculator" id="show_in_price_calculator" value="1"
                         {{ old('show_in_price_calculator', $faq->show_in_price_calculator) ? 'checked' : '' }}
                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                    <label for="show_in_price_calculator" class="ml-2 block text-sm text-gray-900">
+                    <label for="show_in_price_calculator" class="ml-2 block text-sm text-gray-900 dark:text-white">
                         Mata till Priskalkylator (AI får denna kunskap vid prisuppskattningar)
                     </label>
                 </div>
@@ -164,10 +164,10 @@
 
     <!-- Form Actions -->
     <div class="flex items-center justify-between gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-        <a href="{{ route('admin.faqs.index') }}" class="text-sm font-semibold leading-6 text-gray-900">
+        <a href="{{ route('admin.faqs.index') }}" class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
             Avbryt
         </a>
-        <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        <button type="submit" class="rounded-md bg-indigo-600 dark:bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
             Uppdatera FAQ
         </button>
     </div>
