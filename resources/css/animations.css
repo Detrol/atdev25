@@ -1,0 +1,248 @@
+/**
+ * GSAP Section Animations
+ *
+ * Dynamic color theming + 3D parallax system
+ * för scroll-driven section transitions
+ */
+
+/* ==========================================================================
+   CSS Custom Properties - Base System
+   ========================================================================== */
+
+:root {
+  /* Light mode defaults */
+  --theme-light-bg: #FFFFFF;
+  --theme-light-text: #111111;
+
+  /* Dark mode defaults */
+  --theme-dark-bg: #0F0F0F;
+  --theme-dark-text: #F5F5F5;
+
+  /* LIVE variables (animeras av GSAP) */
+  --color-bg: var(--theme-light-bg);
+  --color-text: var(--theme-light-text);
+  --color-primary: #8A2BE2;
+  --color-secondary: #4169E1;
+  --color-accent: #FF6B9D;
+  --color-bg-overlay: rgba(138, 43, 226, 0.05); /* Purple-blue default */
+
+  /* CSS transition fallback för smooth färgskifte efter GSAP släpper */
+  transition:
+    --color-primary 0.8s ease-out,
+    --color-secondary 0.8s ease-out,
+    --color-accent 0.8s ease-out,
+    --color-bg-overlay 0.8s ease-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--theme-dark-bg);
+    --color-text: var(--theme-dark-text);
+  }
+}
+
+/* ==========================================================================
+   Färgteman Per Sektion
+   ========================================================================== */
+
+/* Purple-Blue (Tech/Innovation) */
+[data-theme="purple-blue"] {
+  --theme-primary: #8A2BE2;      /* BlueViolet */
+  --theme-secondary: #4169E1;    /* RoyalBlue */
+  --theme-accent: #E066FF;       /* Light Purple */
+  --theme-bg-overlay: rgba(138, 43, 226, 0.05);
+}
+
+/* Blue-Pink (Creative/Playful) */
+[data-theme="blue-pink"] {
+  --theme-primary: #4169E1;      /* RoyalBlue */
+  --theme-secondary: #FF69B4;    /* HotPink */
+  --theme-accent: #87CEEB;       /* SkyBlue */
+  --theme-bg-overlay: rgba(65, 105, 225, 0.05);
+}
+
+/* Green-Teal (Natural/Calm) */
+[data-theme="green-teal"] {
+  --theme-primary: #2E8B57;      /* SeaGreen */
+  --theme-secondary: #20B2AA;    /* LightSeaGreen */
+  --theme-accent: #3CB371;       /* MediumSeaGreen */
+  --theme-bg-overlay: rgba(46, 139, 87, 0.05);
+}
+
+/* Orange-Red (Energy/Passion) */
+[data-theme="orange-red"] {
+  --theme-primary: #FF8C00;      /* DarkOrange */
+  --theme-secondary: #DC143C;    /* Crimson */
+  --theme-accent: #FFD700;       /* Gold */
+  --theme-bg-overlay: rgba(255, 140, 0, 0.05);
+}
+
+/* Pink-Purple (Artistic/Bold) */
+[data-theme="pink-purple"] {
+  --theme-primary: #FF69B4;      /* HotPink */
+  --theme-secondary: #9370DB;    /* MediumPurple */
+  --theme-accent: #FFB6C1;       /* LightPink */
+  --theme-bg-overlay: rgba(255, 105, 180, 0.05);
+}
+
+/* Yellow-Green (Fresh/Optimistic) */
+[data-theme="yellow-green"] {
+  --theme-primary: #FFD700;      /* Gold */
+  --theme-secondary: #32CD32;    /* LimeGreen */
+  --theme-accent: #ADFF2F;       /* GreenYellow */
+  --theme-bg-overlay: rgba(255, 215, 0, 0.05);
+}
+
+/* ==========================================================================
+   Animated Section Container
+   ========================================================================== */
+
+.animated-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Pattern Container & Background
+   ========================================================================== */
+
+.pattern-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pattern-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Performance optimization för parallax layers */
+.parallax-layer-bg,
+.parallax-layer-mid,
+.parallax-layer-fg {
+  will-change: transform;
+}
+
+/* ==========================================================================
+   Section Content Layer
+   ========================================================================== */
+
+.animated-section-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+/* När animation är klar, ta bort will-change */
+.animated-section.completed .animated-section-content {
+  will-change: auto;
+}
+
+/* ==========================================================================
+   Hero Section - 3D Layer Deconstruction Setup
+   ========================================================================== */
+
+.hero-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  position: relative;
+  z-index: 1000; /* Higher than section system (100, 90, 80...) */
+}
+
+.hero-title,
+.hero-subtitle,
+.hero-cta,
+.hero-background {
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  transform: translateZ(0); /* Establish 3D context */
+  backface-visibility: hidden; /* Performance optimization */
+}
+
+/* Container for hero content must also preserve 3D */
+.hero-container > div {
+  transform-style: preserve-3d;
+}
+
+/* Alternativ: Iris Wipe Setup */
+.hero-section.iris-wipe {
+  position: relative;
+  clip-path: circle(150% at 50% 50%); /* Start fully visible */
+  z-index: 10;
+}
+
+/* ==========================================================================
+   Mobile Optimizations
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* Reduce parallax intensity on mobile */
+  .parallax-layer-bg {
+    transform: translateY(0) !important;
+  }
+
+  .parallax-layer-mid {
+    transform: translateY(0) scale(1) !important;
+  }
+
+  .parallax-layer-fg {
+    transform: translateY(0) !important;
+  }
+
+  /* Simplify patterns on mobile */
+  .pattern-bg {
+    opacity: 0.5;
+  }
+}
+
+/* ==========================================================================
+   Dark Mode Adjustments
+   ========================================================================== */
+
+.dark .pattern-bg {
+  opacity: 0.6;
+}
+
+.dark .theme-bg-overlay {
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-section-content,
+  .pattern-bg,
+  .parallax-layer-bg,
+  .parallax-layer-mid,
+  .parallax-layer-fg {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  /* Disable GSAP animations - handled in JS */
+}
+
+/* ==========================================================================
+   Loading State
+   ========================================================================== */
+
+.is-loading .animated-section {
+  opacity: 0;
+}
+
+.is-loading .pattern-bg {
+  display: none;
+}

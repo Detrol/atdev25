@@ -1,13 +1,6 @@
 {{-- Interaktiva Demos CTA Component --}}
 
 <section class="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-700 overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
-        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style="animation-delay: 1s;"></div>
-        <div class="absolute w-64 h-64 bg-white/10 rounded-full blur-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-    </div>
-
     <div class="relative max-w-4xl mx-auto px-6 text-center">
         <div class="inline-block p-3 bg-white/10 rounded-2xl mb-6 float-gentle">
             <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

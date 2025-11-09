@@ -6,7 +6,7 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <a href="{{ route('admin.messages.index') }}" class="text-sm text-indigo-600 hover:text-indigo-500 mb-2 inline-block">
+                <a href="{{ route('admin.messages.index') }}" class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 mb-2 inline-block">
                     ← Tillbaka till meddelanden
                 </a>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Konversation med {{ $message->name }}</h1>
@@ -15,15 +15,15 @@
             <div class="flex items-center space-x-2">
                 {{-- Status badge --}}
                 @if($message->status === 'pending')
-                    <span class="inline-flex items-center rounded-md bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-800">
+                    <span class="inline-flex items-center rounded-md bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1 text-sm font-medium text-yellow-800 dark:text-yellow-400">
                         Väntar på svar
                     </span>
                 @elseif($message->status === 'replied')
-                    <span class="inline-flex items-center rounded-md bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                    <span class="inline-flex items-center rounded-md bg-green-100 dark:bg-green-900/30 px-3 py-1 text-sm font-medium text-green-800 dark:text-green-400">
                         Besvarad
                     </span>
                 @else
-                    <span class="inline-flex items-center rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">
+                    <span class="inline-flex items-center rounded-md bg-gray-100 dark:bg-gray-800 px-3 py-1 text-sm font-medium text-gray-800 dark:text-gray-300">
                         Stängd
                     </span>
                 @endif
@@ -33,7 +33,7 @@
 
     {{-- Price Estimation (if linked) --}}
     @if($message->priceEstimation)
-    <div class="mb-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-6 border-2 border-purple-200">
+    <div class="mb-6 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30 rounded-lg p-6 border-2 border-purple-200 dark:border-purple-800/50">
         <div class="flex items-center gap-3 mb-4">
             <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
@@ -42,38 +42,38 @@
         </div>
 
         <div class="grid md:grid-cols-4 gap-4 mb-4">
-            <div class="bg-white rounded-lg p-4 shadow-sm">
-                <p class="text-xs font-semibold text-purple-600 mb-1">Projekttyp</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-1">Projekttyp</p>
                 <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->project_type_label }}</p>
             </div>
-            <div class="bg-white rounded-lg p-4 shadow-sm">
-                <p class="text-xs font-semibold text-blue-600 mb-1">Komplexitet</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1">Komplexitet</p>
                 <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->complexity }}/10</p>
             </div>
-            <div class="bg-white rounded-lg p-4 shadow-sm">
-                <p class="text-xs font-semibold text-gray-600 mb-1">Arbetstid (AI)</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Arbetstid (AI)</p>
                 <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->hours_ai }}</p>
             </div>
-            <div class="bg-white rounded-lg p-4 shadow-sm">
-                <p class="text-xs font-semibold text-gray-600 mb-1">Leverans</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Leverans</p>
                 <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->delivery_weeks_ai }}</p>
             </div>
         </div>
 
         <div class="grid md:grid-cols-2 gap-4 mb-4">
-            <div class="bg-white rounded-lg p-4 shadow-sm">
-                <p class="text-xs font-semibold text-gray-600 mb-2">Traditionell Utveckling</p>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Traditionell Utveckling</p>
                 <div class="space-y-1 text-sm">
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Timmar:</span>
-                        <span class="font-semibold">{{ $message->priceEstimation->hours_traditional }}</span>
+                        <span class="text-gray-600 dark:text-gray-400">Timmar:</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">{{ $message->priceEstimation->hours_traditional }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Pris (ex. moms):</span>
-                        <span class="font-semibold">{{ $message->priceEstimation->price_traditional }}</span>
+                        <span class="text-gray-600 dark:text-gray-400">Pris (ex. moms):</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">{{ $message->priceEstimation->price_traditional }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Inkl. moms:</span>
+                        <span class="text-gray-600 dark:text-gray-400">Inkl. moms:</span>
                         <span class="font-bold text-gray-900 dark:text-white">{{ $message->priceEstimation->price_traditional_vat }}</span>
                     </div>
                 </div>
@@ -105,19 +105,19 @@
         </div>
 
         @if(count($message->priceEstimation->key_features) > 0)
-        <div class="bg-white rounded-lg p-4 shadow-sm">
-            <p class="text-xs font-semibold text-gray-700 mb-2">Identifierade Funktioner:</p>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Identifierade Funktioner:</p>
             <div class="flex flex-wrap gap-2">
                 @foreach($message->priceEstimation->key_features as $feature)
-                    <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium">{{ $feature }}</span>
+                    <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg text-xs font-medium">{{ $feature }}</span>
                 @endforeach
             </div>
         </div>
         @endif
 
-        <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+        <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800/50">
             <p class="text-xs text-gray-700 dark:text-gray-300"><strong>Original beskrivning:</strong></p>
-            <p class="text-sm text-gray-600 mt-1">{{ $message->priceEstimation->description }}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $message->priceEstimation->description }}</p>
         </div>
     </div>
     @endif
@@ -135,8 +135,8 @@
                                     <span class="text-white font-medium">AT</span>
                                 </div>
                             @else
-                                <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                                    <span class="text-gray-600 font-medium">{{ substr($msg->name, 0, 1) }}</span>
+                                <div class="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+                                    <span class="text-gray-600 dark:text-gray-300 font-medium">{{ substr($msg->name, 0, 1) }}</span>
                                 </div>
                             @endif
                         </div>
@@ -155,26 +155,26 @@
                     </div>
 
                     @if($msg->is_admin_reply)
-                        <span class="inline-flex items-center rounded-md bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800">
+                        <span class="inline-flex items-center rounded-md bg-indigo-100 dark:bg-indigo-900/30 px-2.5 py-0.5 text-xs font-medium text-indigo-800 dark:text-indigo-400">
                             Ditt svar
                         </span>
                     @endif
                 </div>
 
-                <div class="mt-4 text-sm text-gray-700 whitespace-pre-wrap">{{ $msg->message }}</div>
+                <div class="mt-4 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{{ $msg->message }}</div>
             </div>
         @endforeach
     </div>
 
     {{-- Reply Form --}}
     <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Svara på meddelande</h2>
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Svara på meddelande</h2>
 
         <form action="{{ route('admin.messages.reply', $message) }}" method="POST" x-data="{ message: '' }">
             @csrf
 
             <div class="mb-4">
-                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Ditt svar
                 </label>
                 <textarea
@@ -182,15 +182,15 @@
                     name="message"
                     rows="6"
                     x-model="message"
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('message') border-red-300 @enderror"
+                    class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('message') border-red-300 @enderror"
                     placeholder="Skriv ditt svar här..."
                 >{{ old('message') }}</textarea>
 
                 @error('message')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                 @enderror
 
-                <p class="mt-2 text-sm text-gray-500" x-show="message.length > 0">
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400" x-show="message.length > 0">
                     <span x-text="message.length"></span> / 5000 tecken
                 </p>
             </div>

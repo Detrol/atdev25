@@ -2,7 +2,7 @@
 @props(["projects"])
 
 <section id="projects" class="relative py-24 bg-gray-50 dark:bg-gray-800 overflow-hidden">
-    <div class="relative max-w-6xl mx-auto px-6">
+    <div class="relative z-10 max-w-6xl mx-auto px-6">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Utvalda Projekt</h2>
             <p class="text-xl text-gray-600 dark:text-gray-400">En samling av mina senaste arbeten</p>
@@ -11,7 +11,7 @@
         <!-- Consistent 3-column grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($projects as $project)
-            <div class="group relative transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] cursor-pointer"
+            <div class="project-card group relative transition-all duration-300 cursor-pointer"
                  onclick="if(window.GA4) GA4.trackProjectCard('{{ $project->slug }}'); openProjectModal('{{ $project->slug }}')">
                 <div class="relative w-full h-80 rounded-3xl overflow-hidden">
                     <!-- Gradient border on hover -->
