@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidTurnstile;
+use App\Rules\ValidRecaptcha;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactRequest extends FormRequest
@@ -26,8 +26,8 @@ class ContactRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'message' => ['required', 'string', 'min:10', 'max:5000'],
-            'website' => ['nullable', 'max:0'], // Honeypot field
-            'cf-turnstile-response' => ['required', new ValidTurnstile],
+            'website' => ['nullable', 'max:0'], // Honeypot field (anti-spam)
+            'g-recaptcha-response' => ['required', new ValidRecaptcha],
             'price_estimation_id' => ['nullable', 'integer', 'exists:price_estimations,id'],
         ];
     }
@@ -44,7 +44,7 @@ class ContactRequest extends FormRequest
             'message.required' => 'Vänligen skriv ett meddelande.',
             'message.min' => 'Meddelandet måste vara minst 10 tecken.',
             'message.max' => 'Meddelandet får inte vara längre än 5000 tecken.',
-            'cf-turnstile-response.required' => 'Vänligen slutför säkerhetsverifieringen.',
+            'g-recaptcha-response.required' => 'Säkerhetsverifiering krävs.',
         ];
     }
 

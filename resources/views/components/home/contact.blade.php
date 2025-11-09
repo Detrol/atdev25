@@ -1,7 +1,10 @@
 {{-- Contact Section Component --}}
 
 <section id="contact" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden" x-data="{ viewed: false }" x-intersect="viewed = true; if(window.GA4) GA4.trackContactView()">
-    <div class="relative max-w-4xl mx-auto px-6">
+    {{-- Background orbs --}}
+    <x-section-background theme="blue" density="sparse" />
+
+    <div class="relative z-10 max-w-4xl mx-auto px-6">
         <div class="relative text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">
                 Låt Oss Skapa Något Fantastiskt
@@ -182,7 +185,7 @@
                     <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl p-4">
                         <div class="flex justify-between items-center mb-3">
                             <p class="text-xs font-semibold opacity-90">Estimerat Pris</p>
-                            <span class="px-2 py-1 bg-white/20 rounded-full text-xs font-bold" x-text="'-' + (estimation.savings_percent || 80) + '%'"></span>
+                            <span class="px-2 py-1 bg-white/20 rounded-full text-xs font-bold" x-text="estimation ? ('-' + (estimation.savings_percent || 80) + '%') : ''"></span>
                         </div>
                         <div class="space-y-2">
                             <div class="flex justify-between items-baseline">
@@ -196,7 +199,7 @@
                         </div>
                         <div class="mt-3 pt-3 border-t border-white/30">
                             <div class="flex justify-between items-center">
-                                <span class="text-xs opacity-90" x-text="'Din besparing (' + (estimation.savings_percent || 80) + '%):'"></span>
+                                <span class="text-xs opacity-90" x-text="estimation ? ('Din besparing (' + (estimation.savings_percent || 80) + '%):') : ''"></span>
                                 <span class="font-bold" x-text="estimation?.savings_vat"></span>
                             </div>
                         </div>
@@ -255,8 +258,8 @@
                 <!-- Honeypot -->
                 <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px;">
 
-                <!-- Turnstile Security Verification (Invisible) -->
-                <x-turnstile theme="light" />
+                <!-- reCAPTCHA v3 Security Verification (Invisible) -->
+                <x-recaptcha />
 
                 <!-- Submit Button -->
                 <div class="relative">

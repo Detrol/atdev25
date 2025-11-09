@@ -119,8 +119,8 @@
                 <!-- Honeypot (Hidden) -->
                 <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
 
-                <!-- Turnstile Security Verification (Invisible) -->
-                <x-turnstile theme="light" />
+                <!-- reCAPTCHA v3 Security Verification (Invisible) -->
+                <x-recaptcha />
 
                 <!-- Submit Button -->
                 <button type="submit"

@@ -2,7 +2,7 @@
 @props(["services"])
 
 <section id="services" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="relative z-10 max-w-6xl mx-auto px-6">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Mina Tjänster</h2>
             <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Skräddarsydda lösningar för alla dina webbutvecklingsbehov</p>
