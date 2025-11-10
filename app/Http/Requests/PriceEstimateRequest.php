@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidTurnstile;
+use App\Rules\ValidRecaptcha;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PriceEstimateRequest extends FormRequest
@@ -40,7 +40,7 @@ class PriceEstimateRequest extends FormRequest
         return [
             'service_category' => 'required|string|in:web_development,mobile_app,bug_fixes,performance,api_integration,security,maintenance,modernization',
             'description' => 'required|string|min:20|max:2000',
-            'cf-turnstile-response' => ['required', new ValidTurnstile],
+            'g-recaptcha-response' => ['required', new ValidRecaptcha],
             'website_url' => [
                 'nullable',
                 'url',
@@ -87,7 +87,7 @@ class PriceEstimateRequest extends FormRequest
             'description.required' => 'Vänligen beskriv ditt projekt.',
             'description.min' => 'Projektbeskrivningen måste vara minst :min tecken.',
             'description.max' => 'Projektbeskrivningen får inte överstiga :max tecken.',
-            'cf-turnstile-response.required' => 'Vänligen slutför säkerhetsverifieringen.',
+            'g-recaptcha-response.required' => 'Säkerhetsverifiering krävs.',
             'website_url.url' => 'Vänligen ange en giltig URL.',
             'website_url.regex' => 'URL:en måste börja med http:// eller https://',
         ];

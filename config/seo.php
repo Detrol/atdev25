@@ -76,12 +76,12 @@ return [
 
         'directives' => [
             'default-src' => ["'self'"],
-            'script-src' => ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://ajax.googleapis.com', 'https://www.googletagmanager.com', 'https://challenges.cloudflare.com'],
+            'script-src' => ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://ajax.googleapis.com', 'https://www.googletagmanager.com', 'https://www.google.com', 'https://www.gstatic.com'],
             'style-src' => ["'self'", "'unsafe-inline'"],
             'img-src' => ["'self'", 'data:', 'https:', 'blob:'],
             'font-src' => ["'self'", 'data:'],
-            'connect-src' => ["'self'", 'blob:', 'https://*.google-analytics.com', 'https://ajax.googleapis.com', 'https://challenges.cloudflare.com'],
-            'frame-src' => ["'self'", 'https://challenges.cloudflare.com'],
+            'connect-src' => ["'self'", 'blob:', 'https://*.google-analytics.com', 'https://ajax.googleapis.com', 'https://www.google.com'],
+            'frame-src' => ["'self'", 'https://www.google.com', 'https://www.gstatic.com'],
             'frame-ancestors' => ["'none'"],
             'base-uri' => ["'self'"],
             'form-action' => ["'self'"],

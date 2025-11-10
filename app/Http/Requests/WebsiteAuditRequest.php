@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidTurnstile;
+use App\Rules\ValidRecaptcha;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WebsiteAuditRequest extends FormRequest
@@ -28,7 +28,7 @@ class WebsiteAuditRequest extends FormRequest
             'email' => 'required|email|max:255',
             'company' => 'nullable|string|max:100',
             'website' => 'nullable|max:0', // Honeypot field
-            'cf-turnstile-response' => ['required', new ValidTurnstile],
+            'g-recaptcha-response' => ['required', new ValidRecaptcha],
         ];
     }
 
@@ -54,7 +54,7 @@ class WebsiteAuditRequest extends FormRequest
 
             'website.max' => 'Detta fält ska vara tomt.',
 
-            'cf-turnstile-response.required' => 'Vänligen slutför säkerhetsverifieringen.',
+            'g-recaptcha-response.required' => 'Säkerhetsverifiering krävs.',
         ];
     }
 }

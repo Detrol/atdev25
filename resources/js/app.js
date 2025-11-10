@@ -739,20 +739,68 @@ document.addEventListener('DOMContentLoaded', function() {
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         let formChanged = false;
-        
+
         form.addEventListener('input', function() {
             formChanged = true;
         });
-        
+
         form.addEventListener('submit', function() {
             formChanged = false;
         });
-        
+
         window.addEventListener('beforeunload', function(e) {
             if (formChanged) {
                 e.preventDefault();
                 e.returnValue = '';
             }
+        });
+    });
+
+    // Google reCAPTCHA v3 integration
+    // Handle form submission with reCAPTCHA token
+    const recaptchaForms = document.querySelectorAll('form:has(input.g-recaptcha-response)');
+
+    recaptchaForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const recaptchaInput = form.querySelector('input.g-recaptcha-response');
+
+            // If reCAPTCHA is disabled (dev mode) or token already exists, allow submission
+            if (!recaptchaInput || recaptchaInput.value) {
+                return;
+            }
+
+            // Prevent form submission until we get the token
+            e.preventDefault();
+
+            // Check if reCAPTCHA is loaded
+            if (typeof grecaptcha === 'undefined') {
+                console.error('reCAPTCHA not loaded');
+                // Submit anyway to show server-side error
+                form.submit();
+                return;
+            }
+
+            // Execute reCAPTCHA and get token
+            grecaptcha.ready(function() {
+                const siteKey = document.querySelector('script[src*="recaptcha"]')?.src.match(/render=([^&]+)/)?.[1];
+
+                if (!siteKey) {
+                    console.error('reCAPTCHA site key not found');
+                    form.submit();
+                    return;
+                }
+
+                grecaptcha.execute(siteKey, { action: 'submit' }).then(function(token) {
+                    // Add token to hidden field
+                    recaptchaInput.value = token;
+                    // Submit form
+                    form.submit();
+                }).catch(function(error) {
+                    console.error('reCAPTCHA error:', error);
+                    // Submit anyway to show server-side error
+                    form.submit();
+                });
+            });
         });
     });
 });
