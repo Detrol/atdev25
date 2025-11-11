@@ -66,27 +66,40 @@ function animateTimeline() {
         const milestones = document.querySelectorAll('.mobile-milestone');
         const icons = document.querySelectorAll('.mobile-milestone-icon');
 
+        console.log('📱 Mobile timeline found:', milestones.length, 'milestones,', icons.length, 'icons');
+
+        // Set initial visible state for all elements
+        gsap.set(milestones, { opacity: 1, scale: 1, y: 0 });
+        gsap.set(icons, { opacity: 1, scale: 1, rotation: 0 });
+
         // Milestones appear in sequence (matching original)
         milestones.forEach((milestone, index) => {
-            gsap.from(milestone, {
-                scale: 0.9,
-                opacity: 0,
-                y: 20,
-                duration: 0.6,
-                delay: index * 1.25, // 0, 1250ms, 2500ms, 3750ms
-                ease: 'power2.out'
-            });
+            gsap.fromTo(milestone,
+                { scale: 0.9, opacity: 0, y: 20 },
+                {
+                    scale: 1,
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    delay: index * 1.25, // 0, 1250ms, 2500ms, 3750ms
+                    ease: 'power2.out'
+                }
+            );
         });
 
         // Icons pop in after milestones
         icons.forEach((icon, index) => {
-            gsap.from(icon, {
-                scale: 0,
-                rotation: -45,
-                duration: 0.5,
-                delay: index * 1.25 + 0.3,
-                ease: 'back.out(1.5)'
-            });
+            gsap.fromTo(icon,
+                { scale: 0, rotation: -45, opacity: 0 },
+                {
+                    scale: 1,
+                    rotation: 0,
+                    opacity: 1,
+                    duration: 0.5,
+                    delay: index * 1.25 + 0.3,
+                    ease: 'back.out(1.5)'
+                }
+            );
         });
     }
 }
