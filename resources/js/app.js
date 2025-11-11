@@ -42,8 +42,7 @@ import './animations/section-transitions.js';
 import './animations/service-cards.js';
 // import './animations/projects-gallery.js'; // DISABLED - conflicts with section-transitions.js
 import './animations/hero-particles.js';
-import './animations/separator-animations.js';
-import './animations/divider-effects.js';
+import './animations/wave-divider-system.js'; // UNIFIED: separator + divider effects (optimized)
 
 // Register Alpine.js plugins
 Alpine.plugin(intersect);

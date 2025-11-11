@@ -1,23 +1,32 @@
 /**
- * Wave Divider Effects - Nebula Interior
+ * Wave Divider System - Unified & Optimized
  *
- * Adds twinkling stars and floating stardust particles inside wave dividers
- * to create a subtle nebula/space effect.
+ * Combines separator parallax + nebula effects for wave dividers.
+ * Mobile-optimized with merged ScrollTriggers and reduced particle count.
  */
 
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const isProduction = window.location.hostname === 'atdev.me';
 const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIG ====================
 
-// Phase 3 optimization: Heavily reduce particles on mobile for better performance
 const CONFIG = {
+    // Nebula effects (stars + particles inside waves)
     stars: { min: isMobile ? 1 : 2, max: isMobile ? 2 : 3 },
-    particles: { min: isMobile ? 1 : 3, max: isMobile ? 1 : 4 }, // Only 1 particle per divider on mobile
+    particles: { min: isMobile ? 1 : 3, max: isMobile ? 1 : 4 },
     starSize: { min: 0.3, max: 0.8 },
-    particleSize: { min: 0.15, max: 0.4 }
+    particleSize: { min: 0.15, max: 0.4 },
+
+    // Parallax settings
+    parallax: {
+        scrub: isMobile ? 1.5 : 0.5, // Higher scrub on mobile for smoother performance
+        backLayer: 20,
+        midLayer: 10,
+        frontLayer: 5
+    }
 };
 
 // ==================== UTILITY FUNCTIONS ====================
@@ -35,12 +44,9 @@ function randomInt(min, max) {
 class StarFactory {
     static create(svg, dividerElement, color, index) {
         const size = random(CONFIG.starSize.min, CONFIG.starSize.max);
-
-        // Position within divider bounds (viewBox 0-1200, height 0-120)
         const x = random(50, 1150);
-        const y = random(20, 100); // Keep within wave area
+        const y = random(20, 100);
 
-        // Simple 4-pointed sparkle
         const starPath = this.createSparkle(size);
 
         const star = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -51,11 +57,11 @@ class StarFactory {
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.setAttribute('transform', `translate(${x}, ${y})`);
-        group.style.willChange = 'transform, opacity'; // GPU acceleration hint
+        group.style.willChange = 'transform, opacity';
         group.appendChild(star);
         svg.appendChild(group);
 
-        // Twinkle animation (slow, subtle)
+        // Twinkle animation
         const timeline = gsap.timeline({ repeat: -1, yoyo: true });
         timeline.to(star, {
             opacity: random(0.1, 0.3),
@@ -64,30 +70,28 @@ class StarFactory {
             delay: random(0, 3)
         });
 
-        // Parallax effect on scroll (subtle vertical movement)
+        // Parallax effect
         const starParallax = random(8, 18);
         const parallaxAnim = gsap.to(group, {
-            y: starParallax, // Stars move slower for depth
+            y: starParallax,
             ease: 'none',
             scrollTrigger: {
                 trigger: dividerElement,
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: isMobile ? 1.2 : 0.8 // Higher scrub on mobile for better performance
+                scrub: CONFIG.parallax.scrub
             }
         });
 
         if (!isProduction && index === 0) {
-            console.log(`  ⭐ Divider star created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
+            console.log(`  ⭐ Star created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
         }
 
-        // Return animations for pause/resume control
         return { twinkle: timeline, parallax: parallaxAnim };
     }
 
     static createSparkle(size) {
-        // Simple 4-pointed star/sparkle
-        const outer = size * 10; // Scale up for viewBox
+        const outer = size * 10;
         const inner = outer * 0.3;
         return `
             M 0 ${-outer}
@@ -108,28 +112,26 @@ class StarFactory {
 class ParticleFactory {
     static create(svg, dividerElement, color, index) {
         const size = random(CONFIG.particleSize.min, CONFIG.particleSize.max);
-
-        // Position within divider bounds
         const x = random(50, 1150);
         const y = random(20, 100);
 
         const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         particle.setAttribute('cx', x);
         particle.setAttribute('cy', y);
-        particle.setAttribute('r', size * 10); // Scale for viewBox
+        particle.setAttribute('r', size * 10);
         particle.setAttribute('fill', color);
         particle.setAttribute('opacity', '0.4');
         particle.classList.add('divider-particle');
 
-        // Add soft glow on desktop only (GPU-intensive blur filter)
+        // Disable blur filter on mobile (GPU-intensive)
         if (!isMobile) {
             particle.style.filter = 'url(#dividerGlow)';
         }
-        particle.style.willChange = 'transform, opacity'; // GPU acceleration
+        particle.style.willChange = 'transform, opacity';
 
         svg.appendChild(particle);
 
-        // Slow floating animation (disabled on mobile - SVG attribute animations are expensive)
+        // Disable float animation on mobile (CPU-intensive SVG attribute animations)
         let floatAnim = null;
         if (!isMobile) {
             const floatDistance = random(15, 30);
@@ -147,7 +149,7 @@ class ParticleFactory {
             });
         }
 
-        // Subtle opacity pulse
+        // Opacity pulse
         const pulseAnim = gsap.to(particle, {
             opacity: random(0.1, 0.2),
             duration: random(3, 6),
@@ -157,40 +159,38 @@ class ParticleFactory {
             delay: random(0, 2)
         });
 
-        // Parallax effect on scroll (faster than stars for depth layering)
-        // Use transform instead of cy to avoid conflict with float animation
+        // Parallax effect
         const parallaxDistance = random(15, 25);
         const parallaxAnim = gsap.to(particle, {
-            y: parallaxDistance, // Particles move faster (closer to viewer)
+            y: parallaxDistance,
             ease: 'none',
             scrollTrigger: {
                 trigger: dividerElement,
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: isMobile ? 1.0 : 0.5 // Higher scrub on mobile for better performance
+                scrub: CONFIG.parallax.scrub
             }
         });
 
         if (!isProduction && index === 0) {
-            console.log(`  ✨ Divider particle created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
+            console.log(`  ✨ Particle created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
         }
 
-        // Return animations for pause/resume control
         const anims = { pulse: pulseAnim, parallax: parallaxAnim };
         if (floatAnim) anims.float = floatAnim;
         return anims;
     }
 }
 
-// ==================== DIVIDER EFFECTS SYSTEM ====================
+// ==================== WAVE DIVIDER SYSTEM ====================
 
-class DividerEffectsSystem {
+class WaveDividerSystem {
     constructor(divider, index) {
         this.divider = divider;
         this.index = index;
         this.svg = divider.querySelector('svg');
         this.defs = null;
-        this.animations = []; // Track all GSAP animations
+        this.animations = [];
         this.isVisible = false;
 
         if (!this.svg) {
@@ -200,6 +200,7 @@ class DividerEffectsSystem {
 
         this.init();
         this.setupIntersectionObserver();
+        this.setupParallax();
     }
 
     init() {
@@ -213,17 +214,17 @@ class DividerEffectsSystem {
         // Add glow filter for particles
         this.createGlowFilter();
 
-        // Extract color from divider
+        // Extract color from gradient
         const color = this.extractColor();
 
-        // Create stars and store animations
+        // Create stars
         const starCount = randomInt(CONFIG.stars.min, CONFIG.stars.max);
         for (let i = 0; i < starCount; i++) {
             const starAnims = StarFactory.create(this.svg, this.divider, color, i);
             this.animations.push(...Object.values(starAnims));
         }
 
-        // Create particles and store animations
+        // Create particles
         const particleCount = randomInt(CONFIG.particles.min, CONFIG.particles.max);
         for (let i = 0; i < particleCount; i++) {
             const particleAnims = ParticleFactory.create(this.svg, this.divider, color, i);
@@ -236,7 +237,6 @@ class DividerEffectsSystem {
     }
 
     createGlowFilter() {
-        // Check if filter already exists
         if (this.svg.querySelector('#dividerGlow')) return;
 
         const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
@@ -265,37 +265,56 @@ class DividerEffectsSystem {
     }
 
     extractColor() {
-        // Try to extract color from gradient or paths
         const gradient = this.svg.querySelector('linearGradient stop');
         if (gradient) {
             const stopColor = gradient.getAttribute('style');
             const match = stopColor.match(/stop-color:(#[0-9A-Fa-f]{6})/);
             if (match) {
-                return this.lightenColor(match[1], 0.3); // Lighter version
+                return this.lightenColor(match[1], 0.3);
             }
         }
-
-        // Fallback to white
         return '#ffffff';
     }
 
     lightenColor(hex, amount) {
-        // Convert hex to RGB
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);
         const b = parseInt(hex.slice(5, 7), 16);
 
-        // Lighten
         const newR = Math.min(255, Math.floor(r + (255 - r) * amount));
         const newG = Math.min(255, Math.floor(g + (255 - g) * amount));
         const newB = Math.min(255, Math.floor(b + (255 - b) * amount));
 
-        // Convert back to hex
         return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
     }
 
+    setupParallax() {
+        // OPTIMIZED: Merge all 3 layers into ONE ScrollTrigger timeline
+        const backLayer = this.divider.querySelector('.wave-layer-back');
+        const midLayer = this.divider.querySelector('.wave-layer-mid');
+        const frontLayer = this.divider.querySelector('.wave-layer-front');
+
+        if (!backLayer || !midLayer || !frontLayer) return;
+
+        // Single timeline for all 3 layers (3x fewer ScrollTriggers!)
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: this.divider,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: CONFIG.parallax.scrub
+            }
+        });
+
+        timeline
+            .to(backLayer, { y: CONFIG.parallax.backLayer }, 0)
+            .to(midLayer, { y: CONFIG.parallax.midLayer }, 0)
+            .to(frontLayer, { y: CONFIG.parallax.frontLayer }, 0);
+
+        this.animations.push(timeline);
+    }
+
     setupIntersectionObserver() {
-        // Pause animations when divider is out of viewport
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !this.isVisible) {
@@ -307,7 +326,7 @@ class DividerEffectsSystem {
                 }
             });
         }, {
-            rootMargin: '100px' // Start animations slightly before visible
+            rootMargin: '100px'
         });
 
         observer.observe(this.divider);
@@ -338,33 +357,85 @@ class DividerEffectsSystem {
     }
 }
 
+// ==================== DOM MANIPULATION ====================
+
+function moveDividersOutsideContent() {
+    // Move wave dividers OUTSIDE .animated-section-content to prevent z-index conflicts
+    const sections = document.querySelectorAll('.animated-section');
+    let movedCount = 0;
+
+    sections.forEach(section => {
+        const content = section.querySelector('.animated-section-content');
+        if (!content) return;
+
+        const wavesInContent = content.querySelectorAll('.wave-divider');
+
+        wavesInContent.forEach(wave => {
+            // Deep clone to preserve SVG <defs> references
+            const waveClone = wave.cloneNode(true);
+
+            // Update gradient ID to avoid collisions
+            const svg = waveClone.querySelector('svg');
+            if (svg) {
+                const gradient = svg.querySelector('linearGradient[id^="wave-gradient-"]');
+                if (gradient) {
+                    const oldId = gradient.id;
+                    const newId = `wave-gradient-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+                    gradient.id = newId;
+
+                    const midLayer = svg.querySelector('.wave-layer-mid path');
+                    if (midLayer) {
+                        const fill = midLayer.getAttribute('fill');
+                        if (fill && fill.includes(oldId)) {
+                            midLayer.setAttribute('fill', `url(#${newId})`);
+                        }
+                    }
+                }
+            }
+
+            section.appendChild(waveClone);
+            wave.remove();
+            movedCount++;
+        });
+    });
+
+    if (!isProduction) {
+        console.log(`  ✅ Moved ${movedCount} wave dividers outside content layer`);
+    }
+}
+
 // ==================== MAIN INITIALIZATION ====================
 
-export function initDividerEffects() {
-    // Wait for separator animations to move dividers first
-    setTimeout(() => {
-        const dividers = document.querySelectorAll('.wave-divider');
+export function initWaveDividerSystem() {
+    if (!isProduction) console.log('🌊 Initializing Wave Divider System (unified)');
 
-        if (dividers.length === 0) {
-            if (!isProduction) console.log('🌊 No wave dividers found');
-            return;
-        }
+    // Step 1: Move dividers in DOM tree
+    moveDividersOutsideContent();
 
-        if (!isProduction) console.log(`🌊 Initializing Divider Effects (${dividers.length} dividers)`);
+    // Step 2: Initialize effects on all wave dividers
+    const dividers = document.querySelectorAll('.wave-divider');
 
-        dividers.forEach((divider, index) => {
-            new DividerEffectsSystem(divider, index);
-        });
+    if (dividers.length === 0) {
+        if (!isProduction) console.log('  ⚠️  No wave dividers found');
+        return;
+    }
 
-        if (!isProduction) {
-            console.log(`✨ Divider effects initialized`);
-        }
-    }, 100); // Short delay to ensure dividers are moved by separator-animations.js
+    dividers.forEach((divider, index) => {
+        new WaveDividerSystem(divider, index);
+    });
+
+    if (!isProduction) {
+        console.log(`✨ Wave Divider System initialized (${dividers.length} dividers)`);
+        console.log(`   - Mobile optimizations: ${isMobile ? 'ENABLED' : 'DISABLED'}`);
+        console.log(`   - Parallax scrub: ${CONFIG.parallax.scrub}`);
+        console.log(`   - Particles per divider: ${isMobile ? '1' : '3-4'}`);
+    }
 }
 
 // Auto-initialize
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDividerEffects);
+    document.addEventListener('DOMContentLoaded', initWaveDividerSystem);
 } else {
-    initDividerEffects();
+    initWaveDividerSystem();
 }
