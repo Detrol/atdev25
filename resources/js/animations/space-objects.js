@@ -9,6 +9,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const isProduction = window.location.hostname === 'atdev.me';
+const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIG ====================
 
@@ -59,17 +60,19 @@ class AsteroidFactory {
         group.appendChild(asteroid);
         svg.appendChild(group);
 
-        // Scroll-driven rotation and drift
+        // Scroll-driven rotation and drift (more movement on mobile)
+        const asteroidDriftRange = isMobile ? 25 : 10;
+
         gsap.to(group, {
             rotation: random(180, 360),
-            x: `+=${random(-10, 10)}`,
-            y: `+=${random(-10, 10)}`,
+            x: `+=${random(-asteroidDriftRange, asteroidDriftRange)}`,
+            y: `+=${random(-asteroidDriftRange, asteroidDriftRange)}`,
             ease: 'none',
             scrollTrigger: {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: 2
+                scrub: isMobile ? 1 : 2 // Faster response on mobile
             }
         });
 
@@ -176,12 +179,15 @@ class PlanetFactory {
 
         svg.appendChild(group);
 
-        // Slow continuous drift
+        // Slow continuous drift (faster and longer on mobile)
+        const driftRange = isMobile ? 35 : 15;
+        const driftDuration = isMobile ? random(25, 40) : random(40, 60);
+
         gsap.to(group, {
-            x: `+=${random(-15, 15)}`,
-            y: `+=${random(-15, 15)}`,
+            x: `+=${random(-driftRange, driftRange)}`,
+            y: `+=${random(-driftRange, driftRange)}`,
             rotation: random(10, 30),
-            duration: random(40, 60),
+            duration: driftDuration,
             ease: 'sine.inOut',
             repeat: -1,
             yoyo: true
@@ -243,12 +249,15 @@ class NebulaFactory {
         group.appendChild(nebula);
         svg.appendChild(group);
 
-        // Very slow subtle drift
+        // Very slow subtle drift (faster and longer on mobile)
+        const nebulaDriftRange = isMobile ? 20 : 8;
+        const nebulaDuration = isMobile ? random(40, 60) : random(60, 90);
+
         gsap.to(group, {
-            x: `+=${random(-8, 8)}`,
-            y: `+=${random(-8, 8)}`,
+            x: `+=${random(-nebulaDriftRange, nebulaDriftRange)}`,
+            y: `+=${random(-nebulaDriftRange, nebulaDriftRange)}`,
             rotation: random(-15, 15),
-            duration: random(60, 90),
+            duration: nebulaDuration,
             ease: 'sine.inOut',
             repeat: -1,
             yoyo: true

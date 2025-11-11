@@ -10,6 +10,7 @@ import { ScrollTrigger } from './gsap-config.js';
 import { MotionPathPlugin } from './gsap-config.js';
 
 const isProduction = window.location.hostname === 'atdev.me';
+const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIGURATION ====================
 
@@ -25,7 +26,7 @@ const CONFIG = {
     trailLength: 20, // Number of trail particles
     trailSpacing: 2, // Frames between particle spawns (lower = more frequent)
     particleLifetime: 0.8, // Seconds before particle disappears
-    trailSpread: 0.6, // How much particles spread out in cone shape
+    trailSpread: isMobile ? 1.0 : 0.6, // Wider spread on mobile for more visibility
 
     staggerDelay: 0.15,
     colors: [
@@ -611,7 +612,7 @@ class AnimationController {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: 1,
+                scrub: isMobile ? 0.5 : 1, // Faster on mobile
                 onUpdate: (self) => {
                     const adjustedProgress = Math.max(0, Math.min(1, self.progress - (delay / 10)));
                     const currentOffset = pathLength * (1 - adjustedProgress);
@@ -648,7 +649,7 @@ class AnimationController {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: 1,
+                scrub: isMobile ? 0.5 : 1, // Faster on mobile
                 onUpdate: (self) => {
                     const adjustedProgress = Math.max(0, Math.min(1, self.progress - (delay / 10)));
 
