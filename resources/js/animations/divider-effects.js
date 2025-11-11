@@ -64,7 +64,7 @@ class StarFactory {
 
         // Parallax effect on scroll (subtle vertical movement)
         const starParallax = random(8, 18);
-        gsap.to(group, {
+        const parallaxAnim = gsap.to(group, {
             y: starParallax, // Stars move slower for depth
             ease: 'none',
             scrollTrigger: {
@@ -78,6 +78,9 @@ class StarFactory {
         if (!isProduction && index === 0) {
             console.log(`  ⭐ Divider star created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
         }
+
+        // Return animations for pause/resume control
+        return { twinkle: timeline, parallax: parallaxAnim };
     }
 
     static createSparkle(size) {
@@ -126,7 +129,7 @@ class ParticleFactory {
         const floatDistance = random(15, 30);
         const floatAngle = random(0, Math.PI * 2);
 
-        gsap.to(particle, {
+        const floatAnim = gsap.to(particle, {
             attr: {
                 cx: `+=${Math.cos(floatAngle) * floatDistance}`,
                 cy: `+=${Math.sin(floatAngle) * floatDistance}`
@@ -138,7 +141,7 @@ class ParticleFactory {
         });
 
         // Subtle opacity pulse
-        gsap.to(particle, {
+        const pulseAnim = gsap.to(particle, {
             opacity: random(0.1, 0.2),
             duration: random(3, 6),
             ease: 'sine.inOut',
@@ -150,7 +153,7 @@ class ParticleFactory {
         // Parallax effect on scroll (faster than stars for depth layering)
         // Use transform instead of cy to avoid conflict with float animation
         const parallaxDistance = random(15, 25);
-        gsap.to(particle, {
+        const parallaxAnim = gsap.to(particle, {
             y: parallaxDistance, // Particles move faster (closer to viewer)
             ease: 'none',
             scrollTrigger: {
@@ -164,6 +167,9 @@ class ParticleFactory {
         if (!isProduction && index === 0) {
             console.log(`  ✨ Divider particle created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
         }
+
+        // Return animations for pause/resume control
+        return { float: floatAnim, pulse: pulseAnim, parallax: parallaxAnim };
     }
 }
 
@@ -175,6 +181,8 @@ class DividerEffectsSystem {
         this.index = index;
         this.svg = divider.querySelector('svg');
         this.defs = null;
+        this.animations = []; // Track all GSAP animations
+        this.isVisible = false;
 
         if (!this.svg) {
             console.warn('No SVG found in divider', divider);
@@ -182,6 +190,7 @@ class DividerEffectsSystem {
         }
 
         this.init();
+        this.setupIntersectionObserver();
     }
 
     init() {
@@ -198,16 +207,18 @@ class DividerEffectsSystem {
         // Extract color from divider
         const color = this.extractColor();
 
-        // Create stars
+        // Create stars and store animations
         const starCount = randomInt(CONFIG.stars.min, CONFIG.stars.max);
         for (let i = 0; i < starCount; i++) {
-            StarFactory.create(this.svg, this.divider, color, i);
+            const starAnims = StarFactory.create(this.svg, this.divider, color, i);
+            this.animations.push(...Object.values(starAnims));
         }
 
-        // Create particles
+        // Create particles and store animations
         const particleCount = randomInt(CONFIG.particles.min, CONFIG.particles.max);
         for (let i = 0; i < particleCount; i++) {
-            ParticleFactory.create(this.svg, this.divider, color, i);
+            const particleAnims = ParticleFactory.create(this.svg, this.divider, color, i);
+            this.animations.push(...Object.values(particleAnims));
         }
 
         if (!isProduction) {
@@ -272,6 +283,49 @@ class DividerEffectsSystem {
 
         // Convert back to hex
         return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+    }
+
+    setupIntersectionObserver() {
+        // Pause animations when divider is out of viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !this.isVisible) {
+                    this.resumeAnimations();
+                    this.isVisible = true;
+                } else if (!entry.isIntersecting && this.isVisible) {
+                    this.pauseAnimations();
+                    this.isVisible = false;
+                }
+            });
+        }, {
+            rootMargin: '100px' // Start animations slightly before visible
+        });
+
+        observer.observe(this.divider);
+    }
+
+    pauseAnimations() {
+        this.animations.forEach(anim => {
+            if (anim && typeof anim.pause === 'function') {
+                anim.pause();
+            }
+        });
+
+        if (!isProduction) {
+            console.log(`  ⏸️  Divider ${this.index} animations paused`);
+        }
+    }
+
+    resumeAnimations() {
+        this.animations.forEach(anim => {
+            if (anim && typeof anim.resume === 'function') {
+                anim.resume();
+            }
+        });
+
+        if (!isProduction) {
+            console.log(`  ▶️  Divider ${this.index} animations resumed`);
+        }
     }
 }
 

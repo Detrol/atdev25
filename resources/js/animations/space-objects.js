@@ -13,11 +13,12 @@ const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIG ====================
 
+// Mobile gets half the objects for performance
 const CONFIG = {
-    asteroids: { min: 2, max: 3 },
-    stars: { min: 3, max: 4 },
-    planets: { min: 1, max: 2 },
-    nebulae: { min: 1, max: 1 },
+    asteroids: { min: isMobile ? 1 : 2, max: isMobile ? 2 : 3 },
+    stars: { min: isMobile ? 2 : 3, max: isMobile ? 2 : 4 },
+    planets: { min: isMobile ? 0 : 1, max: isMobile ? 1 : 2 },
+    nebulae: { min: isMobile ? 0 : 1, max: isMobile ? 1 : 1 },
     asteroidSize: { min: 2, max: 5 },
     starSize: { min: 0.3, max: 0.8 },
     planetSize: { min: 4, max: 8 },
@@ -182,19 +183,25 @@ class PlanetFactory {
 
         svg.appendChild(group);
 
-        // Slow continuous drift (faster and longer on mobile)
+        // Slow continuous drift (faster and longer on mobile, no rotation on mobile)
         const driftRange = isMobile ? 35 : 15;
         const driftDuration = isMobile ? random(25, 40) : random(40, 60);
 
-        gsap.to(group, {
+        const animConfig = {
             x: `+=${random(-driftRange, driftRange)}`,
             y: `+=${random(-driftRange, driftRange)}`,
-            rotation: random(10, 30),
             duration: driftDuration,
             ease: 'sine.inOut',
             repeat: -1,
             yoyo: true
-        });
+        };
+
+        // Add rotation only on desktop (CPU intensive)
+        if (!isMobile) {
+            animConfig.rotation = random(10, 30);
+        }
+
+        gsap.to(group, animConfig);
 
         if (!isProduction) console.log(`  🪐 Planet ${index} created at (${x.toFixed(1)}, ${y.toFixed(1)})`);
     }
@@ -253,19 +260,25 @@ class NebulaFactory {
         group.appendChild(nebula);
         svg.appendChild(group);
 
-        // Very slow subtle drift (faster and longer on mobile)
+        // Very slow subtle drift (faster and longer on mobile, no rotation on mobile)
         const nebulaDriftRange = isMobile ? 20 : 8;
         const nebulaDuration = isMobile ? random(40, 60) : random(60, 90);
 
-        gsap.to(group, {
+        const animConfig = {
             x: `+=${random(-nebulaDriftRange, nebulaDriftRange)}`,
             y: `+=${random(-nebulaDriftRange, nebulaDriftRange)}`,
-            rotation: random(-15, 15),
             duration: nebulaDuration,
             ease: 'sine.inOut',
             repeat: -1,
             yoyo: true
-        });
+        };
+
+        // Add rotation only on desktop (CPU intensive)
+        if (!isMobile) {
+            animConfig.rotation = random(-15, 15);
+        }
+
+        gsap.to(group, animConfig);
 
         if (!isProduction) console.log(`  ☁️ Nebula ${index} created at (${x.toFixed(1)}, ${y.toFixed(1)})`);
     }

@@ -259,7 +259,12 @@ class TrailController {
         this.currentProgress = 0;
         this.lastUpdateFrame = 0; // RAF throttling
 
+        // Particle pooling for better performance
+        this.particlePool = [];
+        this.maxPoolSize = CONFIG.trailLength + 5; // Pre-allocate slightly more
+
         this.initParticleGroup();
+        this.initParticlePool();
     }
 
     initParticleGroup() {
@@ -271,6 +276,35 @@ class TrailController {
         if (!isProduction) {
             console.log(`🎨 Trail controller initialized for ${this.threadId}`);
         }
+    }
+
+    initParticlePool() {
+        // Pre-create particle elements to avoid DOM creation during animation
+        for (let i = 0; i < this.maxPoolSize; i++) {
+            const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            particle.setAttribute('cx', 0);
+            particle.setAttribute('cy', 0);
+            particle.style.willChange = 'transform, opacity';
+            particle.style.filter = 'url(#glow)';
+            particle.style.display = 'none'; // Hidden by default
+            this.particleGroup.appendChild(particle);
+            this.particlePool.push(particle);
+        }
+
+        if (!isProduction) {
+            console.log(`  🔄 Particle pool created: ${this.maxPoolSize} particles`);
+        }
+    }
+
+    getParticleFromPool() {
+        // Reuse particle from pool
+        return this.particlePool.find(p => p.style.display === 'none');
+    }
+
+    returnParticleToPool(particle) {
+        // Return particle to pool (hide it)
+        particle.style.display = 'none';
+        particle.style.opacity = '0';
     }
 
     update(progress, color) {
@@ -310,7 +344,14 @@ class TrailController {
     }
 
     spawnParticle() {
-        const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        // Get particle from pool instead of creating new
+        const particle = this.getParticleFromPool();
+        if (!particle) {
+            // Pool exhausted (shouldn't happen with proper sizing)
+            if (!isProduction) console.warn('Particle pool exhausted');
+            return;
+        }
+
         const size = random(0.2, 0.5);
 
         // Get comet's ACTUAL position from GSAP transform in viewBox coordinates
@@ -369,17 +410,12 @@ class TrailController {
         const particleX = currentPoint.x + offsetX;
         const particleY = currentPoint.y + offsetY;
 
-        // Use transform instead of cx/cy for better performance
-        particle.setAttribute('cx', 0);
-        particle.setAttribute('cy', 0);
+        // Reuse pooled particle - just update its properties
         particle.setAttribute('r', size);
         particle.setAttribute('fill', this.color);
-        particle.setAttribute('opacity', '0.9'); // Slightly transparent
         particle.style.transform = `translate(${particleX}px, ${particleY}px)`;
-        particle.style.willChange = 'transform, opacity'; // GPU hint
-        particle.style.filter = 'url(#glow)';
-
-        this.particleGroup.appendChild(particle);
+        particle.style.opacity = '0.9';
+        particle.style.display = 'block'; // Show particle from pool
 
         this.particles.push({
             element: particle,
@@ -392,12 +428,10 @@ class TrailController {
             console.log(`   ✨ First particle spawned for ${this.threadId} at progress ${(this.currentProgress * 100).toFixed(1)}%`);
         }
 
-        // Limit trail length
+        // Limit trail length - return oldest to pool
         if (this.particles.length > CONFIG.trailLength) {
             const old = this.particles.shift();
-            if (old.element.parentNode) {
-                old.element.parentNode.removeChild(old.element);
-            }
+            this.returnParticleToPool(old.element);
         }
     }
 
@@ -409,10 +443,8 @@ class TrailController {
             const lifeProgress = age / CONFIG.particleLifetime;
 
             if (lifeProgress >= 1) {
-                // Remove dead particles
-                if (particle.element.parentNode) {
-                    particle.element.parentNode.removeChild(particle.element);
-                }
+                // Return dead particle to pool
+                this.returnParticleToPool(particle.element);
                 return;
             }
 
