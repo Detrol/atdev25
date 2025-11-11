@@ -24,7 +24,8 @@
       "mcp__zen__challenge",
       "Bash(find:*)",
       "Bash(mkdir:*)",
-      "mcp__zen__chat"
+      "mcp__zen__chat",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

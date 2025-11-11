@@ -1,13 +1,15 @@
 {{-- FAQ Section Component - Database-driven --}}
 
-<section id="faq" class="relative py-24 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 opacity-20">
-        <div class="absolute w-96 h-96 bg-purple-300 dark:bg-purple-600 rounded-full blur-3xl top-1/4 left-1/4 animate-pulse"></div>
-        <div class="absolute w-96 h-96 bg-blue-300 dark:bg-blue-600 rounded-full blur-3xl bottom-1/4 right-1/4 animate-pulse" style="animation-delay: 1.5s;"></div>
-    </div>
+<x-animated-section
+    id="faq"
+    theme="green-teal"
+    next-theme="teal-blue"
+    pattern="circles-dots"
+>
+    {{-- Wave transition from Projects section --}}
+    <x-wave-divider color="green-teal" position="top" />
 
-    <div class="relative max-w-7xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6 py-24">
         <!-- Header -->
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4" data-lazy="fade-in">
@@ -80,6 +82,9 @@
             </a>
         </div>
     </div>
-</section>
+
+    {{-- Wave separator to Price Calculator (matches calculator gradient) --}}
+    <x-wave-divider color="purple-blue-pink" position="bottom" />
+</x-animated-section>
 
 @include('components.price-calculator')

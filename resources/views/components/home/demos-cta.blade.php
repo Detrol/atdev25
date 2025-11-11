@@ -1,14 +1,7 @@
 {{-- Interaktiva Demos CTA Component --}}
 
-<section class="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-700 overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
-        <div class="absolute w-96 h-96 bg-white/5 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style="animation-delay: 1s;"></div>
-        <div class="absolute w-64 h-64 bg-white/10 rounded-full blur-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-    </div>
-
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
+<section class="relative py-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-700 overflow-hidden z-10">
+        <div class="relative max-w-4xl mx-auto px-6 text-center">
         <div class="inline-block p-3 bg-white/10 rounded-2xl mb-6 float-gentle">
             <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
@@ -42,7 +35,9 @@
             Upptäck kraftfulla funktioner som kan revolutionera din närvaro online
         </p>
     </div>
+
+    {{-- Wave separator to FAQ (matches FAQ section) --}}
+    <div class="absolute bottom-0 left-0 right-0">
+        <x-wave-divider color="green-teal" position="bottom" />
+    </div>
 </section>
-
-
-<!-- FAQ Section -->

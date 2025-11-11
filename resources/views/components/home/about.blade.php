@@ -2,27 +2,35 @@
 @props(['profile', 'workImageMedia' => []])
 
 <!-- Om Mig Section -->
-<section id="om-mig" class="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" data-lazy>
-    <div class="max-w-6xl mx-auto px-6">
+<x-animated-section
+    id="om-mig"
+    theme="purple-blue"
+    next-theme="blue-pink"
+    pattern="geometric-lines"
+>
+    {{-- Wave transition from Hero section --}}
+    <x-wave-divider color="purple-blue" position="top" />
+
+    <div class="max-w-6xl mx-auto py-20">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <!-- Text -->
             <div class="space-y-6">
-                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 dark:from-purple-400 dark:via-blue-400 dark:to-pink-400 bg-clip-text text-transparent" data-lazy="fade-in">
+                <h2 class="about-title text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 dark:from-purple-400 dark:via-blue-400 dark:to-pink-400 bg-clip-text text-transparent">
                     Min Resa
                 </h2>
 
-                <div class="space-y-4 text-gray-700 dark:text-gray-300 text-lg leading-relaxed" data-lazy="fade-in" data-delay="100">
-                    <p>
+                <div class="space-y-4 text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                    <p class="about-paragraph">
                         Sedan jag började koda har teknologin varit min passion.
                         Genom åren har jag skapat många applikationer och sett webbutvecklingen utvecklas från enkla HTML-sidor till avancerade, AI-drivna system.
                     </p>
 
-                    <p>
+                    <p class="about-paragraph">
                         Jag började med HTML och ASP, gick sedan vidare till PHP, och från 2017 har Laravel varit mitt huvudramverk.
                         Idag arbetar jag med moderna verktyg som Alpine och Vue, och kombinerar webbutveckling med AI-teknologi för att skapa smarta lösningar.
                     </p>
 
-                    <div class="relative pl-6 border-l-4 border-purple-600 dark:border-purple-500/50 py-2">
+                    <div class="about-quote relative pl-6 border-l-4 border-purple-600 dark:border-purple-500/50 py-2">
                         <p class="text-xl font-semibold text-purple-700 dark:text-purple-300 italic">
                             "Om jag hittar ett problem kommer jag alltid att hitta ett sätt att lösa det."
                         </p>
@@ -33,7 +41,7 @@
             <!-- Foto -->
             <div>
                 @if(!empty($workImageMedia))
-                <div data-lazy="fade-in" data-delay="200">
+                <div class="about-image">
                     <img srcset="{{ $workImageMedia['srcset'] }}"
                          sizes="(max-width: 768px) 100vw, 600px"
                          src="{{ $workImageMedia['src'] }}"
@@ -45,7 +53,7 @@
                          class="rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 hover:scale-105 transition-transform duration-500">
                 </div>
                 @else
-                <div class="aspect-square bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-pink-500/20 rounded-2xl border border-gray-200 dark:border-white/10 flex items-center justify-center backdrop-blur-sm" data-lazy="fade-in" data-delay="200">
+                <div class="about-image aspect-square bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-pink-500/20 rounded-2xl border border-gray-200 dark:border-white/10 flex items-center justify-center backdrop-blur-sm">
                     <div class="text-center p-8">
                         <svg class="w-24 h-24 mx-auto mb-4 text-gray-300 dark:text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -57,4 +65,7 @@
             </div>
         </div>
     </div>
-</section>
+
+    {{-- Wave separator to How I Work (uses next section's color) --}}
+    <x-wave-divider color="blue-pink" position="bottom" />
+</x-animated-section>

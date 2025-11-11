@@ -1,5 +1,5 @@
 {{-- Certifications & Performance Badges --}}
-<div class="py-12 bg-gradient-to-b from-gray-900 to-gray-800">
+<div class="relative z-10 py-12 bg-gradient-to-b from-gray-900 to-gray-800">
     <div class="max-w-6xl mx-auto px-6">
         <div class="text-center mb-8">
             <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">

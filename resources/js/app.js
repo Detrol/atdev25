@@ -25,6 +25,25 @@ window.GA4 = GA4;
 // Import darkmode store
 import darkModeStore from './darkmode-store.js';
 
+// Import GSAP animations
+import './animations/gsap-config.js';
+import './animations/hero.js';
+import './animations/timeline.js';
+import './animations/stats.js';
+// import './animations/projects.js'; // DISABLED - conflicts with section-transitions.js
+import './animations/how-i-work.js';
+import './animations/parallax.js';
+import './animations/about.js';
+
+// Import new animation systems
+import './animations/thread-system.js';
+import './animations/section-transitions.js';
+import './animations/cursor-effects.js';
+import './animations/service-cards.js';
+// import './animations/projects-gallery.js'; // DISABLED - conflicts with section-transitions.js
+import './animations/hero-particles.js';
+import './animations/separator-animations.js';
+
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
 Alpine.plugin(persist);
@@ -435,7 +454,7 @@ class LazyLoadManager {
         // Create observers for different animation types
         this.createObserver('fade-in', this.handleFadeIn.bind(this));
         this.createObserver('slide-up', this.handleSlideUp.bind(this));
-        this.createObserver('counter', this.handleCounter.bind(this));
+        // NOTE: 'counter' observer removed - GSAP stats.js handles counters
         this.createObserver('skeleton', this.handleSkeleton.bind(this));
 
         // Observe all elements with data-lazy attribute
@@ -494,39 +513,8 @@ class LazyLoadManager {
         }, delay);
     }
 
-    handleCounter(element) {
-        const delay = parseInt(element.dataset.delay || 0);
-
-        setTimeout(() => {
-            // Make element visible
-            element.classList.remove('lazy-hidden');
-            element.classList.add('lazy-visible');
-
-            if (this.prefersReducedMotion) {
-                // Show final value immediately
-                const finalValue = parseInt(element.dataset.counterTarget || 0);
-                element.textContent = finalValue;
-                return;
-            }
-
-            const target = parseInt(element.dataset.counterTarget || 0);
-            const duration = this.isMobile ? 1000 : 2000;
-            const steps = 50;
-            const increment = target / steps;
-            const stepDuration = duration / steps;
-
-            let current = 0;
-            const counter = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    element.textContent = target;
-                    clearInterval(counter);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, stepDuration);
-        }, delay);
-    }
+    // handleCounter() REMOVED - GSAP stats.js handles all counter animations
+    // with better performance and smoother easing
 
     handleSkeleton(element) {
         const duration = this.prefersReducedMotion ? 0 : 300;
@@ -565,6 +553,195 @@ class LazyLoadManager {
         this.observers.clear();
     }
 }
+
+// Register Price Calculator component
+Alpine.data('priceCalculator', () => ({
+    description: '',
+    serviceCategory: '',
+    websiteUrl: '',
+    loading: false,
+    result: null,
+    error: null,
+    estimationId: null,
+    placeholder: 'Välj en tjänstekategori ovan för att få relevanta exempel...',
+
+    placeholders: {
+        'web_development': 'T.ex: Jag behöver en webbshop där kunder kan köpa produkter, lägga i kundvagn, betala via Stripe, och jag vill ha en admin-panel för att hantera produkter, lager och ordrar. Viktigt med mobilanpassning och SEO.',
+        'mobile_app': 'T.ex: Jag vill ha en iOS och Android-app för [beskrivning]. Appen ska ha [funktioner], integration med [API/system], push-notifikationer, och offline-funktionalitet.',
+        'bug_fixes': 'T.ex: Min webbplats/app har ett problem med [specifik funktion]. Felet uppstår när [scenario]. Jag behöver snabb åtgärd och rotorsaksanalys.',
+        'performance': 'T.ex: Min webbplats laddar långsamt (nuvarande laddningstid: X sekunder). Jag vill optimera Core Web Vitals, databasfrågor, och implementera caching för bättre prestanda.',
+        'api_integration': 'T.ex: Jag behöver integration med [Stripe/Klarna/Mailgun/etc]. API:et ska hantera [funktionalitet] och jag vill ha dokumentation och säker autentisering.',
+        'security': 'T.ex: Jag behöver säkerhetsanalys av min webbplats/app. Viktigast är [GDPR/penetrationstestning/SSL/2FA]. Vi hanterar [typ av data] och behöver [compliance-krav].',
+        'maintenance': 'T.ex: Jag behöver kontinuerligt underhåll av [webbplats/app]. Det inkluderar säkerhetsuppdateringar, övervakning, backups, och [X timmar/månad] support för ändringar.',
+        'modernization': 'T.ex: Min webbplats är byggd med [gammal teknologi] och behöver uppgraderas till [ny teknologi]. Viktigt att behålla [data/funktionalitet] och minimera driftavbrott.'
+    },
+
+    updatePlaceholder() {
+        if (this.serviceCategory && this.placeholders[this.serviceCategory]) {
+            this.placeholder = this.placeholders[this.serviceCategory];
+        } else {
+            this.placeholder = 'Välj en tjänstekategori ovan för att få relevanta exempel...';
+        }
+
+        // Clear website URL if switching to category that doesn't need it
+        if (!this.shouldShowWebsiteField()) {
+            this.websiteUrl = '';
+        }
+    },
+
+    shouldShowWebsiteField() {
+        // Show website field for categories that typically work with existing websites
+        const categoriesNeedingWebsite = [
+            'modernization',    // Modernizing existing site
+            'maintenance',      // Maintaining existing site
+            'performance',      // Optimizing existing site
+            'bug_fixes',        // Fixing existing site
+            'security',         // Auditing existing site
+            'web_development'   // Can be rebuild/redesign
+        ];
+
+        return categoriesNeedingWebsite.includes(this.serviceCategory);
+    },
+
+    websiteFieldLabel() {
+        const labels = {
+            'modernization': 'Befintlig webbplats att modernisera',
+            'maintenance': 'Webbplats att underhålla',
+            'performance': 'Webbplats att optimera',
+            'bug_fixes': 'Webbplats att fixa',
+            'security': 'Webbplats att analysera',
+            'web_development': 'Har du en befintlig webbplats?'
+        };
+
+        return labels[this.serviceCategory] || 'Befintlig webbplats';
+    },
+
+    websiteFieldDescription() {
+        const descriptions = {
+            'modernization': 'Ange URL:en så analyserar AI:n nuvarande teknologier och ger konkreta moderniseringsförslag',
+            'maintenance': 'Ange URL:en så kan AI:n analysera webbplatsen och ge bättre underhållsuppskattning',
+            'performance': 'Ange URL:en så kan AI:n identifiera prestandaflaskhalsar och optimeringsmöjligheter',
+            'bug_fixes': 'Ange URL:en där felet uppstår för bättre felsökningsanalys',
+            'security': 'Ange URL:en så kan AI:n göra en preliminär säkerhetsanalys',
+            'web_development': 'Om du vill bygga om/designa en befintlig webbplats, klistra in URL:en här'
+        };
+
+        return descriptions[this.serviceCategory] || 'Klistra in URL:en så analyserar AI:n din webbplats för en mer exakt estimering';
+    },
+
+    async estimate() {
+        if (!this.serviceCategory) {
+            this.error = 'Vänligen välj en tjänstekategori.';
+            return;
+        }
+
+        if (this.description.length < 20 || this.description.length > 2000) {
+            this.error = 'Beskrivningen måste vara mellan 20 och 2000 tecken.';
+            return;
+        }
+
+        // Get Turnstile token
+        const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+        if (!turnstileToken) {
+            this.error = 'Vänligen slutför säkerhetsverifieringen.';
+            return;
+        }
+
+        // Track calculator submit
+        if (window.GA4) {
+            window.GA4.trackCalculatorSubmit({
+                service_category: this.serviceCategory,
+                description_length: this.description.length
+            });
+        }
+
+        this.loading = true;
+        this.error = null;
+        this.result = null;
+        this.estimationId = null;
+
+        try {
+            const response = await fetch('/api/price-estimate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    description: this.description,
+                    service_category: this.serviceCategory,
+                    website_url: this.websiteUrl || null,
+                    'cf-turnstile-response': turnstileToken
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                this.result = data.estimation;
+                this.estimationId = data.estimation_id;
+
+                // Track calculator result
+                if (window.GA4 && this.result) {
+                    window.GA4.trackCalculatorResult(this.result.estimated_price);
+                }
+
+                // Scroll to results section
+                setTimeout(() => {
+                    const resultsSection = document.querySelector('#price-results');
+                    if (resultsSection) {
+                        resultsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 200); // Slight delay to allow for transition animation
+            } else {
+                this.error = data.error || 'Ett fel uppstod vid estimering.';
+            }
+
+        } catch (error) {
+            console.error('Price estimation error:', error);
+            this.error = 'Kunde inte kontakta servern. Vänligen försök igen.';
+        } finally {
+            this.loading = false;
+        }
+    },
+
+    bookConsultation() {
+        // Track CTA click
+        if (window.GA4) {
+            window.GA4.trackCalculatorCTA('contact');
+        }
+
+        // Dispatch custom event with estimation data
+        if (this.estimationId && this.result) {
+            window.dispatchEvent(new CustomEvent('estimation-ready', {
+                detail: {
+                    id: this.estimationId,
+                    data: this.result
+                }
+            }));
+        }
+
+        // Scroll to contact form
+        setTimeout(() => {
+            const contactSection = document.querySelector('#contact');
+            if (contactSection) {
+                contactSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }, 100);
+    },
+
+    formatCurrency(amount) {
+        if (!amount) return '0 kr';
+        return new Intl.NumberFormat('sv-SE').format(amount) + ' kr';
+    }
+}));
 
 // Start Alpine.js
 window.Alpine = Alpine;

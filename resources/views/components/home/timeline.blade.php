@@ -1,13 +1,15 @@
 {{-- Timeline & Stats Section Component --}}
 
-<section id="expertis" class="relative py-24 bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
-    <!-- Animated Background -->
-    <div class="absolute inset-0 opacity-30">
-        <div class="absolute w-96 h-96 bg-purple-300 dark:bg-purple-600 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
-        <div class="absolute w-96 h-96 bg-blue-300 dark:bg-blue-600 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style="animation-delay: 2s;"></div>
-    </div>
+<x-animated-section
+    id="expertis"
+    theme="pink-orange"
+    next-theme="orange-amber"
+    pattern="waves"
+>
+    {{-- Wave transition from How I Work section --}}
+    <x-wave-divider color="pink-orange" position="top" />
 
-    <div class="relative max-w-6xl mx-auto px-6">
+    <div class="max-w-6xl mx-auto px-6 py-24">
         <!-- Section Header -->
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4" data-lazy="fade-in">
@@ -19,36 +21,7 @@
         </div>
 
         <!-- Timeline Card (Featured) -->
-        <div class="mb-8"
-             data-lazy="fade-in"
-             data-delay="200"
-             x-data="{
-            progress: 0,
-            showHtml: false,
-            showPhp: false,
-            showLaravel: false,
-            showAi: false,
-            mobileCurrentStep: -1
-        }" x-intersect.once="
-            setTimeout(() => {
-                // Trigger smooth CSS animation
-                progress = 100;
-
-                // Show icons when progress bar reaches each year position (and keep them visible)
-                setTimeout(() => { showHtml = true; }, 625);
-                setTimeout(() => { showPhp = true; }, 1875);
-                setTimeout(() => { showLaravel = true; }, 3125);
-                setTimeout(() => { showAi = true; }, 4375);
-
-                // Mobile animation
-                if (window.innerWidth < 768) {
-                    setTimeout(() => { mobileCurrentStep = 0; }, 0);
-                    setTimeout(() => { mobileCurrentStep = 1; }, 1250);
-                    setTimeout(() => { mobileCurrentStep = 2; }, 2500);
-                    setTimeout(() => { mobileCurrentStep = 3; }, 3750);
-                }
-            }, 800);
-        ">
+        <div class="mb-8" data-lazy="fade-in" data-delay="200">
             <div class="relative group overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 shadow-2xl hover:shadow-purple-500/50 transition-all duration-500">
                 <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
 
@@ -70,22 +43,22 @@
                     <!-- Timeline -->
                     <div class="relative">
                         <!-- Tech Icons - Desktop -->
-                        <div class="hidden md:flex absolute -top-20 left-[12.5%] -translate-x-1/2 items-center justify-center" x-show="showHtml" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                        <div class="timeline-icon hidden md:flex absolute -top-20 left-[12.5%] -translate-x-1/2 items-center justify-center">
                             <div class="bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-orange-500 dark:border-orange-400 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="{{ asset('images/icons/html5.svg') }}" alt="HTML5" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
-                        <div class="hidden md:flex absolute -top-20 left-[37.5%] -translate-x-1/2 items-center justify-center" x-show="showPhp" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                        <div class="timeline-icon hidden md:flex absolute -top-20 left-[37.5%] -translate-x-1/2 items-center justify-center">
                             <div class="bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-purple-600 dark:border-purple-400 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="{{ asset('images/icons/php.svg') }}" alt="PHP" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
-                        <div class="hidden md:flex absolute -top-20 left-[62.5%] -translate-x-1/2 items-center justify-center" x-show="showLaravel" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                        <div class="timeline-icon hidden md:flex absolute -top-20 left-[62.5%] -translate-x-1/2 items-center justify-center">
                             <div class="bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-red-600 dark:border-red-400 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="{{ asset('images/icons/laravel.svg') }}" alt="Laravel" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
                         </div>
-                        <div class="hidden md:flex absolute -top-20 left-[87.5%] -translate-x-1/2 items-center justify-center" x-show="showAi" x-transition:enter="transition-all ease-out duration-600" x-transition:enter-start="opacity-0 scale-50 translate-y-20" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-cloak>
+                        <div class="timeline-icon hidden md:flex absolute -top-20 left-[87.5%] -translate-x-1/2 items-center justify-center">
                             <div class="bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border-2 border-amber-600 dark:border-amber-400 animate-[sway_2s_ease-in-out_infinite]">
                                 <img src="{{ asset('images/icons/anthropic.svg') }}" alt="Anthropic" width="32" height="32" class="w-8 h-8 drop-shadow-lg">
                             </div>
@@ -93,24 +66,24 @@
 
                         <!-- Progress Bar -->
                         <div class="hidden md:block h-2 bg-white/20 rounded-full overflow-hidden mb-4">
-                            <div class="h-full bg-white/90 rounded-full transition-all duration-[5000ms] ease-linear" :style="`width: ${progress}%`"></div>
+                            <div class="timeline-progress h-full bg-white/90 rounded-full w-0"></div>
                         </div>
 
                         <!-- Milestones - Desktop -->
                         <div class="hidden md:grid grid-cols-4 gap-4">
-                            <div class="text-center" data-lazy="slide-up" data-delay="300">
+                            <div class="timeline-milestone text-center">
                                 <div class="text-2xl font-bold text-white mb-1">2001</div>
                                 <div class="text-white/80 text-sm">HTML & ASP</div>
                             </div>
-                            <div class="text-center" data-lazy="slide-up" data-delay="500">
+                            <div class="timeline-milestone text-center">
                                 <div class="text-2xl font-bold text-white mb-1">2004</div>
                                 <div class="text-white/80 text-sm">PHP & MySQL</div>
                             </div>
-                            <div class="text-center" data-lazy="slide-up" data-delay="700">
+                            <div class="timeline-milestone text-center">
                                 <div class="text-2xl font-bold text-white mb-1">2014</div>
                                 <div class="text-white/80 text-sm">Laravel</div>
                             </div>
-                            <div class="text-center" data-lazy="slide-up" data-delay="900">
+                            <div class="timeline-milestone text-center">
                                 <div class="text-2xl font-bold text-white mb-1">2023</div>
                                 <div class="text-white/80 text-sm">AI Integration</div>
                             </div>
@@ -124,13 +97,10 @@
                                 ['year' => 2014, 'tech' => 'Laravel', 'step' => 2, 'color' => 'red', 'icon' => 'laravel'],
                                 ['year' => 2023, 'tech' => 'AI Integration', 'step' => 3, 'color' => 'amber', 'icon' => 'anthropic']
                             ] as $milestone)
-                            <div class="relative rounded-xl p-4 transition-all duration-400"
-                                 :class="mobileCurrentStep >= {{ $milestone['step'] }} ? 'bg-white/30 dark:bg-white/10 ring-2 ring-{{ $milestone['color'] }}-400 shadow-lg shadow-{{ $milestone['color'] }}-500/50' : 'bg-white/10 dark:bg-white/5'"
-                                 data-lazy="slide-up"
-                                 data-delay="{{ 300 + ($milestone['step'] * 200) }}">
-                                <div class="text-2xl font-bold text-white mb-1 transition-all" :class="mobileCurrentStep >= {{ $milestone['step'] }} ? 'opacity-100 scale-110' : 'opacity-80 scale-100'">{{ $milestone['year'] }}</div>
-                                <div class="text-white/80 text-sm transition-opacity" :class="mobileCurrentStep >= {{ $milestone['step'] }} ? 'opacity-100' : 'opacity-60'">{{ $milestone['tech'] }}</div>
-                                <div class="absolute -top-3 -right-3" x-show="mobileCurrentStep >= {{ $milestone['step'] }}" x-transition:enter="transition-all ease-out duration-500" x-transition:enter-start="opacity-0 scale-0 rotate-45" x-transition:enter-end="opacity-100 scale-100 rotate-0" x-cloak>
+                            <div class="mobile-milestone relative rounded-xl p-4 transition-all duration-400 bg-white/10 dark:bg-white/5">
+                                <div class="text-2xl font-bold text-white mb-1">{{ $milestone['year'] }}</div>
+                                <div class="text-white/80 text-sm">{{ $milestone['tech'] }}</div>
+                                <div class="mobile-milestone-icon absolute -top-3 -right-3">
                                     <div class="bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm p-2 rounded-xl shadow-2xl border-2 border-{{ $milestone['color'] }}-500 dark:border-{{ $milestone['color'] }}-400 animate-[sway_1.8s_ease-in-out_infinite]">
                                         <img src="{{ asset('images/icons/' . $milestone['icon'] . '.svg') }}" alt="{{ $milestone['tech'] }}" width="40" height="40" class="w-10 h-10 drop-shadow-lg">
                                     </div>
@@ -146,4 +116,7 @@
         <!-- Stats Grid -->
         @include('components.home.stats')
     </div>
-</section>
+
+    {{-- Wave transition to Services section (uses Services' theme color) --}}
+    <x-wave-divider color="orange-amber" position="bottom" />
+</x-animated-section>

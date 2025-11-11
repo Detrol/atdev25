@@ -1,5 +1,5 @@
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="stats-grid grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <!-- Laravel Expertise -->
             <div class="group relative overflow-hidden rounded-2xl p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20" data-lazy="slide-up" data-delay="100">
@@ -11,7 +11,7 @@
                         </svg>
                     </div>
                     <div class="text-5xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent mb-2">
-                        <span data-lazy="counter" data-counter-target="8">0</span>+
+                        <span data-counter-target="8">0</span>+
                     </div>
                     <div class="text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold mb-2">År med Laravel</div>
                     <p class="text-sm text-gray-500 dark:text-gray-500">Huvudramverk sedan 2017</p>
@@ -31,7 +31,7 @@
                         <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
                     </div>
                     <div class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent mb-2">
-                        &lt; <span data-lazy="counter" data-counter-target="24">0</span>h
+                        &lt; <span data-counter-target="24">0</span>h
                     </div>
                     <div class="text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold mb-2">Responstid</div>
                     <p class="text-sm text-gray-500 dark:text-gray-500">Snabb kommunikation garanterad</p>
@@ -107,7 +107,5 @@
             </div>
 
         </div>
-    </div>
-</section>
 
 
