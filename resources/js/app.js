@@ -639,9 +639,21 @@ Alpine.data('priceCalculator', () => ({
             return;
         }
 
-        // Get Turnstile token
-        const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
-        if (!turnstileToken) {
+        // Generate reCAPTCHA token
+        let recaptchaToken = null;
+
+        if (typeof grecaptcha !== 'undefined') {
+            try {
+                const siteKey = document.querySelector('script[src*="recaptcha"]')?.src.match(/render=([^&]+)/)?.[1];
+                if (siteKey) {
+                    recaptchaToken = await grecaptcha.execute(siteKey, { action: 'price_estimate' });
+                }
+            } catch (error) {
+                console.error('reCAPTCHA error:', error);
+            }
+        }
+
+        if (!recaptchaToken) {
             this.error = 'Vänligen slutför säkerhetsverifieringen.';
             return;
         }
@@ -671,7 +683,7 @@ Alpine.data('priceCalculator', () => ({
                     description: this.description,
                     service_category: this.serviceCategory,
                     website_url: this.websiteUrl || null,
-                    'cf-turnstile-response': turnstileToken
+                    'g-recaptcha-response': recaptchaToken
                 })
             });
 
