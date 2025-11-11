@@ -718,20 +718,16 @@ export function initThreadSystem() {
     const animator = new AnimationController(threads, svgBuilder.svg);
     animator.animate();
 
+    // Refresh ScrollTriggers on resize
     let resizeTimeout;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            if (window.innerWidth < 768) {
-                threadContainer.style.display = 'none';
-            } else {
-                threadContainer.style.display = '';
-                ScrollTrigger.getAll().forEach(trigger => {
-                    if (trigger.vars.trigger === 'body') {
-                        trigger.refresh();
-                    }
-                });
-            }
+            ScrollTrigger.getAll().forEach(trigger => {
+                if (trigger.vars.trigger === 'body') {
+                    trigger.refresh();
+                }
+            });
         }, 250);
     });
 
