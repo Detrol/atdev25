@@ -24,14 +24,16 @@ ScrollTrigger.defaults({
     markers: false // Set to true for debugging (shows trigger points)
 });
 
-// Disable animations on mobile devices and respect reduced motion preference
+// Detect mobile devices and reduced motion preference (for per-animation checks)
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const shouldDisableAnimations = isMobile || prefersReducedMotion;
 
-if (shouldDisableAnimations) {
-    gsap.globalTimeline.timeScale(100); // Speed up to near-instant (effectively disables)
-}
+// Note: Individual animation files handle motion checks appropriately:
+// - Continuous animations (floating particles) are disabled completely
+// - Parallax effects are disabled (can cause motion sickness)
+// - Entrance animations run normally (provide visual feedback)
+// - Scroll-based animations run normally (user-controlled motion)
 
 // Debug helper (only in local)
 const isProduction = window.location.hostname === 'atdev.me';

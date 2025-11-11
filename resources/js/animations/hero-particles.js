@@ -9,6 +9,15 @@ import { gsap } from './gsap-config.js';
 const isProduction = window.location.hostname === 'atdev.me';
 
 export function initHeroParticles() {
+    // Skip floating particles on mobile and with reduced motion (continuous animation)
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isMobile || prefersReducedMotion) {
+        if (!isProduction) console.log('✋ Hero Particles disabled (mobile or reduced motion)');
+        return;
+    }
+
     if (!isProduction) console.log('✨ Initializing Hero Particles');
 
     const hero = document.querySelector('.hero-container');
