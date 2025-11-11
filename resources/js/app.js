@@ -650,12 +650,13 @@ Alpine.data('priceCalculator', () => ({
                 await new Promise((resolve) => {
                     grecaptcha.ready(async () => {
                         try {
-                            const siteKey = document.querySelector('script[src*="recaptcha"]')?.src.match(/render=([^&]+)/)?.[1];
+                            // Get site key from meta tag
+                            const siteKey = document.querySelector('meta[name="recaptcha-site-key"]')?.content;
                             if (siteKey) {
                                 recaptchaToken = await grecaptcha.execute(siteKey, { action: 'price_estimate' });
                                 console.log('reCAPTCHA token generated successfully');
                             } else {
-                                console.error('reCAPTCHA site key not found');
+                                console.error('reCAPTCHA site key not found in meta tag');
                             }
                             resolve();
                         } catch (error) {
@@ -987,10 +988,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Execute reCAPTCHA and get token
             grecaptcha.ready(function() {
-                const siteKey = document.querySelector('script[src*="recaptcha"]')?.src.match(/render=([^&]+)/)?.[1];
+                // Get site key from meta tag
+                const siteKey = document.querySelector('meta[name="recaptcha-site-key"]')?.content;
 
                 if (!siteKey) {
-                    console.error('reCAPTCHA site key not found');
+                    console.error('reCAPTCHA site key not found in meta tag');
                     form.submit();
                     return;
                 }

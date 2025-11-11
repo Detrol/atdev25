@@ -38,6 +38,11 @@
     <!-- CSRF Token for AJAX requests -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- reCAPTCHA Site Key -->
+    @if(config('recaptcha.enabled'))
+    <meta name="recaptcha-site-key" content="{{ config('recaptcha.site_key') }}">
+    @endif
+
     @vite(['resources/css/app.css', 'resources/css/chat-widget.css', 'resources/js/app.js'])
 
     <!-- Google Analytics 4 (GDPR-compliant) -->
