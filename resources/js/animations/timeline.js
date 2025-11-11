@@ -10,6 +10,8 @@
 
 import { gsap, ScrollTrigger } from './gsap-config.js';
 
+const isProduction = window.location.hostname === 'atdev.me';
+
 export function initTimelineAnimations() {
     const timelineSection = document.querySelector('#expertis');
     if (!timelineSection) return;
@@ -66,7 +68,7 @@ function animateTimeline() {
         const milestones = document.querySelectorAll('.mobile-milestone');
         const icons = document.querySelectorAll('.mobile-milestone-icon');
 
-        console.log('📱 Mobile timeline found:', milestones.length, 'milestones,', icons.length, 'icons');
+        if (!isProduction) console.log('📱 Mobile timeline found:', milestones.length, 'milestones,', icons.length, 'icons');
 
         // Set initial visible state for all elements
         gsap.set(milestones, { opacity: 1, scale: 1, y: 0 });

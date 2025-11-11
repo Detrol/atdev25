@@ -18,12 +18,26 @@
         </div>
 
         @if(session('success'))
-        <div class="mb-8 p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl border-l-4 border-green-500" x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)">
+        <div id="success-message" class="mb-8 p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl border-l-4 border-green-500 animate-[fadeIn_0.5s_ease-out]">
             <div class="flex items-center gap-3 text-green-600 dark:text-green-400">
-                <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg class="w-6 h-6 flex-shrink-0 animate-[bounce_1s_ease-in-out]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <p class="font-medium">{{ session('success') }}</p>
             </div>
         </div>
+        <script>
+            // Scroll to success message and auto-hide after 8 seconds
+            document.addEventListener('DOMContentLoaded', () => {
+                const successMsg = document.getElementById('success-message');
+                if (successMsg) {
+                    successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => {
+                        successMsg.style.transition = 'opacity 0.5s ease-out';
+                        successMsg.style.opacity = '0';
+                        setTimeout(() => successMsg.remove(), 500);
+                    }, 8000);
+                }
+            });
+        </script>
         @endif
 
         @if($errors->any())
