@@ -14,7 +14,7 @@ const isProduction = window.location.hostname === 'atdev.me';
 // ==================== CONFIGURATION ====================
 
 const CONFIG = {
-    threadCount: { min: 4, max: 6 },
+    threadCount: { min: 2, max: 3 },
     strokeWidth: { min: 0.5, max: 1.2 },
     opacity: { min: 0.3, max: 0.7 },
 
@@ -479,10 +479,11 @@ class SVGBuilder {
         // Strong glow filter (for comets)
         const strongGlow = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
         strongGlow.setAttribute('id', 'strongGlow');
-        strongGlow.setAttribute('x', '-200%');
-        strongGlow.setAttribute('y', '-200%');
-        strongGlow.setAttribute('width', '500%');
-        strongGlow.setAttribute('height', '500%');
+        strongGlow.setAttribute('x', '-300%');
+        strongGlow.setAttribute('y', '-300%');
+        strongGlow.setAttribute('width', '700%');
+        strongGlow.setAttribute('height', '700%');
+        strongGlow.setAttribute('filterUnits', 'objectBoundingBox');
 
         const feGaussianBlur2 = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
         feGaussianBlur2.setAttribute('stdDeviation', '5');
@@ -713,10 +714,6 @@ export function initThreadSystem() {
     });
 
     document.body.appendChild(threadContainer);
-
-    if (window.innerWidth < 768) {
-        threadContainer.style.display = 'none';
-    }
 
     const animator = new AnimationController(threads, svgBuilder.svg);
     animator.animate();

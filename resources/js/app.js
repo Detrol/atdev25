@@ -37,6 +37,7 @@ import './animations/about.js';
 
 // Import new animation systems
 import './animations/thread-system.js';
+import './animations/space-objects.js';
 import './animations/section-transitions.js';
 import './animations/service-cards.js';
 // import './animations/projects-gallery.js'; // DISABLED - conflicts with section-transitions.js
