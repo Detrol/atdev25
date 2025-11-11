@@ -26,7 +26,7 @@
                     </p>
 
                     <p class="about-paragraph">
-                        Jag började med HTML och ASP, gick sedan vidare till PHP, och från 2017 har Laravel varit mitt huvudramverk.
+                        Jag började med HTML och ASP, gick sedan vidare till PHP, och från 2014 har Laravel varit mitt huvudramverk.
                         Idag arbetar jag med moderna verktyg som Alpine och Vue, och kombinerar webbutveckling med AI-teknologi för att skapa smarta lösningar.
                     </p>
                 </div>

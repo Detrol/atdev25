@@ -14,7 +14,7 @@
                         <span data-counter-target="8">0</span>+
                     </div>
                     <div class="text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 font-semibold mb-2">År med Laravel</div>
-                    <p class="text-sm text-gray-500 dark:text-gray-500">Huvudramverk sedan 2017</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-500">Huvudramverk sedan 2014</p>
                 </div>
             </div>
 
