@@ -18,6 +18,10 @@ gsap.defaults({
     duration: 0.8
 });
 
+// ScrollTrigger configuration for smooth mobile scrolling
+// normalizeScroll fixes Android touch scrolling issues where animations "jump"
+ScrollTrigger.normalizeScroll(true);
+
 // ScrollTrigger defaults
 ScrollTrigger.defaults({
     toggleActions: 'play none none none', // Play animation once on enter
