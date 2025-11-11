@@ -31,7 +31,7 @@ function randomInt(min, max) {
 // ==================== STAR FACTORY ====================
 
 class StarFactory {
-    static create(svg, dividerRect, color, index) {
+    static create(svg, dividerElement, color, index) {
         const size = random(CONFIG.starSize.min, CONFIG.starSize.max);
 
         // Position within divider bounds (viewBox 0-1200, height 0-120)
@@ -61,6 +61,18 @@ class StarFactory {
             delay: random(0, 3)
         });
 
+        // Parallax effect on scroll (subtle vertical movement)
+        gsap.to(group, {
+            y: random(5, 15), // Stars move slower for depth
+            ease: 'none',
+            scrollTrigger: {
+                trigger: dividerElement,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1
+            }
+        });
+
         if (!isProduction && index === 0) {
             console.log(`  ⭐ Divider star created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
         }
@@ -87,7 +99,7 @@ class StarFactory {
 // ==================== PARTICLE FACTORY ====================
 
 class ParticleFactory {
-    static create(svg, dividerRect, color, index) {
+    static create(svg, dividerElement, color, index) {
         const size = random(CONFIG.particleSize.min, CONFIG.particleSize.max);
 
         // Position within divider bounds
@@ -132,6 +144,20 @@ class ParticleFactory {
             delay: random(0, 2)
         });
 
+        // Parallax effect on scroll (faster than stars for depth layering)
+        gsap.to(particle, {
+            attr: {
+                cy: `+=${random(20, 35)}` // Particles move faster (closer to viewer)
+            },
+            ease: 'none',
+            scrollTrigger: {
+                trigger: dividerElement,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.5 // Faster scrub for more responsive feel
+            }
+        });
+
         if (!isProduction && index === 0) {
             console.log(`  ✨ Divider particle created at (${x.toFixed(0)}, ${y.toFixed(0)})`);
         }
@@ -169,19 +195,16 @@ class DividerEffectsSystem {
         // Extract color from divider
         const color = this.extractColor();
 
-        // Get divider dimensions
-        const rect = this.divider.getBoundingClientRect();
-
         // Create stars
         const starCount = randomInt(CONFIG.stars.min, CONFIG.stars.max);
         for (let i = 0; i < starCount; i++) {
-            StarFactory.create(this.svg, rect, color, i);
+            StarFactory.create(this.svg, this.divider, color, i);
         }
 
         // Create particles
         const particleCount = randomInt(CONFIG.particles.min, CONFIG.particles.max);
         for (let i = 0; i < particleCount; i++) {
-            ParticleFactory.create(this.svg, rect, color, i);
+            ParticleFactory.create(this.svg, this.divider, color, i);
         }
 
         if (!isProduction) {
