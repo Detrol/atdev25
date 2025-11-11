@@ -9,86 +9,54 @@
 
 export default function darkModeStore() {
     return {
-        // Nuvarande läge: 'light', 'dark', eller 'system'
-        mode: localStorage.getItem('darkMode') || 'system',
+        // FORCED DARK MODE: Alltid mörkt läge (space theme kräver det)
+        mode: 'dark',
 
-        // Media query för system-preferens
+        // Media query för system-preferens (behålls för bakåtkompatibilitet)
         mediaQuery: window.matchMedia('(prefers-color-scheme: dark)'),
 
         /**
          * Initialisera store
          */
         init() {
-            // Lyssna på ändringar i system-preferens
-            this.mediaQuery.addEventListener('change', () => {
-                if (this.mode === 'system') {
-                    this.applyTheme();
-                }
-            });
-
-            // Applicera initialt tema
+            // Applicera mörkt tema direkt
             this.applyTheme();
         },
 
         /**
-         * Hämta det effektiva läget (resolve 'system' till light/dark)
-         * @returns {string} 'light' eller 'dark'
+         * Hämta det effektiva läget (alltid 'dark')
+         * @returns {string} 'dark'
          */
         getEffectiveMode() {
-            if (this.mode === 'system') {
-                return this.mediaQuery.matches ? 'dark' : 'light';
-            }
-            return this.mode;
+            return 'dark';
         },
 
         /**
-         * Sätt nytt läge
-         * @param {string} newMode - 'light', 'dark', eller 'system'
+         * Sätt nytt läge (disabled - alltid dark)
+         * @param {string} newMode - Ignoreras
          */
         setMode(newMode) {
-            if (!['light', 'dark', 'system'].includes(newMode)) {
-                console.warn(`Invalid darkmode mode: ${newMode}`);
-                return;
-            }
-
-            const oldMode = this.mode;
-            this.mode = newMode;
-
-            // Spara till localStorage
-            localStorage.setItem('darkMode', newMode);
-
-            // Applicera tema
-            this.applyTheme();
-
-            // GA4 tracking om tillgängligt
-            if (window.GA4 && typeof window.GA4.trackDarkMode === 'function') {
-                window.GA4.trackDarkMode(this.getEffectiveMode() === 'dark', newMode);
-            }
-
-            // Logga i dev-mode
+            // Dark mode is forced - do nothing
             if (import.meta.env.DEV) {
-                console.log(`Darkmode changed: ${oldMode} → ${newMode} (effective: ${this.getEffectiveMode()})`);
+                console.log('Dark mode is forced, ignoring setMode() call');
             }
         },
 
         /**
-         * Applicera tema på document
+         * Applicera tema på document (alltid dark)
          */
         applyTheme() {
-            const effectiveMode = this.getEffectiveMode();
-            const isDark = effectiveMode === 'dark';
-
-            document.documentElement.classList.toggle('dark', isDark);
+            document.documentElement.classList.add('dark');
         },
 
         /**
-         * Växla genom lägena: light → dark → system → light
+         * Toggle (disabled - dark mode är alltid aktiverat)
          */
         toggle() {
-            const modes = ['light', 'dark', 'system'];
-            const currentIndex = modes.indexOf(this.mode);
-            const nextMode = modes[(currentIndex + 1) % modes.length];
-            this.setMode(nextMode);
+            // Dark mode is forced - do nothing
+            if (import.meta.env.DEV) {
+                console.log('Dark mode is forced, toggle disabled');
+            }
         },
 
         /**

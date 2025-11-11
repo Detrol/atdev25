@@ -43,6 +43,7 @@ import './animations/service-cards.js';
 // import './animations/projects-gallery.js'; // DISABLED - conflicts with section-transitions.js
 import './animations/hero-particles.js';
 import './animations/separator-animations.js';
+import './animations/divider-effects.js';
 
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
