@@ -12,8 +12,8 @@ const isProduction = window.location.hostname === 'atdev.me';
 // ==================== CONFIG ====================
 
 const CONFIG = {
-    stars: { min: 3, max: 5 },        // Per divider
-    particles: { min: 4, max: 6 },    // Per divider
+    stars: { min: 2, max: 3 },        // Per divider (reduced from 3-5)
+    particles: { min: 3, max: 4 },    // Per divider (reduced from 4-6)
     starSize: { min: 0.3, max: 0.8 },
     particleSize: { min: 0.15, max: 0.4 }
 };
@@ -49,6 +49,7 @@ class StarFactory {
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.setAttribute('transform', `translate(${x}, ${y})`);
+        group.style.willChange = 'transform, opacity'; // GPU acceleration hint
         group.appendChild(star);
         svg.appendChild(group);
 
@@ -115,8 +116,9 @@ class ParticleFactory {
         particle.setAttribute('opacity', '0.4');
         particle.classList.add('divider-particle');
 
-        // Add soft glow
+        // Add soft glow and GPU acceleration hint
         particle.style.filter = 'url(#dividerGlow)';
+        particle.style.willChange = 'transform, opacity'; // GPU acceleration
 
         svg.appendChild(particle);
 

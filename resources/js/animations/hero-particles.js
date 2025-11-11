@@ -59,6 +59,7 @@ export function initHeroParticles() {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            will-change: transform, opacity;
         `;
 
         particleContainer.appendChild(particle);

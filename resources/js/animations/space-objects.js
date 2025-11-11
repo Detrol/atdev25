@@ -57,6 +57,7 @@ class AsteroidFactory {
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.setAttribute('transform', `translate(${x}, ${y})`);
+        group.style.willChange = 'transform'; // GPU acceleration
         group.appendChild(asteroid);
         svg.appendChild(group);
 
@@ -111,6 +112,7 @@ class StarFactory {
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.setAttribute('transform', `translate(${x}, ${y})`);
+        star.style.willChange = 'opacity'; // GPU acceleration for twinkle
         group.appendChild(star);
         svg.appendChild(group);
 
@@ -164,6 +166,7 @@ class PlanetFactory {
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.setAttribute('transform', `translate(${x}, ${y})`);
+        group.style.willChange = 'transform'; // GPU acceleration for drift
         group.appendChild(planet);
 
         // Maybe add ring
@@ -246,6 +249,7 @@ class NebulaFactory {
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.setAttribute('transform', `translate(${x}, ${y})`);
+        group.style.willChange = 'transform'; // GPU acceleration for drift
         group.appendChild(nebula);
         svg.appendChild(group);
 

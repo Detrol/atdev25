@@ -35,7 +35,7 @@
                         id="service-category"
                         x-model="serviceCategory"
                         @change="updatePlaceholder(); if(window.GA4) GA4.trackCalculatorService(serviceCategory)"
-                        class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 transition-all text-gray-900 dark:text-white mb-4"
+                        class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 rounded-2xl border-2 border-gray-300 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-500/20 transition-all text-gray-900 dark:text-white"
                     >
                         <option value="">-- Välj en tjänst --</option>
                         <option value="web_development">Webbutveckling från Grunden</option>

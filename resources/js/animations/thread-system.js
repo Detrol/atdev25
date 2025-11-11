@@ -257,6 +257,7 @@ class TrailController {
         this.path = path;
         this.pathLength = path.getTotalLength();
         this.currentProgress = 0;
+        this.lastUpdateFrame = 0; // RAF throttling
 
         this.initParticleGroup();
     }
@@ -274,6 +275,13 @@ class TrailController {
 
     update(progress, color) {
         this.color = color;
+
+        // RAF Throttling: Update every 2nd frame (30fps instead of 60fps)
+        const currentFrame = Math.floor(Date.now() / 16.67); // ~60fps frame counter
+        if (currentFrame - this.lastUpdateFrame < 2) {
+            return; // Skip this frame
+        }
+        this.lastUpdateFrame = currentFrame;
 
         // Calculate progress delta
         const progressDelta = Math.abs(progress - this.currentProgress);
@@ -361,11 +369,14 @@ class TrailController {
         const particleX = currentPoint.x + offsetX;
         const particleY = currentPoint.y + offsetY;
 
-        particle.setAttribute('cx', particleX);
-        particle.setAttribute('cy', particleY);
+        // Use transform instead of cx/cy for better performance
+        particle.setAttribute('cx', 0);
+        particle.setAttribute('cy', 0);
         particle.setAttribute('r', size);
         particle.setAttribute('fill', this.color);
         particle.setAttribute('opacity', '0.9'); // Slightly transparent
+        particle.style.transform = `translate(${particleX}px, ${particleY}px)`;
+        particle.style.willChange = 'transform, opacity'; // GPU hint
         particle.style.filter = 'url(#glow)';
 
         this.particleGroup.appendChild(particle);
@@ -408,10 +419,10 @@ class TrailController {
             // Fade out faster and shrink more aggressively (fire-like)
             const opacity = 0.9 * (1 - lifeProgress * lifeProgress); // Quadratic fade
             const scale = 1 - (lifeProgress * 0.7); // Shrink to 30%
-            const newSize = particle.initialSize * scale;
 
-            particle.element.setAttribute('opacity', opacity);
-            particle.element.setAttribute('r', newSize);
+            // Use style for opacity (faster than setAttribute)
+            particle.element.style.opacity = opacity;
+            particle.element.setAttribute('r', particle.initialSize * scale);
         });
 
         // Clean up dead particles from array
