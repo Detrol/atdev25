@@ -4,7 +4,6 @@
  * Features:
  * - Title reveal with gradient shimmer
  * - Staggered text paragraphs
- * - Quote highlight with glow
  * - Image reveal with subtle tilt
  * - Parallax on image
  */
@@ -54,23 +53,6 @@ function animateAboutContent() {
             stagger: 0.2,
             duration: 0.8
         }, '-=0.5')
-        // Quote special entrance with glow effect
-        .from('.about-quote', {
-            x: -30,
-            opacity: 0,
-            scale: 0.98,
-            duration: 0.8,
-            onComplete: () => {
-                // Add subtle pulse to quote
-                gsap.to('.about-quote', {
-                    scale: 1.02,
-                    duration: 2,
-                    repeat: -1,
-                    yoyo: true,
-                    ease: 'sine.inOut'
-                });
-            }
-        }, '-=0.4')
         // Image reveals from right with tilt
         .from('.about-image', {
             x: 60,

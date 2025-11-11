@@ -29,12 +29,6 @@
                         Jag började med HTML och ASP, gick sedan vidare till PHP, och från 2017 har Laravel varit mitt huvudramverk.
                         Idag arbetar jag med moderna verktyg som Alpine och Vue, och kombinerar webbutveckling med AI-teknologi för att skapa smarta lösningar.
                     </p>
-
-                    <div class="about-quote relative pl-6 border-l-4 border-purple-600 dark:border-purple-500/50 py-2">
-                        <p class="text-xl font-semibold text-purple-700 dark:text-purple-300 italic">
-                            "Om jag hittar ett problem kommer jag alltid att hitta ett sätt att lösa det."
-                        </p>
-                    </div>
                 </div>
             </div>
 
