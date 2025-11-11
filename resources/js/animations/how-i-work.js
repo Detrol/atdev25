@@ -11,11 +11,15 @@
  * - Parallax scrolling
  */
 
-import { gsap, ScrollTrigger } from './gsap-config.js';
+import { gsap, ScrollTrigger, shouldDisableAnimations } from './gsap-config.js';
 
 export function initHowIWorkAnimations() {
     const howIWorkSection = document.querySelector('#hur-jag-jobbar');
-    if (!howIWorkSection) return;
+    if (!howIWorkSection) {
+        console.log('⚠️ How I Work section not found');
+        return;
+    }
+    console.log('🎯 Initializing How I Work animations');
 
     // === SET INITIAL STATES (BEFORE ScrollTrigger) ===
     gsap.set('.hiw-title', { y: -30, opacity: 0, scale: 0.95 });
@@ -171,6 +175,16 @@ function animateServices() {
  * Parallax effects for cards
  */
 function initParallaxEffects() {
+    // Skip parallax effects if animations are disabled
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    console.log('🔍 Parallax check - Mobile:', isMobile, 'Reduced motion:', prefersReducedMotion);
+    if (isMobile || prefersReducedMotion) {
+        console.log('✋ Parallax effects disabled');
+        return;
+    }
+    console.log('✅ Parallax effects enabled');
+
     // Values cards parallax
     const valueCards = document.querySelectorAll('.value-card');
     valueCards.forEach((card, index) => {

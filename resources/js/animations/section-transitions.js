@@ -53,6 +53,10 @@ export function initSectionTransitions() {
                 initFAQEntrance(section, content);
                 break;
 
+            case 'price-calculator': // Price Calculator
+                initPriceCalculatorEntrance(section, content);
+                break;
+
             case 'contact': // Contact
                 initContactEntrance(section, content);
                 break;
@@ -236,6 +240,24 @@ function initFAQEntrance(section, content) {
 }
 
 /**
+ * Price Calculator - Slide up with grid assembly
+ */
+function initPriceCalculatorEntrance(section, content) {
+    gsap.from(content, {
+        y: 60,
+        opacity: 0,
+        scale: 0.95,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: section,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse'
+        }
+    });
+}
+
+/**
  * Contact - Door swing open
  */
 function initContactEntrance(section, content) {
@@ -316,6 +338,7 @@ function getThemeColors(theme) {
         'orange-amber': { primary: '#FF8C00', secondary: '#FFBF00', accent: '#FFD700' },
         'amber-green': { primary: '#FFBF00', secondary: '#32CD32', accent: '#FFD700' },
         'green-teal': { primary: '#2E8B57', secondary: '#20B2AA', accent: '#3CB371' },
+        'purple-pink': { primary: '#8B5CF6', secondary: '#EC4899', accent: '#A78BFA' },
         'teal-blue': { primary: '#20B2AA', secondary: '#4169E1', accent: '#00CED1' }
     };
 

@@ -20,6 +20,7 @@ $colors = [
     'orange-amber' => ['primary' => '#FF8C00', 'secondary' => '#FFBF00'],
     'amber-green' => ['primary' => '#FFBF00', 'secondary' => '#32CD32'],
     'green-teal' => ['primary' => '#2E8B57', 'secondary' => '#20B2AA'],
+    'purple-pink' => ['primary' => '#8B5CF6', 'secondary' => '#EC4899'],
     'teal-blue' => ['primary' => '#20B2AA', 'secondary' => '#4169E1'],
     // Blended transition colors (for smoother section transitions)
     'blue-pink-orange' => ['primary' => '#B85AC9', 'secondary' => '#FF7F97'], // How I Work → Timeline

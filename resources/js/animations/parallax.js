@@ -12,6 +12,15 @@ import { gsap, ScrollTrigger } from './gsap-config.js';
 const isProduction = window.location.hostname === 'atdev.me';
 
 export function initGlobalParallax() {
+    // Skip all parallax effects if animations are disabled
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isMobile || prefersReducedMotion) {
+        if (!isProduction) console.log('✋ Global Parallax Effects disabled (mobile or reduced motion)');
+        return;
+    }
+
     if (!isProduction) console.log('🎨 Initializing Global Parallax Effects');
 
     // === PATTERN BACKGROUNDS (Geometric shapes in sections) ===

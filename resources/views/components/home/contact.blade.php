@@ -1,7 +1,15 @@
 {{-- Contact Section Component --}}
 
-<section id="contact" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden" x-data="{ viewed: false }" x-intersect="viewed = true; if(window.GA4) GA4.trackContactView()">
-    <div class="relative max-w-4xl mx-auto px-6">
+<x-animated-section
+    id="contact"
+    theme="teal-blue"
+    next-theme="dark-gray"
+    pattern="waves"
+>
+    {{-- Wave transition from Price Calculator or Audit CTA --}}
+    <x-wave-divider color="teal-blue" position="top" />
+
+    <div class="max-w-4xl mx-auto px-6" x-data="{ viewed: false }" x-intersect="viewed = true; if(window.GA4) GA4.trackContactView()">
         <div class="relative text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">
                 Låt Oss Skapa Något Fantastiskt
@@ -298,5 +306,7 @@
             </form>
         </div>
     </div>
-</section>
 
+    {{-- Wave separator to Footer --}}
+    <x-wave-divider color="dark-gray" position="bottom" />
+</x-animated-section>

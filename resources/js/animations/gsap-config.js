@@ -51,4 +51,4 @@ window.ScrollTrigger = ScrollTrigger;
 window.MotionPathPlugin = MotionPathPlugin;
 
 // Export for use in other animation modules
-export { gsap, ScrollTrigger, MotionPathPlugin };
+export { gsap, ScrollTrigger, MotionPathPlugin, shouldDisableAnimations };

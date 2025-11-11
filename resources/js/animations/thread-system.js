@@ -42,7 +42,7 @@ export function initThreadSystem() {
             max-width: 1400px;
             height: 100vh;
             pointer-events: none;
-            z-index: 0;
+            z-index: 1;
             overflow: visible;
         `;
 

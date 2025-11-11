@@ -1,11 +1,13 @@
-<section id="price-calculator" class="relative py-24 bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute w-96 h-96 bg-purple-400/10 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
-        <div class="absolute w-96 h-96 bg-blue-400/10 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" style="animation-delay: 1s;"></div>
-    </div>
+<x-animated-section
+    id="price-calculator"
+    theme="purple-pink"
+    next-theme="teal-blue"
+    pattern="polygons-grid"
+>
+    {{-- Wave transition from FAQ section --}}
+    <x-wave-divider color="purple-blue-pink" position="top" />
 
-    <div class="relative max-w-4xl mx-auto px-6">
+    <div class="max-w-4xl mx-auto px-6">
         <!-- Header -->
         <div class="text-center mb-12" x-data="{ visible: false }" x-intersect="visible = true; if(window.GA4) GA4.trackCalculatorView()">
             <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg mb-4" x-show="visible" x-transition>
@@ -333,7 +335,10 @@
 
         </div>
     </div>
-</section>
+
+    {{-- Wave separator to Contact section --}}
+    <x-wave-divider color="teal-blue" position="bottom" />
+</x-animated-section>
 
 <script>
 function priceCalculator() {
