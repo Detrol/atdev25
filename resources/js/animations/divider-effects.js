@@ -12,10 +12,10 @@ const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIG ====================
 
-// Phase 3 optimization: Reduce counts on mobile for better performance
+// Phase 3 optimization: Heavily reduce particles on mobile for better performance
 const CONFIG = {
     stars: { min: isMobile ? 1 : 2, max: isMobile ? 2 : 3 },
-    particles: { min: isMobile ? 2 : 3, max: isMobile ? 3 : 4 },
+    particles: { min: isMobile ? 1 : 3, max: isMobile ? 1 : 4 }, // Only 1 particle per divider on mobile
     starSize: { min: 0.3, max: 0.8 },
     particleSize: { min: 0.15, max: 0.4 }
 };
@@ -121,26 +121,31 @@ class ParticleFactory {
         particle.setAttribute('opacity', '0.4');
         particle.classList.add('divider-particle');
 
-        // Add soft glow and GPU acceleration hint
-        particle.style.filter = 'url(#dividerGlow)';
+        // Add soft glow on desktop only (GPU-intensive blur filter)
+        if (!isMobile) {
+            particle.style.filter = 'url(#dividerGlow)';
+        }
         particle.style.willChange = 'transform, opacity'; // GPU acceleration
 
         svg.appendChild(particle);
 
-        // Slow floating animation
-        const floatDistance = random(15, 30);
-        const floatAngle = random(0, Math.PI * 2);
+        // Slow floating animation (disabled on mobile - SVG attribute animations are expensive)
+        let floatAnim = null;
+        if (!isMobile) {
+            const floatDistance = random(15, 30);
+            const floatAngle = random(0, Math.PI * 2);
 
-        const floatAnim = gsap.to(particle, {
-            attr: {
-                cx: `+=${Math.cos(floatAngle) * floatDistance}`,
-                cy: `+=${Math.sin(floatAngle) * floatDistance}`
-            },
-            duration: random(20, 35),
-            ease: 'sine.inOut',
-            repeat: -1,
-            yoyo: true
-        });
+            floatAnim = gsap.to(particle, {
+                attr: {
+                    cx: `+=${Math.cos(floatAngle) * floatDistance}`,
+                    cy: `+=${Math.sin(floatAngle) * floatDistance}`
+                },
+                duration: random(20, 35),
+                ease: 'sine.inOut',
+                repeat: -1,
+                yoyo: true
+            });
+        }
 
         // Subtle opacity pulse
         const pulseAnim = gsap.to(particle, {
@@ -171,7 +176,9 @@ class ParticleFactory {
         }
 
         // Return animations for pause/resume control
-        return { float: floatAnim, pulse: pulseAnim, parallax: parallaxAnim };
+        const anims = { pulse: pulseAnim, parallax: parallaxAnim };
+        if (floatAnim) anims.float = floatAnim;
+        return anims;
     }
 }
 
