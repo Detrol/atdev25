@@ -655,7 +655,7 @@ class AnimationController {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: isMobile ? 0.5 : 1, // Faster on mobile
+                scrub: isMobile ? 1.5 : 1, // Higher scrub on mobile for smoother performance
                 onUpdate: (self) => {
                     const adjustedProgress = Math.max(0, Math.min(1, self.progress - (delay / 10)));
                     const currentOffset = pathLength * (1 - adjustedProgress);
@@ -692,7 +692,7 @@ class AnimationController {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: isMobile ? 0.5 : 1, // Faster on mobile
+                scrub: isMobile ? 1.5 : 1, // Higher scrub on mobile for smoother performance
                 onUpdate: (self) => {
                     const adjustedProgress = Math.max(0, Math.min(1, self.progress - (delay / 10)));
 

@@ -74,7 +74,7 @@ class AsteroidFactory {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: isMobile ? 1 : 2 // Faster response on mobile
+                scrub: isMobile ? 2 : 2 // Same scrub on mobile for smoother performance
             }
         });
 

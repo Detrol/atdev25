@@ -20,12 +20,23 @@ gsap.defaults({
 
 // ScrollTrigger configuration for smooth mobile scrolling
 // normalizeScroll fixes Android touch scrolling issues where animations "jump"
-ScrollTrigger.normalizeScroll(true);
+// allowNestedScroll prevents interference with horizontal scrolls and carousels
+ScrollTrigger.normalizeScroll({
+    allowNestedScroll: true,
+    lockAxis: true, // Lock to vertical scroll for better performance
+    type: "touch,wheel,pointer" // Only normalize these events
+});
 
 // ScrollTrigger defaults
 ScrollTrigger.defaults({
     toggleActions: 'play none none none', // Play animation once on enter
     markers: false // Set to true for debugging (shows trigger points)
+});
+
+// Config for better mobile performance
+ScrollTrigger.config({
+    ignoreMobileResize: true, // Don't refresh on address bar hide/show on mobile
+    autoRefreshEvents: "visibilitychange,DOMContentLoaded,load" // Limit refresh events
 });
 
 // Detect mobile devices and reduced motion preference (for per-animation checks)

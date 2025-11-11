@@ -73,7 +73,7 @@ class StarFactory {
                 trigger: dividerElement,
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: 0.8 // Smooth parallax
+                scrub: isMobile ? 1.2 : 0.8 // Higher scrub on mobile for better performance
             }
         });
 
@@ -162,7 +162,7 @@ class ParticleFactory {
                 trigger: dividerElement,
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: 0.5 // Faster scrub for more responsive feel
+                scrub: isMobile ? 1.0 : 0.5 // Higher scrub on mobile for better performance
             }
         });
 
