@@ -1,13 +1,10 @@
 <?php
 
-use App\Services\TurnstileService;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
-    // Mock Turnstile service to always return true in tests
-    $this->mock(TurnstileService::class, function ($mock) {
-        $mock->shouldReceive('verify')->andReturn(true);
-    });
+    // Disable reCAPTCHA validation in tests
+    config(['recaptcha.enabled' => false]);
 });
 
 /**
@@ -52,7 +49,7 @@ test('price calculator returns consistent ranges for same description (5 runs)',
         ]);
 
         $response = $this->postJson('/api/price-estimate', [
-            'cf-turnstile-response' => 'test-token',
+            'g-recaptcha-response' => 'test-token',
             'service_category' => 'web_development',
             'description' => $description,
         ]);
@@ -115,7 +112,7 @@ test('price calculator handles complexity variation within same bracket consiste
     });
 
     $response1 = $this->postJson('/api/price-estimate', [
-        'cf-turnstile-response' => 'test-token',
+        'g-recaptcha-response' => 'test-token',
         'service_category' => 'web_development',
         'description' => 'En enkel portfolio-webbplats med galleri och kontaktformulär.',
     ]);
@@ -124,7 +121,7 @@ test('price calculator handles complexity variation within same bracket consiste
     $result1 = $response1->json('estimation');
 
     $response2 = $this->postJson('/api/price-estimate', [
-        'cf-turnstile-response' => 'test-token',
+        'g-recaptcha-response' => 'test-token',
         'service_category' => 'web_development',
         'description' => 'En enkel portfolio-webbplats med galleri och kontaktformulär.',
     ]);
@@ -172,7 +169,7 @@ test('price calculator gives different ranges for different complexity brackets'
     });
 
     $response1 = $this->postJson('/api/price-estimate', [
-        'cf-turnstile-response' => 'test-token',
+        'g-recaptcha-response' => 'test-token',
         'service_category' => 'web_development',
         'description' => 'En väldigt enkel statisk sida med bara kontaktformulär.',
     ]);
@@ -181,7 +178,7 @@ test('price calculator gives different ranges for different complexity brackets'
     $result1 = $response1->json('estimation');
 
     $response2 = $this->postJson('/api/price-estimate', [
-        'cf-turnstile-response' => 'test-token',
+        'g-recaptcha-response' => 'test-token',
         'service_category' => 'web_development',
         'description' => 'En avancerad sida med autentisering, admin-panel och databas.',
     ]);
