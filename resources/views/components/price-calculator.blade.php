@@ -56,7 +56,7 @@
                     </label>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-3" x-text="websiteFieldDescription()"></p>
                     <input
-                        type="text"
+                        type="url"
                         id="website-url"
                         x-model="websiteUrl"
                         @input="error = null"
