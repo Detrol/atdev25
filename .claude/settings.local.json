@@ -25,7 +25,9 @@
       "Bash(find:*)",
       "Bash(mkdir:*)",
       "mcp__zen__chat",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

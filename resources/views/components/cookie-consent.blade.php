@@ -7,7 +7,7 @@
      x-transition:leave="transform transition ease-in duration-200"
      x-transition:leave-start="translate-x-0"
      x-transition:leave-end="translate-x-full"
-     class="fixed z-50 inset-x-4 bottom-4 md:max-w-md md:inset-x-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:bottom-auto"
+     class="fixed z-[10000] inset-x-4 bottom-4 md:max-w-md md:inset-x-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:bottom-auto"
      style="display: none;">
 
     {{-- Glassmorphism Container (matchar AI chatbot) --}}
