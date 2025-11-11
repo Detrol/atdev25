@@ -639,22 +639,41 @@ Alpine.data('priceCalculator', () => ({
             return;
         }
 
+        // Show loading state
+        this.loading = true;
+
         // Generate reCAPTCHA token
         let recaptchaToken = null;
 
-        if (typeof grecaptcha !== 'undefined') {
+        if (typeof grecaptcha !== 'undefined' && grecaptcha.ready) {
             try {
-                const siteKey = document.querySelector('script[src*="recaptcha"]')?.src.match(/render=([^&]+)/)?.[1];
-                if (siteKey) {
-                    recaptchaToken = await grecaptcha.execute(siteKey, { action: 'price_estimate' });
-                }
+                await new Promise((resolve) => {
+                    grecaptcha.ready(async () => {
+                        try {
+                            const siteKey = document.querySelector('script[src*="recaptcha"]')?.src.match(/render=([^&]+)/)?.[1];
+                            if (siteKey) {
+                                recaptchaToken = await grecaptcha.execute(siteKey, { action: 'price_estimate' });
+                                console.log('reCAPTCHA token generated successfully');
+                            } else {
+                                console.error('reCAPTCHA site key not found');
+                            }
+                            resolve();
+                        } catch (error) {
+                            console.error('reCAPTCHA execute error:', error);
+                            resolve();
+                        }
+                    });
+                });
             } catch (error) {
-                console.error('reCAPTCHA error:', error);
+                console.error('reCAPTCHA ready error:', error);
             }
+        } else {
+            console.error('grecaptcha not loaded or ready');
         }
 
         if (!recaptchaToken) {
-            this.error = 'Vänligen slutför säkerhetsverifieringen.';
+            this.error = 'Säkerhetsverifiering misslyckades. Vänligen ladda om sidan och försök igen.';
+            this.loading = false;
             return;
         }
 
@@ -665,8 +684,6 @@ Alpine.data('priceCalculator', () => ({
                 description_length: this.description.length
             });
         }
-
-        this.loading = true;
         this.error = null;
         this.result = null;
         this.estimationId = null;
