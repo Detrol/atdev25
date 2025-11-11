@@ -8,6 +8,7 @@
 
 import { gsap, ScrollTrigger } from './gsap-config.js';
 
+const isMobile = window.innerWidth < 768;
 let currentSectionIndex = 0;
 let isTransitioning = false;
 
@@ -53,6 +54,16 @@ function createTransition(fromSection, toSection, fromIndex, toIndex, sections) 
                 currentSectionIndex = toIndex;
                 isTransitioning = false;
                 console.log(`  ✓ Transition complete, now at ${toSection.id}`);
+
+                // Instant color change on mobile (no smooth morphing for performance)
+                if (isMobile && toColors) {
+                    const root = document.documentElement;
+                    root.style.setProperty('--color-primary', toColors.primary);
+                    root.style.setProperty('--color-secondary', toColors.secondary);
+                    root.style.setProperty('--color-accent', toColors.accent);
+                    root.style.setProperty('--color-bg-overlay', toColors.bgOverlay);
+                }
+
                 resolve();
             }
         });
@@ -82,8 +93,9 @@ function createTransition(fromSection, toSection, fromIndex, toIndex, sections) 
                     console.log(`  ✓ Triggered animations for ${toSection.id}`);
                 }
 
-                // Color morphing
-                if (toColors) {
+                // Color morphing (DISABLED on mobile for performance)
+                // getComputedStyle() forces reflow - extremely expensive on mobile
+                if (toColors && !isMobile) {
                     const root = document.documentElement;
                     gsap.set(root, {
                         '--color-primary': gsap.utils.interpolate(
