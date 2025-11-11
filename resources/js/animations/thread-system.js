@@ -311,8 +311,8 @@ class TrailController {
         this.color = color;
 
         // RAF Throttling: More aggressive on mobile for better performance
-        // Desktop: Every 2nd frame (30fps), Mobile: Every 6th frame (10fps)
-        const frameSkip = isMobile ? 6 : 2;
+        // Desktop: Every 2nd frame (30fps), Mobile: Every 20th frame (3fps)
+        const frameSkip = isMobile ? 20 : 2;
         const currentFrame = Math.floor(Date.now() / 16.67); // ~60fps frame counter
         if (currentFrame - this.lastUpdateFrame < frameSkip) {
             return; // Skip this frame

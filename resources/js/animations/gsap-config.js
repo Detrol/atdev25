@@ -42,6 +42,12 @@ ScrollTrigger.config({
 // Detect mobile devices and reduced motion preference (for per-animation checks)
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Set global FPS for GSAP animations - much lower on mobile for better performance
+// This affects how often GSAP updates/renders animations (not animation speed/duration)
+if (isMobile) {
+    gsap.ticker.fps(3); // 3 FPS on mobile - massive performance boost
+}
 const shouldDisableAnimations = isMobile || prefersReducedMotion;
 
 // Note: Individual animation files handle motion checks appropriately:
