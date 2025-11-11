@@ -23,7 +23,7 @@ const CONFIG = {
     cometSize: { min: 1.5, max: 2.5 },
 
     // Trail settings
-    trailLength: 20, // Number of trail particles
+    trailLength: isMobile ? 12 : 20, // Fewer particles on mobile for performance
     trailSpacing: 2, // Frames between particle spawns (lower = more frequent)
     particleLifetime: 0.8, // Seconds before particle disappears
     trailSpread: isMobile ? 1.0 : 0.6, // Wider spread on mobile for more visibility

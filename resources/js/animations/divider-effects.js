@@ -8,12 +8,14 @@
 import { gsap } from 'gsap';
 
 const isProduction = window.location.hostname === 'atdev.me';
+const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIG ====================
 
+// Phase 3 optimization: Reduce counts on mobile for better performance
 const CONFIG = {
-    stars: { min: 2, max: 3 },        // Per divider (reduced from 3-5)
-    particles: { min: 3, max: 4 },    // Per divider (reduced from 4-6)
+    stars: { min: isMobile ? 1 : 2, max: isMobile ? 2 : 3 },
+    particles: { min: isMobile ? 2 : 3, max: isMobile ? 3 : 4 },
     starSize: { min: 0.3, max: 0.8 },
     particleSize: { min: 0.15, max: 0.4 }
 };
