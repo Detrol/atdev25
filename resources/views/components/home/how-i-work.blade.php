@@ -3,10 +3,12 @@
 <x-animated-section
     id="hur-jag-jobbar"
     theme="blue-pink"
-    next-theme="green-teal"
+    next-theme="pink-orange"
     pattern="circles-dots"
-    scroll-mode="layered-scroll"
 >
+    {{-- Wave transition from About section --}}
+    <x-wave-divider color="blue-pink" position="top" />
+
     <div class="max-w-6xl mx-auto px-6 py-24">
         <!-- Section Header -->
         <div class="text-center mb-16">
@@ -401,4 +403,7 @@
         </div>
 
     </div>
+
+    {{-- Wave separator to Timeline (uses Timeline's theme color) --}}
+    <x-wave-divider color="pink-orange" position="bottom" />
 </x-animated-section>

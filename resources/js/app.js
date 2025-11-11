@@ -30,13 +30,19 @@ import './animations/gsap-config.js';
 import './animations/hero.js';
 import './animations/timeline.js';
 import './animations/stats.js';
-import './animations/projects.js';
+// import './animations/projects.js'; // DISABLED - conflicts with section-transitions.js
 import './animations/how-i-work.js';
 import './animations/parallax.js';
 import './animations/about.js';
 
-// Import section transitions
+// Import new animation systems
+import './animations/thread-system.js';
 import './animations/section-transitions.js';
+import './animations/cursor-effects.js';
+import './animations/service-cards.js';
+// import './animations/projects-gallery.js'; // DISABLED - conflicts with section-transitions.js
+import './animations/hero-particles.js';
+import './animations/separator-animations.js';
 
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
@@ -448,7 +454,7 @@ class LazyLoadManager {
         // Create observers for different animation types
         this.createObserver('fade-in', this.handleFadeIn.bind(this));
         this.createObserver('slide-up', this.handleSlideUp.bind(this));
-        this.createObserver('counter', this.handleCounter.bind(this));
+        // NOTE: 'counter' observer removed - GSAP stats.js handles counters
         this.createObserver('skeleton', this.handleSkeleton.bind(this));
 
         // Observe all elements with data-lazy attribute
@@ -507,39 +513,8 @@ class LazyLoadManager {
         }, delay);
     }
 
-    handleCounter(element) {
-        const delay = parseInt(element.dataset.delay || 0);
-
-        setTimeout(() => {
-            // Make element visible
-            element.classList.remove('lazy-hidden');
-            element.classList.add('lazy-visible');
-
-            if (this.prefersReducedMotion) {
-                // Show final value immediately
-                const finalValue = parseInt(element.dataset.counterTarget || 0);
-                element.textContent = finalValue;
-                return;
-            }
-
-            const target = parseInt(element.dataset.counterTarget || 0);
-            const duration = this.isMobile ? 1000 : 2000;
-            const steps = 50;
-            const increment = target / steps;
-            const stepDuration = duration / steps;
-
-            let current = 0;
-            const counter = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    element.textContent = target;
-                    clearInterval(counter);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, stepDuration);
-        }, delay);
-    }
+    // handleCounter() REMOVED - GSAP stats.js handles all counter animations
+    // with better performance and smoother easing
 
     handleSkeleton(element) {
         const duration = this.prefersReducedMotion ? 0 : 300;

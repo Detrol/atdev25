@@ -1,8 +1,16 @@
 {{-- Services Section Component --}}
 @props(["services"])
 
-<section id="services" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden">
-    <div class="relative z-10 max-w-6xl mx-auto px-6">
+<x-animated-section
+    id="services"
+    theme="orange-amber"
+    next-theme="amber-green"
+    pattern="polygons-grid"
+>
+    {{-- Wave transition from Timeline section --}}
+    <x-wave-divider color="orange-amber" position="top" />
+
+    <div class="max-w-6xl mx-auto px-6 py-24">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Mina Tjänster</h2>
             <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Skräddarsydda lösningar för alla dina webbutvecklingsbehov</p>
@@ -80,6 +88,9 @@
             </a>
         </div>
     </div>
-</section>
+
+    {{-- Wave separator to Projects --}}
+    <x-wave-divider color="amber-green" position="bottom" />
+</x-animated-section>
 
 

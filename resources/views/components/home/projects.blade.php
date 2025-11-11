@@ -1,8 +1,16 @@
 {{-- Projects Section Component --}}
 @props(["projects"])
 
-<section id="projects" class="relative py-24 bg-gray-50 dark:bg-gray-800 overflow-hidden">
-    <div class="relative z-10 max-w-6xl mx-auto px-6">
+<x-animated-section
+    id="projects"
+    theme="amber-green"
+    next-theme="green-teal"
+    pattern="geometric-lines"
+>
+    {{-- Wave transition from Services section --}}
+    <x-wave-divider color="amber-green" position="top" />
+
+    <div class="max-w-6xl mx-auto px-6 py-24">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Utvalda Projekt</h2>
             <p class="text-xl text-gray-600 dark:text-gray-400">En samling av mina senaste arbeten</p>
@@ -206,6 +214,9 @@
 
     <!-- Project Modal -->
     <x-home.project-modal :projects="$projects" />
-</section>
+
+    {{-- Wave separator to Demos CTA (matches CTA gradient) --}}
+    <x-wave-divider color="indigo-purple-pink" position="bottom" />
+</x-animated-section>
 
 <!-- Interaktiva Demos CTA Section -->

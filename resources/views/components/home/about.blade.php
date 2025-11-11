@@ -7,8 +7,10 @@
     theme="purple-blue"
     next-theme="blue-pink"
     pattern="geometric-lines"
-    scroll-mode="layered"
 >
+    {{-- Wave transition from Hero section --}}
+    <x-wave-divider color="purple-blue" position="top" />
+
     <div class="max-w-6xl mx-auto py-20">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <!-- Text -->
@@ -63,4 +65,7 @@
             </div>
         </div>
     </div>
+
+    {{-- Wave separator to How I Work (uses next section's color) --}}
+    <x-wave-divider color="blue-pink" position="bottom" />
 </x-animated-section>

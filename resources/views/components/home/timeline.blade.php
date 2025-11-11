@@ -1,7 +1,15 @@
 {{-- Timeline & Stats Section Component --}}
 
-<section id="expertis" class="relative py-24 bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
-    <div class="relative z-10 max-w-6xl mx-auto px-6">
+<x-animated-section
+    id="expertis"
+    theme="pink-orange"
+    next-theme="orange-amber"
+    pattern="waves"
+>
+    {{-- Wave transition from How I Work section --}}
+    <x-wave-divider color="pink-orange" position="top" />
+
+    <div class="max-w-6xl mx-auto px-6 py-24">
         <!-- Section Header -->
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4" data-lazy="fade-in">
@@ -108,4 +116,7 @@
         <!-- Stats Grid -->
         @include('components.home.stats')
     </div>
-</section>
+
+    {{-- Wave transition to Services section (uses Services' theme color) --}}
+    <x-wave-divider color="orange-amber" position="bottom" />
+</x-animated-section>

@@ -1,7 +1,7 @@
 {{-- Hero Section Component --}}
 @props(['profile', 'avatarMedia' => []])
 
-<section id="main-content" class="hero-container relative min-h-screen flex items-center justify-center overflow-hidden">
+<section id="main-content" class="hero-container relative min-h-screen flex items-center justify-center">
     <div class="absolute inset-0 gradient-mesh"></div>
 
     {{-- Parallax Background Elements (Organic Microbe Motion + Scroll Parallax) --}}
@@ -96,5 +96,10 @@
                    class="hero-cta px-8 py-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20 dark:from-purple-500/10 dark:to-blue-500/10 backdrop-blur-md text-white rounded-full font-semibold hover:from-purple-500/30 hover:to-blue-500/30 dark:hover:from-purple-500/20 dark:hover:to-blue-500/20 transition-all border border-purple-400/30 dark:border-purple-400/20 hover:scale-105">Beräkna Pris ⚡</a>
             </div>
         </div>
+    </div>
+
+    {{-- Wave separator to About section (matches About's theme) --}}
+    <div class="absolute bottom-0 left-0 right-0 z-20">
+        <x-wave-divider color="purple-blue" position="bottom" />
     </div>
 </section>

@@ -107,7 +107,5 @@
             </div>
 
         </div>
-    </div>
-</section>
 
 

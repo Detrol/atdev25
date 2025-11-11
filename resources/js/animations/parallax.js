@@ -9,7 +9,70 @@
 
 import { gsap, ScrollTrigger } from './gsap-config.js';
 
+const isProduction = window.location.hostname === 'atdev.me';
+
 export function initGlobalParallax() {
+    if (!isProduction) console.log('🎨 Initializing Global Parallax Effects');
+
+    // === PATTERN BACKGROUNDS (Geometric shapes in sections) ===
+    // Advanced parallax with multi-directional movement for depth
+    const bgLayers = document.querySelectorAll('.parallax-layer-bg');
+    const midLayers = document.querySelectorAll('.parallax-layer-mid');
+    const fgLayers = document.querySelectorAll('.parallax-layer-fg');
+
+    // Background layers - move UP (opposite direction for depth)
+    bgLayers.forEach(layer => {
+        const speed = parseInt(layer.getAttribute('data-speed') || '30', 10);
+        const distance = (speed / 100) * -40; // Negative for upward movement
+
+        gsap.to(layer, {
+            y: distance,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: layer.closest('section') || layer.closest('.animated-section'),
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.5
+            }
+        });
+    });
+
+    // Mid layers - move DOWN (normal scroll direction)
+    midLayers.forEach(layer => {
+        const speed = parseInt(layer.getAttribute('data-speed') || '60', 10);
+        const distance = (speed / 100) * 50; // Positive for downward movement
+
+        gsap.to(layer, {
+            y: distance,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: layer.closest('section') || layer.closest('.animated-section'),
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.5
+            }
+        });
+    });
+
+    // Foreground layers - move UP faster (creates depth illusion)
+    fgLayers.forEach(layer => {
+        const speed = parseInt(layer.getAttribute('data-speed') || '100', 10);
+        const distance = (speed / 100) * -60; // Negative + faster for dramatic effect
+
+        gsap.to(layer, {
+            y: distance,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: layer.closest('section') || layer.closest('.animated-section'),
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.5
+            }
+        });
+    });
+
+    if (!isProduction) console.log(`✅ Advanced parallax initialized: ${bgLayers.length} bg, ${midLayers.length} mid, ${fgLayers.length} fg layers`);
+
     // === HERO GRADIENT MESH (already handled in hero.js) ===
     // Keeping this centralized for future global parallax elements
 

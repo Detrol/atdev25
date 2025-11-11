@@ -93,6 +93,38 @@
   --theme-bg-overlay: rgba(255, 215, 0, 0.05);
 }
 
+/* Pink-Orange (Warm/Dynamic) */
+[data-theme="pink-orange"] {
+  --theme-primary: #FF69B4;      /* HotPink */
+  --theme-secondary: #FF8C00;    /* DarkOrange */
+  --theme-accent: #FFB6C1;       /* LightPink */
+  --theme-bg-overlay: rgba(255, 105, 180, 0.05);
+}
+
+/* Orange-Amber (Energetic/Bright) */
+[data-theme="orange-amber"] {
+  --theme-primary: #FF8C00;      /* DarkOrange */
+  --theme-secondary: #FFBF00;    /* Amber */
+  --theme-accent: #FFD700;       /* Gold */
+  --theme-bg-overlay: rgba(255, 140, 0, 0.05);
+}
+
+/* Amber-Green (Growth/Fresh) */
+[data-theme="amber-green"] {
+  --theme-primary: #FFBF00;      /* Amber */
+  --theme-secondary: #32CD32;    /* LimeGreen */
+  --theme-accent: #FFD700;       /* Gold */
+  --theme-bg-overlay: rgba(255, 191, 0, 0.05);
+}
+
+/* Teal-Blue (Calm/Professional) */
+[data-theme="teal-blue"] {
+  --theme-primary: #20B2AA;      /* LightSeaGreen */
+  --theme-secondary: #4169E1;    /* RoyalBlue */
+  --theme-accent: #00CED1;       /* DarkTurquoise */
+  --theme-bg-overlay: rgba(32, 178, 170, 0.05);
+}
+
 /* ==========================================================================
    Animated Section Container
    ========================================================================== */

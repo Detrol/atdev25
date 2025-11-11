@@ -24,27 +24,27 @@
 ])
 
 <section
-    {{ $attributes->merge(['class' => 'animated-section relative min-h-screen']) }}
+    {{ $attributes->merge(['class' => 'animated-section relative z-10 min-h-screen py-16']) }}
     data-theme="{{ $theme }}"
     @if($nextTheme) data-next-theme="{{ $nextTheme }}" @endif
     @if($id) id="{{ $id }}" @endif
     data-scroll-mode="{{ $scrollMode }}"
 >
+    {{-- Background Overlay (subtle theme tint) - LIVE animated --}}
+    <div class="absolute inset-0 pointer-events-none z-0"
+         style="background-color: var(--color-bg-overlay, transparent);"></div>
+
     {{-- Background Pattern (3D Parallax) --}}
     @if($pattern)
-        <div class="pattern-container">
+        <div class="pattern-container z-[1]">
             @include("components.patterns.{$pattern}")
         </div>
     @endif
 
     {{-- Content Layer --}}
-    <div class="animated-section-content relative z-10 w-full min-h-screen flex items-center">
+    <div class="animated-section-content relative z-20 w-full min-h-screen flex items-center">
         <div class="w-full">
             {{ $slot }}
         </div>
     </div>
-
-    {{-- Background Overlay (subtle theme tint) - LIVE animated --}}
-    <div class="absolute inset-0 pointer-events-none z-[1]"
-         style="background-color: var(--color-bg-overlay, transparent);"></div>
 </section>

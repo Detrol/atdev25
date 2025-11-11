@@ -1,4 +1,9 @@
 <section id="price-calculator" class="relative py-24 bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
+    {{-- Wave transition from FAQ section --}}
+    <div class="absolute top-0 left-0 right-0">
+        <x-wave-divider color="purple-blue-pink" position="top" />
+    </div>
+
     <div class="relative z-10 max-w-4xl mx-auto px-6">
         <!-- Header -->
         <div class="text-center mb-12" x-data="{ visible: false }" x-intersect="visible = true; if(window.GA4) GA4.trackCalculatorView()">
@@ -326,5 +331,10 @@
             </div>
 
         </div>
+    </div>
+
+    {{-- Wave separator to Audit CTA (matches Audit CTA gradient) --}}
+    <div class="absolute bottom-0 left-0 right-0">
+        <x-wave-divider color="purple-blue-pink" position="bottom" />
     </div>
 </section>

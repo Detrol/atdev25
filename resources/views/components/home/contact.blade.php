@@ -1,10 +1,17 @@
 {{-- Contact Section Component --}}
 
-<section id="contact" class="relative py-24 bg-white dark:bg-gray-900 overflow-hidden" x-data="{ viewed: false }" x-intersect="viewed = true; if(window.GA4) GA4.trackContactView()">
-    {{-- Background orbs --}}
-    <x-section-background theme="blue" density="sparse" />
+<x-animated-section
+    id="contact"
+    theme="teal-blue"
+    next-theme="purple-blue"
+    pattern="waves"
+    x-data="{ viewed: false }"
+    x-intersect="viewed = true; if(window.GA4) GA4.trackContactView()"
+>
+    {{-- Wave transition from FAQ section --}}
+    <x-wave-divider color="teal-blue" position="top" />
 
-    <div class="relative z-10 max-w-4xl mx-auto px-6">
+    <div class="max-w-4xl mx-auto px-6 py-24">
         <div class="relative text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent">
                 Låt Oss Skapa Något Fantastiskt
@@ -301,5 +308,8 @@
             </form>
         </div>
     </div>
-</section>
+
+    {{-- Wave separator to Footer (matches footer dark background) --}}
+    <x-wave-divider color="dark-gray" position="bottom" />
+</x-animated-section>
 

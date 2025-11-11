@@ -1,7 +1,7 @@
 {{-- Website Audit CTA Component --}}
 
-<section class="relative py-24 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 overflow-hidden">
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
+<section class="relative py-24 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 overflow-hidden z-10">
+        <div class="relative max-w-4xl mx-auto px-6 text-center">
         <div class="inline-block p-3 bg-white/10 rounded-2xl mb-6">
             <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
@@ -50,6 +50,9 @@
             Ingen kreditkort krävs • Resultat på 2-5 minuter • Rapport via e-post
         </p>
     </div>
+
+    {{-- Wave separator to Contact (matches Contact section) --}}
+    <div class="absolute bottom-0 left-0 right-0">
+        <x-wave-divider color="teal-blue" position="bottom" />
+    </div>
 </section>
-
-

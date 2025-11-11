@@ -9,61 +9,76 @@
 
 import { gsap, ScrollTrigger } from './gsap-config.js';
 
+const isProduction = window.location.hostname === 'atdev.me';
+
 export function initHeroAnimations() {
     const heroSection = document.querySelector('#main-content');
     if (!heroSection) return;
 
     // === INTRO TIMELINE ===
+    // Set initial states FIRST to prevent flash
+    gsap.set('.hero-badge', { opacity: 0, y: -30 });
+    if (document.querySelector('.hero-avatar')) {
+        gsap.set('.hero-avatar', { opacity: 0, scale: 0.8 });
+    }
+    gsap.set('h1', { opacity: 0, y: 50 });
+    gsap.set('.hero-subtitle', { opacity: 0, y: 30 });
+    gsap.set('.hero-experience', { opacity: 0, scale: 0.9 });
+    gsap.set('.hero-cta', { opacity: 0, y: 20 });
+
     const heroTL = gsap.timeline({
         defaults: {
             ease: 'power3.out'
-        }
+        },
+        delay: 0.3
     });
 
     heroTL
         // Badges fade in from top
-        .from('.hero-badge', {
-            y: -30,
-            opacity: 0,
+        .to('.hero-badge', {
+            y: 0,
+            opacity: 1,
             duration: 0.8,
             stagger: 0.15
         });
 
     // Avatar scales in (only if it exists)
     if (document.querySelector('.hero-avatar')) {
-        heroTL.from('.hero-avatar', {
-            scale: 0.8,
-            opacity: 0,
+        heroTL.to('.hero-avatar', {
+            scale: 1,
+            opacity: 1,
             duration: 0.8
-        }, '-=0.4'); // Overlap with badges
+        }, '-=0.4');
     }
 
     heroTL
         // H1 title slides up
-        .from('h1', {
-            y: 50,
-            opacity: 0,
+        .to('h1', {
+            y: 0,
+            opacity: 1,
             duration: 1
         }, '-=0.6')
         // Subtitle follows
-        .from('.hero-subtitle', {
-            y: 30,
-            opacity: 0,
+        .to('.hero-subtitle', {
+            y: 0,
+            opacity: 1,
             duration: 0.8
         }, '-=0.5')
         // Experience badge
-        .from('.hero-experience', {
-            scale: 0.9,
-            opacity: 0,
+        .to('.hero-experience', {
+            scale: 1,
+            opacity: 1,
             duration: 0.6
         }, '-=0.4')
         // CTA buttons stagger in
-        .from('.hero-cta', {
-            y: 20,
-            opacity: 0,
+        .to('.hero-cta', {
+            y: 0,
+            opacity: 1,
             stagger: 0.15,
             duration: 0.6
         }, '-=0.4');
+
+    if (!isProduction) console.log('✅ Hero intro timeline created with', heroTL.duration().toFixed(2), 'seconds duration');
 
     // === SCROLL PARALLAX (Decorative background elements) ===
     initBackgroundParallax();
