@@ -97,6 +97,7 @@
                         value="{{ old('name') }}"
                         required
                         maxlength="255"
+                        autocomplete="name"
                         @focus="nameFocused = true; if(window.GA4) GA4.trackContactInput()"
                         @blur="nameFocused = ($event.target.value !== '')"
                         x-init="nameFocused = ('{{ old('name') }}' !== '')"
@@ -131,6 +132,7 @@
                         value="{{ old('email') }}"
                         required
                         maxlength="255"
+                        autocomplete="email"
                         @focus="emailFocused = true; if(window.GA4) GA4.trackContactInput()"
                         @blur="emailFocused = ($event.target.value !== '')"
                         x-init="emailFocused = ('{{ old('email') }}' !== '')"
