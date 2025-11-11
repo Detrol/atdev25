@@ -62,14 +62,15 @@ class StarFactory {
         });
 
         // Parallax effect on scroll (subtle vertical movement)
+        const starParallax = random(8, 18);
         gsap.to(group, {
-            y: random(5, 15), // Stars move slower for depth
+            y: starParallax, // Stars move slower for depth
             ease: 'none',
             scrollTrigger: {
                 trigger: dividerElement,
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: 1
+                scrub: 0.8 // Smooth parallax
             }
         });
 
@@ -145,10 +146,10 @@ class ParticleFactory {
         });
 
         // Parallax effect on scroll (faster than stars for depth layering)
+        // Use transform instead of cy to avoid conflict with float animation
+        const parallaxDistance = random(15, 25);
         gsap.to(particle, {
-            attr: {
-                cy: `+=${random(20, 35)}` // Particles move faster (closer to viewer)
-            },
+            y: parallaxDistance, // Particles move faster (closer to viewer)
             ease: 'none',
             scrollTrigger: {
                 trigger: dividerElement,
