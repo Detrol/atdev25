@@ -251,13 +251,9 @@ export function destroyCursorEffects() {
     document.body.style.cursor = '';
 }
 
-// Auto-initialize when DOM is ready (with reduced motion check)
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    if (!isProduction) console.log('⏭️  Skipping cursor effects (reduced motion preference)');
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCursorEffects);
 } else {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCursorEffects);
-    } else {
-        initCursorEffects();
-    }
+    initCursorEffects();
 }
