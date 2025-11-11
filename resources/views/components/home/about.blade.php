@@ -11,7 +11,7 @@
     {{-- Wave transition from Hero section --}}
     <x-wave-divider color="purple-blue" position="top" />
 
-    <div class="max-w-6xl mx-auto py-20">
+    <div class="max-w-6xl mx-auto px-6 py-20">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <!-- Text -->
             <div class="space-y-6">

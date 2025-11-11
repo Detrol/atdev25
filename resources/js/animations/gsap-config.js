@@ -24,9 +24,12 @@ ScrollTrigger.defaults({
     markers: false // Set to true for debugging (shows trigger points)
 });
 
-// Respect user's accessibility preference
+// Disable animations on mobile devices and respect reduced motion preference
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (prefersReducedMotion) {
+const shouldDisableAnimations = isMobile || prefersReducedMotion;
+
+if (shouldDisableAnimations) {
     gsap.globalTimeline.timeScale(100); // Speed up to near-instant (effectively disables)
 }
 
@@ -34,7 +37,9 @@ if (prefersReducedMotion) {
 const isProduction = window.location.hostname === 'atdev.me';
 if (!isProduction) {
     console.log('🎬 GSAP initialized with ScrollTrigger (local dev mode)');
-    console.log(`♿ Reduced motion: ${prefersReducedMotion ? 'ACTIVE (animations disabled)' : 'Not active'}`);
+    console.log(`📱 Mobile device: ${isMobile}`);
+    console.log(`♿ Reduced motion: ${prefersReducedMotion}`);
+    console.log(`✨ Animations: ${shouldDisableAnimations ? 'DISABLED' : 'ENABLED'}`);
 
     // Uncomment to enable ScrollTrigger markers in development
     // ScrollTrigger.defaults({ markers: true });
