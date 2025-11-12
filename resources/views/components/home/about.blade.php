@@ -37,7 +37,7 @@
                 @if(!empty($workImageMedia))
                 <div class="about-image">
                     <img srcset="{{ $workImageMedia['srcset'] }}"
-                         sizes="(max-width: 768px) 100vw, 640px"
+                         sizes="(max-width: 640px) 100vw, 50vw"
                          src="{{ $workImageMedia['src'] }}"
                          alt="Andreas Thun arbetar - utvecklare vid sitt skrivbord"
                          width="800"

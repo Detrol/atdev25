@@ -28,24 +28,17 @@ import './recaptcha-loader.js';
 // Import darkmode store
 import darkModeStore from './darkmode-store.js';
 
-// Import GSAP animations
-import './animations/gsap-config.js';
-import './animations/hero.js';
-import './animations/timeline.js';
-import './animations/stats.js';
-// import './animations/projects.js'; // DISABLED - conflicts with section-transitions.js
-import './animations/how-i-work.js';
-import './animations/parallax.js';
-import './animations/about.js';
+// Import GSAP animations (CRITICAL ONLY - loaded immediately for first paint)
+import './animations/gsap-config.js';  // Core GSAP setup
+import './animations/hero.js';         // Hero section (above-the-fold)
+import './animations/stats.js';        // Stats counter (above-the-fold)
+// LAZY LOADED (via lazy-loader.js after 3s to reduce TBT):
+// - timeline.js, how-i-work.js, parallax.js, about.js, section-transitions.js
 
-// Import new animation systems
-// NOTE: Heavy animations (thread-system, space-objects, hero-particles) loaded lazily via lazy-loader.js
-// This improves Lighthouse Performance score by deferring CPU-intensive effects until after initial render
-import './animations/section-transitions.js';
+// Import lightweight animation systems
 import './animations/service-cards.js';
-// import './animations/projects-gallery.js'; // DISABLED - conflicts with section-transitions.js
 import './animations/wave-divider-system.js'; // UNIFIED: separator + divider effects (optimized)
-import './animations/lazy-loader.js'; // Progressive enhancement: loads heavy animations on capable devices
+import './animations/lazy-loader.js'; // Progressive enhancement: loads heavy animations after 3s delay
 
 // Register Alpine.js plugins
 Alpine.plugin(intersect);

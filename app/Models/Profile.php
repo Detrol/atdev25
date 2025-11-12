@@ -84,9 +84,15 @@ class Profile extends Model implements HasMedia
             ->performOnCollections('avatar');
 
         // Work image conversions - responsive sizes for about section
-        // Mobile: 100vw (~375px @2x = 750px), Desktop: 640px @2x = 1280px
+        // Mobile @1x: 640px, Mobile @2-3x: 800px, Desktop @2x: 1280px
         $this->addMediaConversion('small')
-            ->width(640) // For mobile @1x
+            ->width(640) // For mobile @1x DPR
+            ->quality(85)
+            ->format('webp')
+            ->performOnCollections('work_image');
+
+        $this->addMediaConversion('tablet')
+            ->width(800) // For mobile high-DPR (412px × 2.625 = 1082px)
             ->quality(85)
             ->format('webp')
             ->performOnCollections('work_image');
@@ -146,6 +152,7 @@ class Profile extends Model implements HasMedia
             'tiny' => $media->getUrl('tiny').'?v='.$version,
             'thumb' => $media->getUrl('thumb').'?v='.$version,
             'small' => $media->getUrl('small').'?v='.$version,
+            'tablet' => $media->getUrl('tablet').'?v='.$version,
             'medium' => $media->getUrl('medium').'?v='.$version,
             'optimized' => $media->getUrl('optimized').'?v='.$version,
         ];
@@ -163,10 +170,11 @@ class Profile extends Model implements HasMedia
             );
             $urls['src'] = $urls['tiny']; // Fallback to smallest
         } else {
-            // Work image srcset: 640w, 1280w, 1600w
+            // Work image srcset: 640w, 800w, 1280w, 1600w
             $urls['srcset'] = sprintf(
-                '%s 640w, %s 1280w, %s 1600w',
+                '%s 640w, %s 800w, %s 1280w, %s 1600w',
                 $urls['small'],
+                $urls['tablet'],
                 $urls['medium'],
                 $urls['optimized']
             );

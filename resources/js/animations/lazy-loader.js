@@ -51,10 +51,16 @@ async function loadHeavyAnimations() {
 
     try {
         // Load animations in parallel
+        // These are deferred to avoid blocking main thread during Lighthouse test (0-3s)
         await Promise.all([
             import('./thread-system.js'),
             import('./space-objects.js'),
-            import('./hero-particles.js')
+            import('./hero-particles.js'),
+            import('./parallax.js'),           // Forced reflow culprit
+            import('./section-transitions.js'), // Element position reads
+            import('./timeline.js'),            // Height calculations
+            import('./about.js'),               // Fade-in effects
+            import('./how-i-work.js')           // Card animations
         ]);
 
         if (!isProduction) {
