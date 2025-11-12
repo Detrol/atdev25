@@ -3,14 +3,20 @@
  *
  * Genererar slumpmässiga animerade threads från olika håll med
  * roterande comet-shapes och particle trails.
+ *
+ * MOBILE OPTIMIZATION:
+ * - Dynamic viewport detection (updates on resize/rotation)
+ * - Safer edge placement to prevent threads going off-screen
+ * - Reduced trail count and spread on mobile
+ * - Container fills full viewport width (no max-width constraint)
  */
 
 import { gsap } from './gsap-config.js';
 import { ScrollTrigger } from './gsap-config.js';
 import { MotionPathPlugin } from './gsap-config.js';
+import { viewport } from './viewport-utils.js';
 
 const isProduction = window.location.hostname === 'atdev.me';
-const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIGURATION ====================
 
@@ -22,11 +28,11 @@ const CONFIG = {
     // Comet/Teardrop settings
     cometSize: { min: 1.5, max: 2.5 },
 
-    // Trail settings
-    trailLength: isMobile ? 12 : 20, // Fewer particles on mobile for performance
+    // Trail settings (REDUCED on mobile for performance and visibility)
+    trailLength: viewport.isMobile ? 8 : 20, // Fewer particles on mobile
     trailSpacing: 2, // Frames between particle spawns (lower = more frequent)
     particleLifetime: 0.8, // Seconds before particle disappears
-    trailSpread: isMobile ? 1.0 : 0.6, // Wider spread on mobile for more visibility
+    trailSpread: viewport.isMobile ? 0.4 : 0.6, // SMALLER spread on mobile to keep within viewport
 
     staggerDelay: 0.15,
     colors: [
@@ -196,17 +202,15 @@ class ThreadGenerator {
             endEdge = randomChoice(edges);
         }
 
+        // Get edge ranges (tighter on mobile to prevent threads going off-screen)
+        const edgeRanges = viewport.getEdgeRanges();
+
         const getPointOnEdge = (edge) => {
-            switch (edge) {
-                case 'top':
-                    return { x: random(5, 95), y: random(0, 15) };
-                case 'right':
-                    return { x: random(85, 100), y: random(5, 95) };
-                case 'bottom':
-                    return { x: random(5, 95), y: random(85, 100) };
-                case 'left':
-                    return { x: random(0, 15), y: random(5, 95) };
-            }
+            const range = edgeRanges[edge];
+            return {
+                x: random(range.x[0], range.x[1]),
+                y: random(range.y[0], range.y[1])
+            };
         };
 
         const start = getPointOnEdge(startEdge);
@@ -312,7 +316,7 @@ class TrailController {
 
         // RAF Throttling: More aggressive on mobile for better performance
         // Desktop: Every 2nd frame (30fps), Mobile: Every 20th frame (3fps)
-        const frameSkip = isMobile ? 20 : 2;
+        const frameSkip = viewport.isMobile ? 20 : 2;
         const currentFrame = Math.floor(Date.now() / 16.67); // ~60fps frame counter
         if (currentFrame - this.lastUpdateFrame < frameSkip) {
             return; // Skip this frame
@@ -657,7 +661,7 @@ class AnimationController {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: isMobile ? 1.5 : 1, // Higher scrub on mobile for smoother performance
+                scrub: viewport.isMobile ? 1.5 : 1, // Higher scrub on mobile for smoother performance
                 onUpdate: (self) => {
                     const adjustedProgress = Math.max(0, Math.min(1, self.progress - (delay / 10)));
                     const currentOffset = pathLength * (1 - adjustedProgress);
@@ -694,7 +698,7 @@ class AnimationController {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: isMobile ? 1.5 : 1, // Higher scrub on mobile for smoother performance
+                scrub: viewport.isMobile ? 1.5 : 1, // Higher scrub on mobile for smoother performance
                 onUpdate: (self) => {
                     const adjustedProgress = Math.max(0, Math.min(1, self.progress - (delay / 10)));
 
@@ -739,18 +743,34 @@ export function initThreadSystem() {
 
     const threadContainer = document.createElement('div');
     threadContainer.className = 'story-thread-container';
-    threadContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        max-width: 1400px;
-        height: 100vh;
-        pointer-events: none;
-        z-index: 1;
-        overflow: visible;
-    `;
+
+    // Mobile: Full viewport width (no max-width constraint)
+    // Desktop: Centered 1400px container
+    const containerStyles = viewport.isMobile
+        ? `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: visible;
+        `
+        : `
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1400px;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: visible;
+        `;
+
+    threadContainer.style.cssText = containerStyles;
 
     const threadConfigs = ThreadGenerator.generateThreads();
     const svgBuilder = new SVGBuilder(threadContainer);

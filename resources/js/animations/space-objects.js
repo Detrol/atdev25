@@ -3,22 +3,28 @@
  *
  * Adds subtle space-themed elements (asteroids, stars, planets, nebulae)
  * with mix of scroll-driven and continuous floating animations.
+ *
+ * MOBILE OPTIMIZATION:
+ * - Dynamic viewport detection (updates on resize/rotation)
+ * - Tighter positioning ranges to prevent objects going off-screen
+ * - Reduced drift on mobile (smaller viewport = less room for movement)
+ * - Container fills full viewport width (no max-width constraint)
  */
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { viewport } from './viewport-utils.js';
 
 const isProduction = window.location.hostname === 'atdev.me';
-const isMobile = window.innerWidth < 768;
 
 // ==================== CONFIG ====================
 
 // Mobile gets half the objects for performance
 const CONFIG = {
-    asteroids: { min: isMobile ? 1 : 2, max: isMobile ? 2 : 3 },
-    stars: { min: isMobile ? 2 : 3, max: isMobile ? 2 : 4 },
-    planets: { min: isMobile ? 0 : 1, max: isMobile ? 1 : 2 },
-    nebulae: { min: isMobile ? 0 : 1, max: isMobile ? 1 : 1 },
+    asteroids: { min: viewport.isMobile ? 1 : 2, max: viewport.isMobile ? 2 : 3 },
+    stars: { min: viewport.isMobile ? 2 : 3, max: viewport.isMobile ? 2 : 4 },
+    planets: { min: viewport.isMobile ? 0 : 1, max: viewport.isMobile ? 1 : 2 },
+    nebulae: { min: viewport.isMobile ? 0 : 1, max: viewport.isMobile ? 1 : 1 },
     asteroidSize: { min: 2, max: 5 },
     starSize: { min: 0.3, max: 0.8 },
     planetSize: { min: 4, max: 8 },
@@ -52,9 +58,10 @@ class AsteroidFactory {
         asteroid.setAttribute('opacity', random(0.3, 0.5));
         asteroid.classList.add('space-asteroid');
 
-        // Random position
-        const x = random(10, 90);
-        const y = random(10, 90);
+        // Random position (tighter on mobile to prevent going off-screen)
+        const ranges = viewport.getSafeRanges('asteroids');
+        const x = random(ranges.x[0], ranges.x[1]);
+        const y = random(ranges.y[0], ranges.y[1]);
 
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.setAttribute('transform', `translate(${x}, ${y})`);
@@ -62,8 +69,8 @@ class AsteroidFactory {
         group.appendChild(asteroid);
         svg.appendChild(group);
 
-        // Scroll-driven rotation and drift (more movement on mobile)
-        const asteroidDriftRange = isMobile ? 25 : 10;
+        // Scroll-driven rotation and drift (REDUCED on mobile - less viewport space)
+        const asteroidDriftRange = viewport.isMobile ? 5 : 10;
 
         gsap.to(group, {
             rotation: random(180, 360),
@@ -74,7 +81,7 @@ class AsteroidFactory {
                 trigger: 'body',
                 start: 'top top',
                 end: 'bottom bottom',
-                scrub: isMobile ? 2 : 2 // Same scrub on mobile for smoother performance
+                scrub: viewport.isMobile ? 2 : 2 // Same scrub on mobile for smoother performance
             }
         });
 
@@ -99,8 +106,9 @@ class AsteroidFactory {
 class StarFactory {
     static create(svg, index) {
         const size = random(CONFIG.starSize.min, CONFIG.starSize.max);
-        const x = random(5, 95);
-        const y = random(5, 95);
+        const ranges = viewport.getSafeRanges('stars');
+        const x = random(ranges.x[0], ranges.x[1]);
+        const y = random(ranges.y[0], ranges.y[1]);
 
         // 4-pointed star shape
         const starPath = this.createStarPath(size);
@@ -152,8 +160,9 @@ class StarFactory {
 class PlanetFactory {
     static create(svg, defs, index) {
         const size = random(CONFIG.planetSize.min, CONFIG.planetSize.max);
-        const x = random(10, 90);
-        const y = random(10, 90);
+        const ranges = viewport.getSafeRanges('planets');
+        const x = random(ranges.x[0], ranges.x[1]);
+        const y = random(ranges.y[0], ranges.y[1]);
 
         // Create gradient for planet
         const gradientId = `planetGradient${index}`;
@@ -183,9 +192,9 @@ class PlanetFactory {
 
         svg.appendChild(group);
 
-        // Slow continuous drift (faster and longer on mobile, no rotation on mobile)
-        const driftRange = isMobile ? 35 : 15;
-        const driftDuration = isMobile ? random(25, 40) : random(40, 60);
+        // Slow continuous drift (REDUCED on mobile to stay within viewport, no rotation on mobile)
+        const driftRange = viewport.isMobile ? 8 : 15;
+        const driftDuration = viewport.isMobile ? random(25, 40) : random(40, 60);
 
         const animConfig = {
             x: `+=${random(-driftRange, driftRange)}`,
@@ -197,7 +206,7 @@ class PlanetFactory {
         };
 
         // Add rotation only on desktop (CPU intensive)
-        if (!isMobile) {
+        if (!viewport.isMobile) {
             animConfig.rotation = random(10, 30);
         }
 
@@ -238,8 +247,9 @@ class PlanetFactory {
 class NebulaFactory {
     static create(svg, index) {
         const size = random(CONFIG.nebulaSize.min, CONFIG.nebulaSize.max);
-        const x = random(20, 80);
-        const y = random(20, 80);
+        const ranges = viewport.getSafeRanges('nebulae');
+        const x = random(ranges.x[0], ranges.x[1]);
+        const y = random(ranges.y[0], ranges.y[1]);
 
         // Create organic blob shape
         const path = this.createBlobPath(size);
@@ -260,9 +270,9 @@ class NebulaFactory {
         group.appendChild(nebula);
         svg.appendChild(group);
 
-        // Very slow subtle drift (faster and longer on mobile, no rotation on mobile)
-        const nebulaDriftRange = isMobile ? 20 : 8;
-        const nebulaDuration = isMobile ? random(40, 60) : random(60, 90);
+        // Very slow subtle drift (REDUCED on mobile to stay within viewport, no rotation on mobile)
+        const nebulaDriftRange = viewport.isMobile ? 5 : 8;
+        const nebulaDuration = viewport.isMobile ? random(40, 60) : random(60, 90);
 
         const animConfig = {
             x: `+=${random(-nebulaDriftRange, nebulaDriftRange)}`,
@@ -440,18 +450,34 @@ export function initSpaceObjects() {
 
     const container = document.createElement('div');
     container.className = 'space-objects-container';
-    container.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-        max-width: 1400px;
-        height: 100vh;
-        pointer-events: none;
-        z-index: 0;
-        overflow: visible;
-    `;
+
+    // Mobile: Full viewport width (no max-width constraint)
+    // Desktop: Centered 1400px container
+    const containerStyles = viewport.isMobile
+        ? `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: visible;
+        `
+        : `
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1400px;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: visible;
+        `;
+
+    container.style.cssText = containerStyles;
 
     document.body.appendChild(container);
 
