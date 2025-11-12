@@ -36,13 +36,13 @@ import './animations/parallax.js';
 import './animations/about.js';
 
 // Import new animation systems
-import './animations/thread-system.js';
-import './animations/space-objects.js';
+// NOTE: Heavy animations (thread-system, space-objects, hero-particles) loaded lazily via lazy-loader.js
+// This improves Lighthouse Performance score by deferring CPU-intensive effects until after initial render
 import './animations/section-transitions.js';
 import './animations/service-cards.js';
 // import './animations/projects-gallery.js'; // DISABLED - conflicts with section-transitions.js
-import './animations/hero-particles.js';
 import './animations/wave-divider-system.js'; // UNIFIED: separator + divider effects (optimized)
+import './animations/lazy-loader.js'; // Progressive enhancement: loads heavy animations on capable devices
 
 // Register Alpine.js plugins
 Alpine.plugin(intersect);
