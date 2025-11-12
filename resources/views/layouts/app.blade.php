@@ -59,7 +59,7 @@
     </main>
 
     <!-- Certifications & Badges -->
-    {{-- <x-certifications-badges /> --}}
+    <x-certifications-badges />
 
     <!-- Footer -->
     <x-footer />
