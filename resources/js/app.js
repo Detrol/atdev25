@@ -22,6 +22,9 @@ import { initProjectModal } from './project-modal.js';
 import { GA4 } from './analytics.js';
 window.GA4 = GA4;
 
+// Import reCAPTCHA lazy loader (saves 690KB on initial load)
+import './recaptcha-loader.js';
+
 // Import darkmode store
 import darkModeStore from './darkmode-store.js';
 

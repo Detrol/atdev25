@@ -55,7 +55,7 @@
             <div class="hero-avatar">
                 <img
                     srcset="{{ $avatarMedia['srcset'] }}"
-                    sizes="(max-width: 768px) 128px, 256px"
+                    sizes="128px"
                     src="{{ $avatarMedia['src'] }}"
                     alt="Andreas Thun - AI-driven utvecklare med 20+ års erfarenhet"
                     width="128"

@@ -37,9 +37,15 @@
     <!-- Google Analytics 4 (GDPR-compliant) -->
     <x-google-analytics />
 
-    <!-- Google reCAPTCHA v3 (loaded once globally) -->
+    <!-- Google reCAPTCHA v3 (lazy loaded via recaptcha-loader.js when user scrolls to forms) -->
     @if(config('recaptcha.enabled'))
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}" async defer></script>
+    <script>
+        // Store reCAPTCHA config for lazy loader
+        window.recaptchaConfig = {
+            enabled: true,
+            siteKey: '{{ config('recaptcha.site_key') }}'
+        };
+    </script>
     @endif
 
     <!-- Structured Data (JSON-LD) -->
