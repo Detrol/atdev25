@@ -131,6 +131,27 @@ export class ViewportDetector {
     }
 
     /**
+     * Get optimal SVG viewBox based on viewport aspect ratio
+     * Returns viewBox string that matches screen proportions
+     *
+     * Examples:
+     * - Portrait mobile (375×667): "0 0 100 178" (taller)
+     * - Square tablet (768×1024): "0 0 100 133"
+     * - Landscape desktop (1920×1080): "0 0 100 56" (wider)
+     */
+    getViewBox() {
+        // Base width is always 100
+        const baseWidth = 100;
+
+        // Calculate height based on aspect ratio to maintain proportions
+        // aspectRatio = width / height
+        // So: viewBoxHeight = baseWidth / aspectRatio
+        const viewBoxHeight = Math.round(baseWidth / this.aspectRatio);
+
+        return `0 0 ${baseWidth} ${viewBoxHeight}`;
+    }
+
+    /**
      * Get edge ranges for thread system
      */
     getEdgeRanges() {

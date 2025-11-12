@@ -492,7 +492,8 @@ class SVGBuilder {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('width', '100%');
         svg.setAttribute('height', '100%');
-        svg.setAttribute('viewBox', '0 0 100 100');
+        // Dynamic viewBox based on viewport aspect ratio (portrait mobile = taller viewBox)
+        svg.setAttribute('viewBox', viewport.getViewBox());
         svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
         svg.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%;';
         this.container.appendChild(svg);
@@ -744,16 +745,15 @@ export function initThreadSystem() {
     const threadContainer = document.createElement('div');
     threadContainer.className = 'story-thread-container';
 
-    // Mobile: Full width & height (covers entire page, not just viewport)
+    // Mobile: Full viewport width (no max-width constraint)
     // Desktop: Centered 1400px container
     const containerStyles = viewport.isMobile
         ? `
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            min-height: 100vh;
-            height: 100%;
+            height: 100vh;
             pointer-events: none;
             z-index: 1;
             overflow: visible;
