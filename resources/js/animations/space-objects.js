@@ -284,7 +284,7 @@ class NebulaFactory {
         };
 
         // Add rotation only on desktop (CPU intensive)
-        if (!isMobile) {
+        if (!viewport.isMobile) {
             animConfig.rotation = random(-15, 15);
         }
 
