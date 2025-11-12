@@ -134,19 +134,27 @@ export class ViewportDetector {
      * Get optimal SVG viewBox based on viewport aspect ratio
      * Returns viewBox string that matches screen proportions
      *
+     * IMPORTANT: viewBox height must be at least 100 to avoid clipping objects
+     * positioned at Y:0-100. We only EXTEND the viewBox for portrait mode.
+     *
      * Examples:
-     * - Portrait mobile (375×667): "0 0 100 178" (taller)
-     * - Square tablet (768×1024): "0 0 100 133"
-     * - Landscape desktop (1920×1080): "0 0 100 56" (wider)
+     * - Portrait mobile (375×667): "0 0 100 178" (extended height)
+     * - Square tablet (768×1024): "0 0 100 133" (slightly extended)
+     * - Landscape desktop (1920×1080): "0 0 100 100" (minimum, no extension)
      */
     getViewBox() {
         // Base width is always 100
         const baseWidth = 100;
+        const minHeight = 100; // Never go below 100 to avoid clipping
 
         // Calculate height based on aspect ratio to maintain proportions
         // aspectRatio = width / height
         // So: viewBoxHeight = baseWidth / aspectRatio
-        const viewBoxHeight = Math.round(baseWidth / this.aspectRatio);
+        const calculatedHeight = Math.round(baseWidth / this.aspectRatio);
+
+        // Use the LARGER of calculated height or minimum (100)
+        // This ensures landscape screens use 100×100, portrait extends to match ratio
+        const viewBoxHeight = Math.max(minHeight, calculatedHeight);
 
         return `0 0 ${baseWidth} ${viewBoxHeight}`;
     }
