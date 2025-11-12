@@ -744,15 +744,16 @@ export function initThreadSystem() {
     const threadContainer = document.createElement('div');
     threadContainer.className = 'story-thread-container';
 
-    // Mobile: Full viewport width (no max-width constraint)
+    // Mobile: Full width & height (covers entire page, not just viewport)
     // Desktop: Centered 1400px container
     const containerStyles = viewport.isMobile
         ? `
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
+            height: 100%;
             pointer-events: none;
             z-index: 1;
             overflow: visible;
