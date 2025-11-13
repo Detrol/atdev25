@@ -10,17 +10,17 @@
     {{-- Wave transition from Timeline section --}}
     <x-wave-divider color="orange-amber" position="top" />
 
-    <div class="max-w-6xl mx-auto px-6 py-24">
+    <div class="max-w-6xl mx-auto px-6 py-20">
         <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Mina Tjänster</h2>
-            <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Skräddarsydda lösningar för alla dina webbutvecklingsbehov</p>
+            <h2 class="services-title text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-600 via-amber-600 to-amber-500 dark:from-orange-400 dark:via-amber-400 dark:to-amber-300 bg-clip-text text-transparent">Mina Tjänster</h2>
+            <p class="services-subtitle text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mt-4">Skräddarsydda lösningar för alla dina webbutvecklingsbehov</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="services-grid grid md:grid-cols-3 gap-8">
             @foreach($services as $service)
-            <div class="group relative bg-white dark:bg-gray-800 rounded-3xl p-8 border-2 border-gray-200 dark:border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-purple-500 dark:hover:border-purple-500">
+            <div class="service-card group relative bg-white dark:bg-gray-800 rounded-3xl p-8 border-2 border-gray-200 dark:border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-orange-500 dark:hover:border-orange-500">
                 <!-- Icon -->
-                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
                     @if($service->icon === 'code')
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
@@ -56,7 +56,7 @@
                 <div class="space-y-3">
                     @foreach($service->features as $feature)
                     <div class="flex items-start gap-3">
-                        <svg class="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                         <span class="text-sm text-gray-700 dark:text-gray-300">{{ $feature }}</span>
@@ -66,8 +66,8 @@
                 @endif
 
                 <!-- Hover indicator -->
-                <div class="absolute bottom-6 right-6 w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="absolute bottom-6 right-6 w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>
                 </div>
@@ -76,11 +76,11 @@
         </div>
 
         <!-- CTA -->
-        <div class="mt-16 text-center">
+        <div class="services-cta mt-16 text-center">
             <p class="text-gray-600 dark:text-gray-400 mb-6 text-lg">
                 Inte säker på vilken tjänst som passar dig bäst?
             </p>
-            <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full font-semibold hover:shadow-2xl hover:shadow-purple-500/30 transition-all hover:scale-105">
+            <a href="#contact" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-full font-semibold hover:shadow-2xl hover:shadow-orange-500/30 transition-all hover:scale-105">
                 Kontakta Mig För Rådgivning
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>

@@ -218,18 +218,23 @@ function initTimelineEntrance(section, content) {
 }
 
 /**
- * Services - Cards cascade in
+ * Services - Slide in from right with scale (EXACT ABOUT PATTERN)
  */
 function initServicesEntrance(section, content) {
-    if (viewport.isMobile) {
-        // Mobile: Simple fade in for entire content
-        gsap.set(content, { y: 30, opacity: 0 });
+    if (!isProduction) {
+        console.log('Services entrance - isMobile:', viewport.isMobile, 'width:', viewport.width);
+    }
 
+    if (viewport.isMobile) {
+        // Set initial state BEFORE observing (SAME AS ABOUT)
+        gsap.set(content, { x: 50, opacity: 0 });
+
+        // Mobile: IntersectionObserver (zero scroll overhead)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     gsap.to(content, {
-                        y: 0,
+                        x: 0,
                         opacity: 1,
                         duration: 0.6,
                         ease: 'power2.out'
@@ -241,21 +246,23 @@ function initServicesEntrance(section, content) {
 
         observer.observe(section);
     } else {
-        // Desktop: Full cascade animation
+        // Desktop: ScrollTrigger with full animation (SAME AS ABOUT)
         gsap.from(content, {
-            y: 50,
+            x: 100,
             opacity: 0,
-            duration: 0.8,
-            ease: 'power2.out',
+            scale: 0.95,
+            duration: 1.2,
+            ease: 'power3.out',
             scrollTrigger: {
                 trigger: section,
                 start: 'top 80%',
+                end: 'top 50%',
                 toggleActions: 'play none none reverse'
             }
         });
 
-        // Cascade service cards
-        const cards = content.querySelectorAll('.group');
+        // Cascade service cards (additional animation)
+        const cards = content.querySelectorAll('.service-card');
         if (cards.length) {
             gsap.from(cards, {
                 y: 80,
