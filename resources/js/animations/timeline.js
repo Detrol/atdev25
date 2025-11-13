@@ -18,14 +18,29 @@ export function initTimelineAnimations() {
     if (!timelineSection) return;
 
     // === MAIN TIMELINE SEQUENCE ===
-    ScrollTrigger.create({
-        trigger: '#expertis',
-        start: 'top 70%',
-        onEnter: () => {
-            animateTimeline();
-        },
-        once: true
-    });
+    if (viewport.isMobile) {
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateTimeline();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        observer.observe(timelineSection);
+    } else {
+        // Desktop: ScrollTrigger
+        ScrollTrigger.create({
+            trigger: '#expertis',
+            start: 'top 70%',
+            onEnter: () => {
+                animateTimeline();
+            },
+            once: true
+        });
+    }
 
     // === PARALLAX BLOBS ===
     initBlobParallax();

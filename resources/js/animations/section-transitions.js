@@ -78,21 +78,29 @@ export function initSectionTransitions() {
  * About Section - Slide in from right with scale
  */
 function initAboutEntrance(section, content) {
+    if (!isProduction) {
+        console.log('About entrance - isMobile:', viewport.isMobile, 'width:', viewport.width);
+    }
+
     if (viewport.isMobile) {
-        // Mobile: Simple slide from right (no scale)
-        gsap.from(content, {
-            x: 50,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // Mobile: IntersectionObserver (zero scroll overhead)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.from(content, {
+                        x: 50,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(section);
     } else {
-        // Desktop: Full animation with scale
+        // Desktop: ScrollTrigger with full animation
         gsap.from(content, {
             x: 100,
             opacity: 0,
@@ -114,18 +122,22 @@ function initAboutEntrance(section, content) {
  */
 function initHowIWorkEntrance(section, content) {
     if (viewport.isMobile) {
-        // Mobile: Simple slide from left (no stagger)
-        gsap.from(content, {
-            x: -50,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // Mobile: IntersectionObserver (zero scroll overhead)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.from(content, {
+                        x: -50,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(section);
     } else {
         // Desktop: Full animation with stagger
         gsap.from(content, {
@@ -164,20 +176,24 @@ function initHowIWorkEntrance(section, content) {
  */
 function initTimelineEntrance(section, content) {
     if (viewport.isMobile) {
-        // Mobile: Quick fade + slide
-        gsap.from(content, {
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 70%',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.from(content, {
+                        y: 30,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        observer.observe(section);
     } else {
-        // Desktop: Full animation
+        // Desktop: ScrollTrigger
         gsap.from(content, {
             y: 50,
             opacity: 0,
@@ -197,17 +213,21 @@ function initTimelineEntrance(section, content) {
  */
 function initServicesEntrance(section, content) {
     if (viewport.isMobile) {
-        // Mobile: Quick fade-in (no stagger)
-        gsap.from(content, {
-            opacity: 0,
-            duration: 0.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.from(content, {
+                        opacity: 0,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(section);
     } else {
         // Desktop: Full cascade animation
         gsap.from(content, {
@@ -250,17 +270,21 @@ function initProjectsEntrance(section, content) {
 
     if (projectCards.length) {
         if (viewport.isMobile) {
-            // Mobile: Fast fade-in (no scale, no stagger)
-            gsap.from(projectCards, {
-                opacity: 0,
-                duration: 0.5,
-                ease: 'power2.out',
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top 70%',
-                    toggleActions: 'play none none none'
-                }
-            });
+            // Mobile: IntersectionObserver
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        gsap.from(projectCards, {
+                            opacity: 0,
+                            duration: 0.5,
+                            ease: 'power2.out'
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(section);
         } else {
             // Desktop: Full masonry assembly
             gsap.from(projectCards, {
@@ -273,7 +297,7 @@ function initProjectsEntrance(section, content) {
                 },
                 duration: 0.6,
                 ease: 'back.out(1.2)',
-                immediateRender: false, // Don't apply 'from' values until animation starts
+                immediateRender: false,
                 scrollTrigger: {
                     trigger: section,
                     start: 'top 70%',
@@ -289,18 +313,22 @@ function initProjectsEntrance(section, content) {
  */
 function initFAQEntrance(section, content) {
     if (viewport.isMobile) {
-        // Mobile: Gentle fade-in with subtle scale (no stagger)
-        gsap.from(content, {
-            scale: 0.98,
-            opacity: 0,
-            duration: 0.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.from(content, {
+                        scale: 0.98,
+                        opacity: 0,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(section);
     } else {
         // Desktop: Full bubble pop animation
         gsap.from(content, {
@@ -316,7 +344,7 @@ function initFAQEntrance(section, content) {
         });
 
         // Pop individual FAQ items
-        const faqItems = content.querySelectorAll('[x-data]'); // FAQ accordion items
+        const faqItems = content.querySelectorAll('[x-data]');
         if (faqItems.length) {
             gsap.from(faqItems, {
                 scale: 0.95,
@@ -339,18 +367,22 @@ function initFAQEntrance(section, content) {
  */
 function initPriceCalculatorEntrance(section, content) {
     if (viewport.isMobile) {
-        // Mobile: Simple slide up (no scale)
-        gsap.from(content, {
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 75%',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.from(content, {
+                        y: 30,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.25 });
+
+        observer.observe(section);
     } else {
         // Desktop: Full animation with scale
         gsap.from(content, {
@@ -373,18 +405,22 @@ function initPriceCalculatorEntrance(section, content) {
  */
 function initContactEntrance(section, content) {
     if (viewport.isMobile) {
-        // Mobile: Fade + slide from center (no 3D rotation)
-        gsap.from(content, {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            }
-        });
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.from(content, {
+                        y: 20,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(section);
     } else {
         // Desktop: 3D door swing
         gsap.from(content, {

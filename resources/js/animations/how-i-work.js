@@ -115,21 +115,28 @@ function animateValues() {
     const valueCards = document.querySelectorAll('.value-card');
     if (valueCards.length === 0) return;
 
+    const valuesGrid = document.querySelector('.values-grid');
+    if (!valuesGrid) return;
+
     if (viewport.isMobile) {
-        // Mobile: Quick fade toggle (no 3D rotation)
-        gsap.to(valueCards, {
-            opacity: 1,
-            stagger: 0.1,
-            duration: 0.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '.values-grid',
-                start: 'top 80%',
-                once: true
-            }
-        });
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.to(valueCards, {
+                        opacity: 1,
+                        stagger: 0.1,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(valuesGrid);
     } else {
-        // Desktop: 3D flip animation
+        // Desktop: 3D flip animation with ScrollTrigger
         gsap.to(valueCards, {
             rotationY: 0,
             opacity: 1,
@@ -155,38 +162,63 @@ function animateServices() {
     const serviceCards = document.querySelectorAll('.service-card');
     if (serviceCards.length === 0) return;
 
-    gsap.to(serviceCards, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        rotation: 0,
-        stagger: 0.2,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: '.services-grid',
-            start: 'top 80%',
-            once: true
-        }
-    });
+    const servicesGrid = document.querySelector('.services-grid');
+    if (!servicesGrid) return;
 
-    // Animate checkmarks separately
-    const checkmarks = document.querySelectorAll('.service-checkmark');
-    if (checkmarks.length > 0) {
-        checkmarks.forEach((check, index) => {
-            gsap.to(check, {
-                scale: 1,
-                rotation: 0,
-                duration: 0.5,
-                ease: 'back.out(1.7)',
-                scrollTrigger: {
-                    trigger: check.closest('.service-card'),
-                    start: 'top 75%',
-                    once: true
-                },
-                delay: index * 0.05 // Slight stagger per checkmark in same card
+    if (viewport.isMobile) {
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.to(serviceCards, {
+                        y: 0,
+                        opacity: 1,
+                        scale: 1,
+                        rotation: 0,
+                        duration: 0.6,
+                        ease: 'power2.out'
+                    });
+                    observer.unobserve(entry.target);
+                }
             });
+        }, { threshold: 0.2 });
+
+        observer.observe(servicesGrid);
+    } else {
+        // Desktop: ScrollTrigger with stagger
+        gsap.to(serviceCards, {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            rotation: 0,
+            stagger: 0.2,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '.services-grid',
+                start: 'top 80%',
+                once: true
+            }
         });
+
+        // Animate checkmarks separately
+        const checkmarks = document.querySelectorAll('.service-checkmark');
+        if (checkmarks.length > 0) {
+            checkmarks.forEach((check, index) => {
+                gsap.to(check, {
+                    scale: 1,
+                    rotation: 0,
+                    duration: 0.5,
+                    ease: 'back.out(1.7)',
+                    scrollTrigger: {
+                        trigger: check.closest('.service-card'),
+                        start: 'top 75%',
+                        once: true
+                    },
+                    delay: index * 0.05
+                });
+            });
+        }
     }
 }
 

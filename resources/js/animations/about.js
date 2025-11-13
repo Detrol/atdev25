@@ -16,14 +16,29 @@ export function initAboutAnimations() {
     if (!aboutSection) return;
 
     // === MAIN REVEAL TIMELINE ===
-    ScrollTrigger.create({
-        trigger: '#om-mig',
-        start: 'top 75%',
-        onEnter: () => {
-            animateAboutContent();
-        },
-        once: true
-    });
+    if (viewport.isMobile) {
+        // Mobile: IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateAboutContent();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.25 });
+
+        observer.observe(aboutSection);
+    } else {
+        // Desktop: ScrollTrigger
+        ScrollTrigger.create({
+            trigger: '#om-mig',
+            start: 'top 75%',
+            onEnter: () => {
+                animateAboutContent();
+            },
+            once: true
+        });
+    }
 
     // === IMAGE PARALLAX ===
     initImageParallax();

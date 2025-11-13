@@ -20,17 +20,21 @@ export function initProjectsGallery() {
         const img = card.querySelector('img');
         if (img) {
             if (viewport.isMobile) {
-                // Mobile: Simple fade-in (no clipPath)
-                gsap.from(img, {
-                    opacity: 0,
-                    duration: 0.5,
-                    ease: 'power2.out',
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 85%',
-                        toggleActions: 'play none none reverse'
-                    }
-                });
+                // Mobile: IntersectionObserver for zero scroll overhead
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            gsap.from(img, {
+                                opacity: 0,
+                                duration: 0.5,
+                                ease: 'power2.out'
+                            });
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 });
+
+                observer.observe(card);
             } else {
                 // Desktop: Curtain reveal with clipPath
                 gsap.from(img, {
