@@ -237,7 +237,7 @@ function initServicesEntrance(section, content) {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.15 });
+        }, { threshold: 0.2 });
 
         observer.observe(section);
     } else {
