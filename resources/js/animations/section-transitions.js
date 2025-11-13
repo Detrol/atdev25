@@ -221,46 +221,23 @@ function initTimelineEntrance(section, content) {
  * Services - Cards cascade in
  */
 function initServicesEntrance(section, content) {
-    // Services cards are inside .grid container
-    const grid = section.querySelector('.grid');
-    const cards = grid ? grid.querySelectorAll('.group') : [];
-
-    if (!isProduction) {
-        console.log('🔧 Services entrance - isMobile:', viewport.isMobile, 'cards found:', cards.length);
-    }
-
     if (viewport.isMobile) {
-        // Set initial states BEFORE observing
-        gsap.set(content, { opacity: 1 }); // Content visible
-        if (cards.length > 0) {
-            gsap.set(cards, { y: 40, opacity: 0 }); // Cards hidden
-            if (!isProduction) console.log('✅ Services cards initial state set');
-        } else {
-            if (!isProduction) console.log('⚠️ No service cards found!');
-        }
+        // Mobile: Simple fade in for entire content
+        gsap.set(content, { y: 30, opacity: 0 });
 
-        // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    if (!isProduction) console.log('👀 Services section intersecting');
-                    // Animate cards in
-                    if (cards.length > 0) {
-                        gsap.to(cards, {
-                            y: 0,
-                            opacity: 1,
-                            stagger: 0.15,
-                            duration: 0.5,
-                            ease: 'power2.out',
-                            onComplete: () => {
-                                if (!isProduction) console.log('✅ Services cards animated in');
-                            }
-                        });
-                    }
+                    gsap.to(content, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.6,
+                        ease: 'power2.out'
+                    });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.15 });
 
         observer.observe(section);
     } else {
@@ -278,7 +255,8 @@ function initServicesEntrance(section, content) {
         });
 
         // Cascade service cards
-        if (cards.length > 0) {
+        const cards = content.querySelectorAll('.group');
+        if (cards.length) {
             gsap.from(cards, {
                 y: 80,
                 opacity: 0,
