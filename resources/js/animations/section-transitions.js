@@ -221,27 +221,40 @@ function initTimelineEntrance(section, content) {
  * Services - Cards cascade in
  */
 function initServicesEntrance(section, content) {
-    const cards = content.querySelectorAll('.group');
+    // Services cards are inside .grid container
+    const grid = section.querySelector('.grid');
+    const cards = grid ? grid.querySelectorAll('.group') : [];
+
+    if (!isProduction) {
+        console.log('🔧 Services entrance - isMobile:', viewport.isMobile, 'cards found:', cards.length);
+    }
 
     if (viewport.isMobile) {
         // Set initial states BEFORE observing
         gsap.set(content, { opacity: 1 }); // Content visible
-        if (cards.length) {
+        if (cards.length > 0) {
             gsap.set(cards, { y: 40, opacity: 0 }); // Cards hidden
+            if (!isProduction) console.log('✅ Services cards initial state set');
+        } else {
+            if (!isProduction) console.log('⚠️ No service cards found!');
         }
 
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    if (!isProduction) console.log('👀 Services section intersecting');
                     // Animate cards in
-                    if (cards.length) {
+                    if (cards.length > 0) {
                         gsap.to(cards, {
                             y: 0,
                             opacity: 1,
                             stagger: 0.15,
                             duration: 0.5,
-                            ease: 'power2.out'
+                            ease: 'power2.out',
+                            onComplete: () => {
+                                if (!isProduction) console.log('✅ Services cards animated in');
+                            }
                         });
                     }
                     observer.unobserve(entry.target);
@@ -265,7 +278,7 @@ function initServicesEntrance(section, content) {
         });
 
         // Cascade service cards
-        if (cards.length) {
+        if (cards.length > 0) {
             gsap.from(cards, {
                 y: 80,
                 opacity: 0,
