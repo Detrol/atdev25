@@ -24,25 +24,56 @@ export function initHowIWorkAnimations() {
     }
     if (!isProduction) console.log('🎯 Initializing How I Work animations');
 
-    // === SET INITIAL STATES (BEFORE ScrollTrigger) ===
-    gsap.set('.hiw-title', { y: -30, opacity: 0, scale: 0.95 });
-    gsap.set('.hiw-subtitle', { y: 20, opacity: 0 });
-    gsap.set('.progress-line', { scaleY: 0, transformOrigin: 'top' });
-    gsap.set('.process-step', { x: -80, opacity: 0, rotation: -3 });
-    gsap.set('.step-number', { scale: 0, rotation: -180 });
-    gsap.set('.value-card', { rotationY: -90, opacity: 0 });
-    gsap.set('.service-card', { y: 60, opacity: 0, scale: 0.95, rotation: 2 });
-    gsap.set('.service-checkmark', { scale: 0, rotation: -180 });
+    if (viewport.isMobile) {
+        // === MOBILE: SET INITIAL STATES ===
+        gsap.set('.hiw-title', { y: -30, opacity: 0, scale: 0.95 });
+        gsap.set('.hiw-subtitle', { y: 20, opacity: 0 });
+        gsap.set('.progress-line', { scaleY: 0, transformOrigin: 'top' });
+        gsap.set('.process-step', { x: -80, opacity: 0, rotation: -3 });
+        gsap.set('.step-number', { scale: 0, rotation: -180 });
+        gsap.set('.value-card', { opacity: 0 });
+        gsap.set('.service-card', { y: 60, opacity: 0, scale: 0.95, rotation: 2 });
 
-    // === MAIN SECTION REVEAL ===
-    ScrollTrigger.create({
-        trigger: '#hur-jag-jobbar',
-        start: 'top 75%',
-        onEnter: () => {
-            animateSection();
-        },
-        once: true
-    });
+        // === MOBILE: MAIN SECTION REVEAL WITH IntersectionObserver ===
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateSection();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(howIWorkSection);
+
+        // === MOBILE: CREATE OBSERVERS FOR VALUES AND SERVICES ===
+        animateValues();
+        animateServices();
+    } else {
+        // === DESKTOP: SET INITIAL STATES ===
+        gsap.set('.hiw-title', { y: -30, opacity: 0, scale: 0.95 });
+        gsap.set('.hiw-subtitle', { y: 20, opacity: 0 });
+        gsap.set('.progress-line', { scaleY: 0, transformOrigin: 'top' });
+        gsap.set('.process-step', { x: -80, opacity: 0, rotation: -3 });
+        gsap.set('.step-number', { scale: 0, rotation: -180 });
+        gsap.set('.value-card', { rotationY: -90, opacity: 0 });
+        gsap.set('.service-card', { y: 60, opacity: 0, scale: 0.95, rotation: 2 });
+        gsap.set('.service-checkmark', { scale: 0, rotation: -180 });
+
+        // === DESKTOP: MAIN SECTION REVEAL WITH ScrollTrigger ===
+        ScrollTrigger.create({
+            trigger: '#hur-jag-jobbar',
+            start: 'top 75%',
+            onEnter: () => {
+                animateSection();
+            },
+            once: true
+        });
+
+        // === DESKTOP: ANIMATE VALUES AND SERVICES ===
+        animateValues();
+        animateServices();
+    }
 
     // === SUBSTEP EXPANSION OBSERVER ===
     observeStepExpansion();
@@ -101,11 +132,8 @@ function animateSection() {
             ease: 'back.out(1.7)'
         }, '-=0.6');
 
-    // Values section
-    animateValues();
-
-    // Services section
-    animateServices();
+    // Values and Services are animated separately via their own observers/triggers
+    // (called from initHowIWorkAnimations)
 }
 
 /**
@@ -119,10 +147,7 @@ function animateValues() {
     if (!valuesGrid) return;
 
     if (viewport.isMobile) {
-        // Set initial state BEFORE observing
-        gsap.set(valueCards, { opacity: 0 });
-
-        // Mobile: IntersectionObserver
+        // Mobile: IntersectionObserver (initial states set in init)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -169,10 +194,7 @@ function animateServices() {
     if (!servicesGrid) return;
 
     if (viewport.isMobile) {
-        // Set initial state BEFORE observing
-        gsap.set(serviceCards, { y: 60, opacity: 0, scale: 0.95, rotation: 2 });
-
-        // Mobile: IntersectionObserver
+        // Mobile: IntersectionObserver (initial states set in init)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
