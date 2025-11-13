@@ -12,6 +12,7 @@
  */
 
 import { gsap, ScrollTrigger, shouldDisableAnimations } from './gsap-config.js';
+import { viewport } from './viewport-utils.js';
 
 const isProduction = window.location.hostname === 'atdev.me';
 
@@ -114,21 +115,37 @@ function animateValues() {
     const valueCards = document.querySelectorAll('.value-card');
     if (valueCards.length === 0) return;
 
-    gsap.to(valueCards, {
-        rotationY: 0,
-        opacity: 1,
-        stagger: {
-            each: 0.15,
-            from: 'start'
-        },
-        duration: 0.8,
-        ease: 'back.out(1.4)',
-        scrollTrigger: {
-            trigger: '.values-grid',
-            start: 'top 80%',
-            once: true
-        }
-    });
+    if (viewport.isMobile) {
+        // Mobile: Quick fade toggle (no 3D rotation)
+        gsap.to(valueCards, {
+            opacity: 1,
+            stagger: 0.1,
+            duration: 0.5,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: '.values-grid',
+                start: 'top 80%',
+                once: true
+            }
+        });
+    } else {
+        // Desktop: 3D flip animation
+        gsap.to(valueCards, {
+            rotationY: 0,
+            opacity: 1,
+            stagger: {
+                each: 0.15,
+                from: 'start'
+            },
+            duration: 0.8,
+            ease: 'back.out(1.4)',
+            scrollTrigger: {
+                trigger: '.values-grid',
+                start: 'top 80%',
+                once: true
+            }
+        });
+    }
 }
 
 /**

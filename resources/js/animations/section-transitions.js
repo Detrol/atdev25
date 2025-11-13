@@ -7,6 +7,7 @@
 
 import { gsap } from './gsap-config.js';
 import { ScrollTrigger } from './gsap-config.js';
+import { viewport } from './viewport-utils.js';
 
 const isProduction = window.location.hostname === 'atdev.me';
 
@@ -77,49 +78,31 @@ export function initSectionTransitions() {
  * About Section - Slide in from right with scale
  */
 function initAboutEntrance(section, content) {
-    gsap.from(content, {
-        x: 100,
-        opacity: 0,
-        scale: 0.95,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            end: 'top 50%',
-            toggleActions: 'play none none reverse'
-        }
-    });
-}
-
-/**
- * How I Work - Conveyor belt entrance (slide from left)
- */
-function initHowIWorkEntrance(section, content) {
-    gsap.from(content, {
-        x: -100,
-        opacity: 0,
-        duration: 1,
-        ease: 'power2.out',
-        scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-        }
-    });
-
-    // Stagger children (process steps)
-    const steps = content.querySelectorAll('.step-card, .hiw-step');
-    if (steps.length) {
-        gsap.from(steps, {
-            y: 50,
+    if (viewport.isMobile) {
+        // Mobile: Simple slide from right (no scale)
+        gsap.from(content, {
+            x: 50,
             opacity: 0,
-            stagger: 0.15,
-            duration: 0.8,
-            ease: 'back.out(1.2)',
+            duration: 0.6,
+            ease: 'power2.out',
             scrollTrigger: {
                 trigger: section,
-                start: 'top 60%',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    } else {
+        // Desktop: Full animation with scale
+        gsap.from(content, {
+            x: 100,
+            opacity: 0,
+            scale: 0.95,
+            duration: 1.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                end: 'top 50%',
                 toggleActions: 'play none none reverse'
             }
         });
@@ -127,54 +110,135 @@ function initHowIWorkEntrance(section, content) {
 }
 
 /**
+ * How I Work - Conveyor belt entrance (slide from left)
+ */
+function initHowIWorkEntrance(section, content) {
+    if (viewport.isMobile) {
+        // Mobile: Simple slide from left (no stagger)
+        gsap.from(content, {
+            x: -50,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    } else {
+        // Desktop: Full animation with stagger
+        gsap.from(content, {
+            x: -100,
+            opacity: 0,
+            duration: 1,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+
+        // Stagger children (process steps)
+        const steps = content.querySelectorAll('.step-card, .hiw-step');
+        if (steps.length) {
+            gsap.from(steps, {
+                y: 50,
+                opacity: 0,
+                stagger: 0.15,
+                duration: 0.8,
+                ease: 'back.out(1.2)',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+    }
+}
+
+/**
  * Timeline - Fade in with subtle slide (NO scale to prevent text blur)
  */
 function initTimelineEntrance(section, content) {
-    gsap.from(content, {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: section,
-            start: 'top 70%',
-            toggleActions: 'play none none reverse'
-        }
-    });
+    if (viewport.isMobile) {
+        // Mobile: Quick fade + slide
+        gsap.from(content, {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    } else {
+        // Desktop: Full animation
+        gsap.from(content, {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    }
 }
 
 /**
  * Services - Cards cascade in
  */
 function initServicesEntrance(section, content) {
-    gsap.from(content, {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-        }
-    });
-
-    // Cascade service cards
-    const cards = content.querySelectorAll('.group');
-    if (cards.length) {
-        gsap.from(cards, {
-            y: 80,
+    if (viewport.isMobile) {
+        // Mobile: Quick fade-in (no stagger)
+        gsap.from(content, {
             opacity: 0,
-            stagger: 0.1,
-            duration: 0.6,
-            ease: 'back.out(1.4)',
-            immediateRender: false,
+            duration: 0.5,
+            ease: 'power2.out',
             scrollTrigger: {
                 trigger: section,
-                start: 'top 60%',
-                toggleActions: 'play none none none'
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
             }
         });
+    } else {
+        // Desktop: Full cascade animation
+        gsap.from(content, {
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+
+        // Cascade service cards
+        const cards = content.querySelectorAll('.group');
+        if (cards.length) {
+            gsap.from(cards, {
+                y: 80,
+                opacity: 0,
+                stagger: 0.1,
+                duration: 0.6,
+                ease: 'back.out(1.4)',
+                immediateRender: false,
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 60%',
+                    toggleActions: 'play none none none'
+                }
+            });
+        }
     }
 }
 
@@ -185,23 +249,38 @@ function initProjectsEntrance(section, content) {
     const projectCards = content.querySelectorAll('.project-card');
 
     if (projectCards.length) {
-        gsap.from(projectCards, {
-            scale: 0.8,
-            opacity: 0,
-            stagger: {
-                amount: 0.8,
-                grid: 'auto',
-                from: 'start'
-            },
-            duration: 0.6,
-            ease: 'back.out(1.2)',
-            immediateRender: false, // Don't apply 'from' values until animation starts
-            scrollTrigger: {
-                trigger: section,
-                start: 'top 70%',
-                toggleActions: 'play none none none'
-            }
-        });
+        if (viewport.isMobile) {
+            // Mobile: Fast fade-in (no scale, no stagger)
+            gsap.from(projectCards, {
+                opacity: 0,
+                duration: 0.5,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 70%',
+                    toggleActions: 'play none none none'
+                }
+            });
+        } else {
+            // Desktop: Full masonry assembly
+            gsap.from(projectCards, {
+                scale: 0.8,
+                opacity: 0,
+                stagger: {
+                    amount: 0.8,
+                    grid: 'auto',
+                    from: 'start'
+                },
+                duration: 0.6,
+                ease: 'back.out(1.2)',
+                immediateRender: false, // Don't apply 'from' values until animation starts
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 70%',
+                    toggleActions: 'play none none none'
+                }
+            });
+        }
     }
 }
 
@@ -209,33 +288,49 @@ function initProjectsEntrance(section, content) {
  * FAQ - Chat bubbles pop
  */
 function initFAQEntrance(section, content) {
-    gsap.from(content, {
-        scale: 0.9,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'back.out(1.4)',
-        scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-        }
-    });
-
-    // Pop individual FAQ items
-    const faqItems = content.querySelectorAll('[x-data]'); // FAQ accordion items
-    if (faqItems.length) {
-        gsap.from(faqItems, {
-            scale: 0.95,
+    if (viewport.isMobile) {
+        // Mobile: Gentle fade-in with subtle scale (no stagger)
+        gsap.from(content, {
+            scale: 0.98,
             opacity: 0,
-            stagger: 0.08,
             duration: 0.5,
-            ease: 'back.out(1.3)',
+            ease: 'power2.out',
             scrollTrigger: {
                 trigger: section,
-                start: 'top 60%',
+                start: 'top 80%',
                 toggleActions: 'play none none reverse'
             }
         });
+    } else {
+        // Desktop: Full bubble pop animation
+        gsap.from(content, {
+            scale: 0.9,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'back.out(1.4)',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+
+        // Pop individual FAQ items
+        const faqItems = content.querySelectorAll('[x-data]'); // FAQ accordion items
+        if (faqItems.length) {
+            gsap.from(faqItems, {
+                scale: 0.95,
+                opacity: 0,
+                stagger: 0.08,
+                duration: 0.5,
+                ease: 'back.out(1.3)',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 60%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
     }
 }
 
@@ -243,36 +338,68 @@ function initFAQEntrance(section, content) {
  * Price Calculator - Slide up with grid assembly
  */
 function initPriceCalculatorEntrance(section, content) {
-    gsap.from(content, {
-        y: 60,
-        opacity: 0,
-        scale: 0.95,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: section,
-            start: 'top 75%',
-            toggleActions: 'play none none reverse'
-        }
-    });
+    if (viewport.isMobile) {
+        // Mobile: Simple slide up (no scale)
+        gsap.from(content, {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 75%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    } else {
+        // Desktop: Full animation with scale
+        gsap.from(content, {
+            y: 60,
+            opacity: 0,
+            scale: 0.95,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 75%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    }
 }
 
 /**
  * Contact - Door swing open
  */
 function initContactEntrance(section, content) {
-    gsap.from(content, {
-        rotateY: -15,
-        transformOrigin: 'left center',
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-        }
-    });
+    if (viewport.isMobile) {
+        // Mobile: Fade + slide from center (no 3D rotation)
+        gsap.from(content, {
+            y: 20,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    } else {
+        // Desktop: 3D door swing
+        gsap.from(content, {
+            rotateY: -15,
+            transformOrigin: 'left center',
+            opacity: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    }
 }
 
 /**

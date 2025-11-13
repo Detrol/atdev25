@@ -9,6 +9,7 @@
  */
 
 import { gsap, ScrollTrigger } from './gsap-config.js';
+import { viewport } from './viewport-utils.js';
 
 const isProduction = window.location.hostname === 'atdev.me';
 
@@ -110,6 +111,11 @@ function animateTimeline() {
  * Parallax effect on background blobs
  */
 function initBlobParallax() {
+    // Disable parallax on mobile
+    if (viewport.isMobile) {
+        return;
+    }
+
     const blobs = document.querySelectorAll('#expertis .absolute.opacity-30 > div');
 
     blobs.forEach((blob, index) => {

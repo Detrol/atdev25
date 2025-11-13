@@ -9,6 +9,7 @@
  */
 
 import { gsap, ScrollTrigger } from './gsap-config.js';
+import { viewport } from './viewport-utils.js';
 
 export function initAboutAnimations() {
     const aboutSection = document.querySelector('#om-mig');
@@ -52,9 +53,20 @@ function animateAboutContent() {
             opacity: 0,
             stagger: 0.2,
             duration: 0.8
-        }, '-=0.5')
-        // Image reveals from right with tilt
-        .from('.about-image', {
+        }, '-=0.5');
+
+    // Image reveals - different animation for mobile vs desktop
+    if (viewport.isMobile) {
+        // Mobile: Simple slide from right (no rotation, no scale)
+        timeline.from('.about-image', {
+            x: 30,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out'
+        }, '-=0.5');
+    } else {
+        // Desktop: Full animation with tilt
+        timeline.from('.about-image', {
             x: 60,
             opacity: 0,
             rotation: 3,
@@ -62,12 +74,18 @@ function animateAboutContent() {
             duration: 1,
             ease: 'power2.out'
         }, '-=0.8');
+    }
 }
 
 /**
  * Parallax effect on about image
  */
 function initImageParallax() {
+    // Disable parallax on mobile
+    if (viewport.isMobile) {
+        return;
+    }
+
     const image = document.querySelector('.about-image');
     if (!image) return;
 
