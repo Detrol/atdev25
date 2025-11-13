@@ -43,7 +43,8 @@ export function initSectionTransitions() {
                 break;
 
             case 'services': // Services
-                initServicesEntrance(section, content);
+                // TEMPORARILY DISABLED - testing if section renders at all
+                // initServicesEntrance(section, content);
                 break;
 
             case 'projects': // Projects
