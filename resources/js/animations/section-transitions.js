@@ -43,8 +43,7 @@ export function initSectionTransitions() {
                 break;
 
             case 'services': // Services
-                // TEMPORARILY DISABLED - testing if section renders at all
-                // initServicesEntrance(section, content);
+                initServicesEntrance(section, content);
                 break;
 
             case 'projects': // Projects
@@ -219,37 +218,35 @@ function initTimelineEntrance(section, content) {
 }
 
 /**
- * Services - Slide in from right with scale (EXACT ABOUT PATTERN)
+ * Services - Simple fade up (SIMPLIFIED FOR MOBILE)
  */
 function initServicesEntrance(section, content) {
-    if (!isProduction) {
-        console.log('Services entrance - isMobile:', viewport.isMobile, 'width:', viewport.width);
-    }
-
     if (viewport.isMobile) {
-        // Set initial state BEFORE observing (SAME AS ABOUT)
-        gsap.set(content, { x: 50, opacity: 0 });
+        // Mobile: Ultra-simple fade up with very low threshold
+        gsap.set(content, { y: 20, opacity: 0 });
 
-        // Mobile: IntersectionObserver (zero scroll overhead)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     gsap.to(content, {
-                        x: 0,
+                        y: 0,
                         opacity: 1,
-                        duration: 0.6,
+                        duration: 0.8,
                         ease: 'power2.out'
                     });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, {
+            threshold: 0.05,  // Trigger when just 5% visible
+            rootMargin: '50px'  // Start 50px before entering viewport
+        });
 
         observer.observe(section);
     } else {
-        // Desktop: ScrollTrigger with full animation (SAME AS ABOUT)
+        // Desktop: Full animation with scale
         gsap.from(content, {
-            x: 100,
+            y: 50,
             opacity: 0,
             scale: 0.95,
             duration: 1.2,
@@ -262,8 +259,8 @@ function initServicesEntrance(section, content) {
             }
         });
 
-        // Cascade service cards (additional animation)
-        const cards = content.querySelectorAll('.service-card');
+        // Cascade service cards
+        const cards = content.querySelectorAll('.service-card, .main-service-card');
         if (cards.length) {
             gsap.from(cards, {
                 y: 80,
