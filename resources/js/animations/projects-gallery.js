@@ -20,12 +20,15 @@ export function initProjectsGallery() {
         const img = card.querySelector('img');
         if (img) {
             if (viewport.isMobile) {
+                // Set initial state BEFORE observing
+                gsap.set(img, { opacity: 0 });
+
                 // Mobile: IntersectionObserver for zero scroll overhead
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            gsap.from(img, {
-                                opacity: 0,
+                            gsap.to(img, {
+                                opacity: 1,
                                 duration: 0.5,
                                 ease: 'power2.out'
                             });

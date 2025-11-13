@@ -86,38 +86,32 @@ function animateTimeline() {
 
         if (!isProduction) console.log('📱 Mobile timeline found:', milestones.length, 'milestones,', icons.length, 'icons');
 
-        // Set initial visible state for all elements
-        gsap.set(milestones, { opacity: 1, scale: 1, y: 0 });
-        gsap.set(icons, { opacity: 1, scale: 1, rotation: 0 });
+        // Set initial HIDDEN state for all elements (not visible)
+        gsap.set(milestones, { opacity: 0, scale: 0.9, y: 20 });
+        gsap.set(icons, { opacity: 0, scale: 0, rotation: -45 });
 
         // Milestones appear in sequence (matching original)
         milestones.forEach((milestone, index) => {
-            gsap.fromTo(milestone,
-                { scale: 0.9, opacity: 0, y: 20 },
-                {
-                    scale: 1,
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.6,
-                    delay: index * 1.25, // 0, 1250ms, 2500ms, 3750ms
-                    ease: 'power2.out'
-                }
-            );
+            gsap.to(milestone, {
+                scale: 1,
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                delay: index * 1.25, // 0, 1250ms, 2500ms, 3750ms
+                ease: 'power2.out'
+            });
         });
 
         // Icons pop in after milestones
         icons.forEach((icon, index) => {
-            gsap.fromTo(icon,
-                { scale: 0, rotation: -45, opacity: 0 },
-                {
-                    scale: 1,
-                    rotation: 0,
-                    opacity: 1,
-                    duration: 0.5,
-                    delay: index * 1.25 + 0.3,
-                    ease: 'back.out(1.5)'
-                }
-            );
+            gsap.to(icon, {
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                duration: 0.5,
+                delay: index * 1.25 + 0.3,
+                ease: 'back.out(1.5)'
+            });
         });
     }
 }

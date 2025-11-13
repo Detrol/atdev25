@@ -17,6 +17,11 @@ export function initAboutAnimations() {
 
     // === MAIN REVEAL TIMELINE ===
     if (viewport.isMobile) {
+        // Set initial states BEFORE observing (mobile only)
+        gsap.set('.about-title', { x: -50, opacity: 0, scale: 0.95 });
+        gsap.set('.about-paragraph', { y: 30, opacity: 0 });
+        gsap.set('.about-image', { x: 30, opacity: 0 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -54,41 +59,50 @@ function animateAboutContent() {
         }
     });
 
-    timeline
-        // Title reveals with scale
-        .from('.about-title', {
-            x: -50,
-            opacity: 0,
-            scale: 0.95,
-            duration: 1
-        })
-        // Paragraphs stagger in
-        .from('.about-paragraph', {
-            y: 30,
-            opacity: 0,
-            stagger: 0.2,
-            duration: 0.8
-        }, '-=0.5');
-
-    // Image reveals - different animation for mobile vs desktop
     if (viewport.isMobile) {
-        // Mobile: Simple slide from right (no rotation, no scale)
-        timeline.from('.about-image', {
-            x: 30,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power2.out'
-        }, '-=0.5');
+        // Mobile: Animate TO final state (from pre-set initial states)
+        timeline
+            .to('.about-title', {
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 0.8
+            })
+            .to('.about-paragraph', {
+                y: 0,
+                opacity: 1,
+                stagger: 0.15,
+                duration: 0.6
+            }, '-=0.4')
+            .to('.about-image', {
+                x: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: 'power2.out'
+            }, '-=0.5');
     } else {
-        // Desktop: Full animation with tilt
-        timeline.from('.about-image', {
-            x: 60,
-            opacity: 0,
-            rotation: 3,
-            scale: 0.95,
-            duration: 1,
-            ease: 'power2.out'
-        }, '-=0.8');
+        // Desktop: Use FROM (works with ScrollTrigger)
+        timeline
+            .from('.about-title', {
+                x: -50,
+                opacity: 0,
+                scale: 0.95,
+                duration: 1
+            })
+            .from('.about-paragraph', {
+                y: 30,
+                opacity: 0,
+                stagger: 0.2,
+                duration: 0.8
+            }, '-=0.5')
+            .from('.about-image', {
+                x: 60,
+                opacity: 0,
+                rotation: 3,
+                scale: 0.95,
+                duration: 1,
+                ease: 'power2.out'
+            }, '-=0.8');
     }
 }
 

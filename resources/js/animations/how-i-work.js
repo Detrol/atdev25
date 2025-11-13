@@ -119,6 +119,9 @@ function animateValues() {
     if (!valuesGrid) return;
 
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(valueCards, { opacity: 0 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -166,6 +169,9 @@ function animateServices() {
     if (!servicesGrid) return;
 
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(serviceCards, { y: 60, opacity: 0, scale: 0.95, rotation: 2 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {

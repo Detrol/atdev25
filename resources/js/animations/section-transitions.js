@@ -83,13 +83,16 @@ function initAboutEntrance(section, content) {
     }
 
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(content, { x: 50, opacity: 0 });
+
         // Mobile: IntersectionObserver (zero scroll overhead)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.from(content, {
-                        x: 50,
-                        opacity: 0,
+                    gsap.to(content, {
+                        x: 0,
+                        opacity: 1,
                         duration: 0.6,
                         ease: 'power2.out'
                     });
@@ -122,13 +125,16 @@ function initAboutEntrance(section, content) {
  */
 function initHowIWorkEntrance(section, content) {
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(content, { x: -50, opacity: 0 });
+
         // Mobile: IntersectionObserver (zero scroll overhead)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.from(content, {
-                        x: -50,
-                        opacity: 0,
+                    gsap.to(content, {
+                        x: 0,
+                        opacity: 1,
                         duration: 0.6,
                         ease: 'power2.out'
                     });
@@ -176,13 +182,16 @@ function initHowIWorkEntrance(section, content) {
  */
 function initTimelineEntrance(section, content) {
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(content, { y: 30, opacity: 0 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.from(content, {
-                        y: 30,
-                        opacity: 0,
+                    gsap.to(content, {
+                        y: 0,
+                        opacity: 1,
                         duration: 0.6,
                         ease: 'power2.out'
                     });
@@ -213,12 +222,15 @@ function initTimelineEntrance(section, content) {
  */
 function initServicesEntrance(section, content) {
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(content, { opacity: 0 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.from(content, {
-                        opacity: 0,
+                    gsap.to(content, {
+                        opacity: 1,
                         duration: 0.5,
                         ease: 'power2.out'
                     });
@@ -270,12 +282,15 @@ function initProjectsEntrance(section, content) {
 
     if (projectCards.length) {
         if (viewport.isMobile) {
+            // Set initial state BEFORE observing
+            gsap.set(projectCards, { opacity: 0 });
+
             // Mobile: IntersectionObserver
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        gsap.from(projectCards, {
-                            opacity: 0,
+                        gsap.to(projectCards, {
+                            opacity: 1,
                             duration: 0.5,
                             ease: 'power2.out'
                         });
@@ -313,13 +328,16 @@ function initProjectsEntrance(section, content) {
  */
 function initFAQEntrance(section, content) {
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(content, { scale: 0.98, opacity: 0 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.from(content, {
-                        scale: 0.98,
-                        opacity: 0,
+                    gsap.to(content, {
+                        scale: 1,
+                        opacity: 1,
                         duration: 0.5,
                         ease: 'power2.out'
                     });
@@ -367,13 +385,16 @@ function initFAQEntrance(section, content) {
  */
 function initPriceCalculatorEntrance(section, content) {
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(content, { y: 30, opacity: 0 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.from(content, {
-                        y: 30,
-                        opacity: 0,
+                    gsap.to(content, {
+                        y: 0,
+                        opacity: 1,
                         duration: 0.6,
                         ease: 'power2.out'
                     });
@@ -405,13 +426,16 @@ function initPriceCalculatorEntrance(section, content) {
  */
 function initContactEntrance(section, content) {
     if (viewport.isMobile) {
+        // Set initial state BEFORE observing
+        gsap.set(content, { y: 20, opacity: 0 });
+
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.from(content, {
-                        y: 20,
-                        opacity: 0,
+                    gsap.to(content, {
+                        y: 0,
+                        opacity: 1,
                         duration: 0.6,
                         ease: 'power2.out'
                     });
