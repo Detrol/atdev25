@@ -221,19 +221,29 @@ function initTimelineEntrance(section, content) {
  * Services - Cards cascade in
  */
 function initServicesEntrance(section, content) {
+    const cards = content.querySelectorAll('.group');
+
     if (viewport.isMobile) {
-        // Set initial state BEFORE observing
-        gsap.set(content, { opacity: 0 });
+        // Set initial states BEFORE observing
+        gsap.set(content, { opacity: 1 }); // Content visible
+        if (cards.length) {
+            gsap.set(cards, { y: 40, opacity: 0 }); // Cards hidden
+        }
 
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    gsap.to(content, {
-                        opacity: 1,
-                        duration: 0.5,
-                        ease: 'power2.out'
-                    });
+                    // Animate cards in
+                    if (cards.length) {
+                        gsap.to(cards, {
+                            y: 0,
+                            opacity: 1,
+                            stagger: 0.15,
+                            duration: 0.5,
+                            ease: 'power2.out'
+                        });
+                    }
                     observer.unobserve(entry.target);
                 }
             });
@@ -255,7 +265,6 @@ function initServicesEntrance(section, content) {
         });
 
         // Cascade service cards
-        const cards = content.querySelectorAll('.group');
         if (cards.length) {
             gsap.from(cards, {
                 y: 80,
