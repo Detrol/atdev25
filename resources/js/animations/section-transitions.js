@@ -84,22 +84,25 @@ function initAboutEntrance(section, content) {
 
     if (viewport.isMobile) {
         // Set initial state BEFORE observing
-        gsap.set(content, { x: 50, opacity: 0 });
+        gsap.set(content, { y: 20, opacity: 0 });
 
         // Mobile: IntersectionObserver (zero scroll overhead)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     gsap.to(content, {
-                        x: 0,
+                        y: 0,
                         opacity: 1,
-                        duration: 0.6,
+                        duration: 0.8,
                         ease: 'power2.out'
                     });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, {
+            threshold: 0.05,
+            rootMargin: '50px'
+        });
 
         observer.observe(section);
     } else {
@@ -126,22 +129,25 @@ function initAboutEntrance(section, content) {
 function initHowIWorkEntrance(section, content) {
     if (viewport.isMobile) {
         // Set initial state BEFORE observing
-        gsap.set(content, { x: -50, opacity: 0 });
+        gsap.set(content, { y: 20, opacity: 0 });
 
         // Mobile: IntersectionObserver (zero scroll overhead)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     gsap.to(content, {
-                        x: 0,
+                        y: 0,
                         opacity: 1,
-                        duration: 0.6,
+                        duration: 0.8,
                         ease: 'power2.out'
                     });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, {
+            threshold: 0.05,
+            rootMargin: '50px'
+        });
 
         observer.observe(section);
     } else {
@@ -183,7 +189,7 @@ function initHowIWorkEntrance(section, content) {
 function initTimelineEntrance(section, content) {
     if (viewport.isMobile) {
         // Set initial state BEFORE observing
-        gsap.set(content, { y: 30, opacity: 0 });
+        gsap.set(content, { y: 20, opacity: 0 });
 
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
@@ -192,13 +198,16 @@ function initTimelineEntrance(section, content) {
                     gsap.to(content, {
                         y: 0,
                         opacity: 1,
-                        duration: 0.6,
+                        duration: 0.8,
                         ease: 'power2.out'
                     });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.3 });
+        }, {
+            threshold: 0.05,
+            rootMargin: '50px'
+        });
 
         observer.observe(section);
     } else {
@@ -288,21 +297,25 @@ function initProjectsEntrance(section, content) {
     if (projectCards.length) {
         if (viewport.isMobile) {
             // Set initial state BEFORE observing
-            gsap.set(projectCards, { opacity: 0 });
+            gsap.set(projectCards, { y: 20, opacity: 0 });
 
             // Mobile: IntersectionObserver
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         gsap.to(projectCards, {
+                            y: 0,
                             opacity: 1,
-                            duration: 0.5,
+                            duration: 0.8,
                             ease: 'power2.out'
                         });
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.3 });
+            }, {
+                threshold: 0.05,
+                rootMargin: '50px'
+            });
 
             observer.observe(section);
         } else {
@@ -334,22 +347,25 @@ function initProjectsEntrance(section, content) {
 function initFAQEntrance(section, content) {
     if (viewport.isMobile) {
         // Set initial state BEFORE observing
-        gsap.set(content, { scale: 0.98, opacity: 0 });
+        gsap.set(content, { y: 20, opacity: 0 });
 
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     gsap.to(content, {
-                        scale: 1,
+                        y: 0,
                         opacity: 1,
-                        duration: 0.5,
+                        duration: 0.8,
                         ease: 'power2.out'
                     });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, {
+            threshold: 0.05,
+            rootMargin: '50px'
+        });
 
         observer.observe(section);
     } else {
@@ -391,7 +407,7 @@ function initFAQEntrance(section, content) {
 function initPriceCalculatorEntrance(section, content) {
     if (viewport.isMobile) {
         // Set initial state BEFORE observing
-        gsap.set(content, { y: 30, opacity: 0 });
+        gsap.set(content, { y: 20, opacity: 0 });
 
         // Mobile: IntersectionObserver
         const observer = new IntersectionObserver((entries) => {
@@ -400,13 +416,16 @@ function initPriceCalculatorEntrance(section, content) {
                     gsap.to(content, {
                         y: 0,
                         opacity: 1,
-                        duration: 0.6,
+                        duration: 0.8,
                         ease: 'power2.out'
                     });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.25 });
+        }, {
+            threshold: 0.05,
+            rootMargin: '50px'
+        });
 
         observer.observe(section);
     } else {
@@ -441,13 +460,16 @@ function initContactEntrance(section, content) {
                     gsap.to(content, {
                         y: 0,
                         opacity: 1,
-                        duration: 0.6,
+                        duration: 0.8,
                         ease: 'power2.out'
                     });
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, {
+            threshold: 0.05,
+            rootMargin: '50px'
+        });
 
         observer.observe(section);
     } else {
