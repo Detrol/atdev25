@@ -31,3 +31,4 @@ auth.json
 /.idea
 CLAUDE.md
 resources/views/home.blade.php.backup
+.claude/settings.local.json

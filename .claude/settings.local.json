@@ -24,10 +24,7 @@
       "mcp__zen__challenge",
       "Bash(find:*)",
       "Bash(mkdir:*)",
-      "mcp__zen__chat",
-      "Bash(rm:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "mcp__zen__chat"
     ],
     "deny": [],
     "ask": []
