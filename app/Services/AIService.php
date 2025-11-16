@@ -39,7 +39,7 @@ class AIService
     public function callAnthropicApi(
         string $userMessage,
         string $chatHistory,
-        string $model = 'claude-3-7-sonnet-20250219',
+        string $model = 'claude-sonnet-4-5-20250929',
         int $maxTokens = 500,
         float $temperature = 0.7
     ): string {
@@ -182,7 +182,7 @@ class AIService
         ]);
 
         $data = [
-            'model' => 'claude-3-7-sonnet-20250219',
+            'model' => 'claude-sonnet-4-5-20250929',
             'messages' => [
                 [
                     'role' => 'user',
@@ -1001,7 +1001,7 @@ HTML;
         $userMessage = $this->buildContextualUserMessage($serviceCategory, $description);
 
         $data = [
-            'model' => 'claude-3-7-sonnet-20250219',
+            'model' => 'claude-sonnet-4-5-20250929',
             'messages' => [
                 [
                     'role' => 'user',
@@ -1620,7 +1620,7 @@ PROMPT;
         $systemPrompt = $this->createAllergenAnalysisPrompt();
 
         $data = [
-            'model' => 'claude-3-7-sonnet-20250219',
+            'model' => 'claude-sonnet-4-5-20250929',
             'messages' => [
                 [
                     'role' => 'user',

@@ -48,7 +48,7 @@ ATDev är en **AI-driven portfolio-plattform** byggd med Laravel 12 som demonstr
 - **Testing**: Pest (feature + unit tests)
 
 ### AI & Externa Tjänster
-- **AI Platform**: Anthropic Claude 3.7 Sonnet (claude-3-7-sonnet-20250219)
+- **AI Platform**: Anthropic Claude 4.5 Sonnet (claude-sonnet-4-5-20250929)
 - **Web Scraping**: BrightData proxy service
 - **Reviews API**: Google Places API
 - **Bot Protection**: Cloudflare Turnstile
@@ -197,7 +197,7 @@ ATDev är en **AI-driven portfolio-plattform** byggd med Laravel 12 som demonstr
 - `analyzeMenuAllergens($menuText)` - Swedish allergen detection
 
 **Configuration**:
-- **Model**: claude-3-7-sonnet-20250219
+- **Model**: claude-sonnet-4-5-20250929
 - **Max Tokens**: 500 (chat), variable för andra tasks
 - **Temperature**: 0.7 (default)
 - **System Prompts**: Per use case (portfolio, audit, pricing, allergens)

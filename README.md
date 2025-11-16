@@ -15,7 +15,7 @@ ATDev är inte bara en portfolio – det är en **showcase av moderna webbutveck
 ## ✨ Huvudfunktioner
 
 ### 🤖 AI-Drivna Funktioner
-- **AI-Assistent**: Chatbot med portfolio-kontext (Anthropic Claude 3.7 Sonnet)
+- **AI-Assistent**: Chatbot med portfolio-kontext (Anthropic Claude 4.5 Sonnet)
 - **Website Audit**: Omfattande AI-baserad webbplatsanalys med ground truth data
 - **Priskalkylator**: AI-driven projektuppskattning med web scraping (BrightData)
 - **Smart Menu**: AI allergen-analys på svenska (EU 14 allergener)
@@ -79,7 +79,7 @@ ATDev är inte bara en portfolio – det är en **showcase av moderna webbutveck
 - **Testing**: Pest
 
 ### AI & Externa Tjänster
-- **AI**: Anthropic Claude 3.7 Sonnet
+- **AI**: Anthropic Claude 4.5 Sonnet
 - **Scraping**: BrightData proxy service
 - **Reviews**: Google Places API
 - **Bot Protection**: Cloudflare Turnstile

@@ -400,7 +400,7 @@ URL: `/admin/estimations/{estimation}`
 - **Timestamp**: När estimeringen gjordes
 
 **AI-analys:**
-Estimeringen genereras av Claude 3.7 Sonnet baserat på:
+Estimeringen genereras av Claude 4.5 Sonnet baserat på:
 - Användarens projektbeskrivning
 - Web scraping av liknande produkter (via BrightData)
 - Tidigare projekt-erfarenhet
@@ -490,7 +490,7 @@ php artisan queue:work --tries=3 --timeout=90
 
 ### AI-Funktioner
 **Website Audits** och **Price Estimations** använder AI:
-- Audits: Ground truth data + AI-analys (Claude 3.7 Sonnet)
+- Audits: Ground truth data + AI-analys (Claude 4.5 Sonnet)
 - Estimations: AI-driven projekttypning + web scraping
 
 **Rate Limiting:**

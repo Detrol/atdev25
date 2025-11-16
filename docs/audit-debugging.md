@@ -158,7 +158,7 @@ curl https://api.anthropic.com/v1/messages \
   -H "x-api-key: $ANTHROPIC_API_KEY" \
   -H "anthropic-version: 2023-06-01" \
   -H "content-type: application/json" \
-  -d '{"model":"claude-3-7-sonnet-20250219","messages":[{"role":"user","content":"test"}],"max_tokens":10}'
+  -d '{"model":"claude-sonnet-4-5-20250929","messages":[{"role":"user","content":"test"}],"max_tokens":10}'
 ```
 
 ### Problem 4: Job Går Till Failed

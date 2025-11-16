@@ -57,7 +57,7 @@ Content-Type: application/json
 **Response** (200 OK):
 ```json
 {
-  "answer": "Jag använder Laravel 12 som backend-ramverk tillsammans med PHP 8.2+. För databas använder jag MySQL 8, och för caching och queue i produktion används Redis. All AI-funktionalitet drivs av Anthropic Claude 3.7 Sonnet.",
+  "answer": "Jag använder Laravel 12 som backend-ramverk tillsammans med PHP 8.2+. För databas använder jag MySQL 8, och för caching och queue i produktion används Redis. All AI-funktionalitet drivs av Anthropic Claude 4.5 Sonnet.",
   "session_id": "abc123-def456-ghi789"
 }
 ```

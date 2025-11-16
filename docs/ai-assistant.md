@@ -211,7 +211,7 @@ Widgeten är redan inkluderad i `layouts/app.blade.php` och visas automatiskt p�
 Redigera `AIService::createPortfolioPrompt()` för att anpassa AI:ns beteende och kontext.
 
 **Ändra modell/parametrar**:
-Redigera `AIService::callAnthropicApi()` - standard är `claude-3-7-sonnet-20250219` med 500 max tokens.
+Redigera `AIService::callAnthropicApi()` - standard är `claude-sonnet-4-5-20250929` med 500 max tokens.
 
 ### För Besökare
 
@@ -248,7 +248,7 @@ Redigera `AIService::callAnthropicApi()` - standard är `claude-3-7-sonnet-20250
 
 ### Anthropic Pricing (approximativt)
 
-**Claude 3.7 Sonnet**:
+**Claude 4.5 Sonnet**:
 - Input: ~$3 per miljoner tokens
 - Output: ~$15 per miljoner tokens
 

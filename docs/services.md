@@ -47,7 +47,7 @@ public function callAnthropicApi(
     string $system,
     int $maxTokens = 500,
     float $temperature = 0.7,
-    string $model = 'claude-3-7-sonnet-20250219'
+    string $model = 'claude-sonnet-4-5-20250929'
 ): array
 ```
 
@@ -56,7 +56,7 @@ public function callAnthropicApi(
 - `$system` - System prompt defining AI's role och context
 - `$maxTokens` - Max response length (default: 500, max: 8192)
 - `$temperature` - Creativity level 0.0-1.0 (default: 0.7)
-- `$model` - Claude model version (default: claude-3-7-sonnet-20250219)
+- `$model` - Claude model version (default: claude-sonnet-4-5-20250929)
 
 **Returns**: Array med AI response
 

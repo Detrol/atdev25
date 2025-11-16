@@ -15,7 +15,7 @@ Showcase-demos för att:
 1. **3D Product Viewer** - AR-aktiverad 3D-produktvisning
 2. **Before/After Slider** - Interaktiv före/efter-jämförelse
 3. **Google Reviews Widget** - Automatisk recensionsvisning
-4. **Smart Menu** - AI allergen-analys (Claude 3.7 Sonnet)
+4. **Smart Menu** - AI allergen-analys (Claude 4.5 Sonnet)
 
 ---
 
@@ -523,10 +523,10 @@ public function getPlace(string $placeId)
 ## 4. Smart Menu med AI Allergen-Analys
 
 ### Beskrivning
-AI-driven allergen-identifiering för restaurangmenyer. Analyserar matbeskrivningar automatiskt och identifierar alla 14 EU-allergener med förklaringar och konfidensgrad. Använder Anthropic Claude 3.7 Sonnet.
+AI-driven allergen-identifiering för restaurangmenyer. Analyserar matbeskrivningar automatiskt och identifierar alla 14 EU-allergener med förklaringar och konfidensgrad. Använder Anthropic Claude 4.5 Sonnet.
 
 ### Teknisk Stack
-- **Anthropic Claude 3.7 Sonnet** - AI-analys
+- **Anthropic Claude 4.5 Sonnet** - AI-analys
 - **AIService** - Laravel service wrapper
 - **Alpine.js** - Interaktiv UI
 - **Rate Limiting** - 5 requests/minut
@@ -617,7 +617,7 @@ public function analyzeMenuAllergens(string $dishName, string $description): arr
     $prompt = "Analysera följande rätt och identifiera ALLA allergener enligt EU:s 14 obligatoriska allergener...";
 
     $response = $this->callAnthropicApi($prompt, [
-        'model' => 'claude-3-7-sonnet-20250219',
+        'model' => 'claude-sonnet-4-5-20250929',
         'max_tokens' => 1500,
         'temperature' => 0.3,  // Låg temperatur för precision
     ]);
@@ -717,7 +717,7 @@ Route::prefix('menu')->middleware('throttle:5,1')->group(function () {
 
 ### Kostnader (Anthropic)
 
-**Claude 3.7 Sonnet Pricing** (2025):
+**Claude 4.5 Sonnet Pricing** (2025):
 - Input: $3 per 1M tokens
 - Output: $15 per 1M tokens
 
