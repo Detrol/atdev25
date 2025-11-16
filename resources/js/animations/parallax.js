@@ -100,23 +100,23 @@ export function initGlobalParallax() {
         });
     });
 
-    // === SERVICES SECTION CARDS ===
-    const serviceCards = document.querySelectorAll('.service-card');
-    serviceCards.forEach((card, index) => {
-        // Alternate parallax direction for visual interest
-        const direction = index % 2 === 0 ? 10 : -10;
+    // === SERVICES SECTION CARDS === (DISABLED - No parallax on service cards)
+    // const serviceCards = document.querySelectorAll('.service-card');
+    // serviceCards.forEach((card, index) => {
+    //     // Alternate parallax direction for visual interest
+    //     const direction = index % 2 === 0 ? 10 : -10;
 
-        gsap.to(card, {
-            y: `${direction}%`,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: card,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 1.5
-            }
-        });
-    });
+    //     gsap.to(card, {
+    //         y: `${direction}%`,
+    //         ease: 'none',
+    //         scrollTrigger: {
+    //             trigger: card,
+    //             start: 'top bottom',
+    //             end: 'bottom top',
+    //             scrub: 1.5
+    //         }
+    //     });
+    // });
 
     // === FAQ SECTION ITEMS ===
     const faqItems = document.querySelectorAll('.faq-item');

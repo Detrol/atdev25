@@ -281,22 +281,22 @@ function initParallaxEffects() {
         });
     });
 
-    // Services cards parallax - DISABLED
-    // const serviceCards = document.querySelectorAll('.service-card');
-    // serviceCards.forEach((card, index) => {
-    //     const speed = [20, -15, 18][index] || 15;
+    // Services cards parallax
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach((card, index) => {
+        const speed = [20, -15, 18][index] || 15;
 
-    //     gsap.to(card, {
-    //         yPercent: speed,
-    //         ease: 'none',
-    //         scrollTrigger: {
-    //             trigger: '.services-grid',
-    //             start: 'top bottom',
-    //             end: 'bottom top',
-    //             scrub: 2
-    //         }
-    //     });
-    // });
+        gsap.to(card, {
+            yPercent: speed,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.services-grid',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 2
+            }
+        });
+    });
 }
 
 /**
